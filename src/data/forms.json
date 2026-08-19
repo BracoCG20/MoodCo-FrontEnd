@@ -1,0 +1,68 @@
+{
+  "formContacto": {
+    "title": {
+      "regular": "¿TU MARCA TIENE OBJETIVOS CLAROS Y GANAS DE TRANSFORMARSE?",
+      "bold": "HABLEMOS."
+    },
+    "subtitle": "Déjanos tus datos",
+    "fields": [
+      { "id": "c-nombre", "name": "nombre", "label": "Nombre", "type": "text" },
+      {
+        "id": "c-correo",
+        "name": "correo",
+        "label": "Correo electrónico",
+        "type": "email"
+      },
+      {
+        "id": "c-telefono",
+        "name": "telefono",
+        "label": "Teléfono",
+        "type": "tel"
+      },
+      {
+        "id": "c-mensaje",
+        "name": "mensaje",
+        "label": "Mensaje",
+        "type": "text"
+      }
+    ],
+    "buttons": {
+      "submit": "ENVIAR MENSAJE",
+      "success": "MENSAJE ENVIADO"
+    }
+  },
+  "formTrabajo": {
+    "title": {
+      "bold": "THINK BIG.",
+      "regular": " STAY HUNGRY.",
+      "bold2": "MAKE IT HAPPEN."
+    },
+    "subtitle": "Déjanos tus datos",
+    "fields": [
+      { "id": "t-nombre", "name": "nombre", "label": "Nombre", "type": "text" },
+      {
+        "id": "t-correo",
+        "name": "correo",
+        "label": "Correo electrónico",
+        "type": "email"
+      },
+      {
+        "id": "t-telefono",
+        "name": "telefono",
+        "label": "Teléfono",
+        "type": "tel"
+      },
+      {
+        "id": "t-mensaje",
+        "name": "mensaje",
+        "label": "Mensaje",
+        "type": "text"
+      }
+    ],
+    "uploadLabel": "Adjunta tu HV",
+    "buttons": {
+      "submit": "ENVIAR MENSAJE",
+      "success": "MENSAJE ENVIADO"
+    }
+  }
+}

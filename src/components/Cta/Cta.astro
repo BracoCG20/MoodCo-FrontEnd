@@ -1,0 +1,31 @@
+---
+import ctaData from '../../data/cta.json';
+import './Cta.scss';
+---
+
+<section
+  class='cta'
+  aria-labelledby='cta-title'
+>
+  <div class='cta__container'>
+    <h2
+      id='cta-title'
+      class='cta__title'
+    >
+      <span class='cta__title-regular'>{ctaData.title.regular}</span>
+      <span class='cta__title-bold'>{ctaData.title.bold}</span>
+    </h2>
+
+    <p class="cta__description">
+      {ctaData.description.textBefore} 
+      <a 
+        href={ctaData.description.linkUrl} 
+        class="cta__link"
+        data-form-trigger={ctaData.description.formTrigger || undefined}
+      >
+        {ctaData.description.linkText}
+      </a> 
+      {ctaData.description.textAfter}
+    </p>
+  </div>
+</section>

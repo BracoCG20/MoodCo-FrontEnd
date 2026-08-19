@@ -1,0 +1,33 @@
+{
+	"companyLinks": [
+		{ "label": "Nosotros", "url": "/nosotros" },
+		{ "label": "Moodology", "url": "/moodology" },
+		{ "label": "Trabajos", "url": "/trabajos" },
+		{ "label": "Contacto", "url": "/contacto" }
+	],
+	"contactInfo": [
+		{
+			"label": "Email: hola@mood.pe",
+			"url": "mailto:hola@mood.pe",
+			"isBold": false
+		},
+		{
+			"label": "WhatsApp / Teléfono: +51 999 999 999",
+			"url": "tel:+51999999999",
+			"isBold": false
+		},
+		{ "label": "Ubicación: Bogotá Colombia", "url": null, "isBold": false },
+		{
+			"label": "Iniciemos un proyecto",
+			"url": "#contacto",
+			"isBold": false,
+			"formTrigger": "contacto"
+		},
+		{
+			"label": "Trabaja con nosotros",
+			"url": "#contacto",
+			"isBold": true,
+			"formTrigger": "trabaja"
+		}
+	]
+}

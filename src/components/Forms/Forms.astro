@@ -1,0 +1,245 @@
+---
+import formsData from '../../data/forms.json';
+import './Forms.scss';
+---
+
+<section
+  class='forms-section'
+  id='contacto'
+>
+  <!-- FORMULARIO 1: CONTACTO (Visible por defecto) -->
+  <div
+    class='forms-section__wrapper is-active'
+    id='wrapper-contacto'
+  >
+    <div class='forms-section__content'>
+      <header class='forms-section__header'>
+        <h2 class='forms-section__title'>
+          <span class='forms-section__title-regular'
+            >{formsData.formContacto.title.regular}</span
+          >
+          <br />
+          <span class='forms-section__title-bold'
+            >{formsData.formContacto.title.bold}</span
+          >
+        </h2>
+        <p class='forms-section__subtitle'>{formsData.formContacto.subtitle}</p>
+      </header>
+
+      <form
+        class='form'
+        id='form-contacto'
+        novalidate
+      >
+        {
+          formsData.formContacto.fields.map((field) => (
+            <div class='form__group'>
+              <label
+                for={field.id}
+                class='form__label'
+              >
+                {field.label}
+              </label>
+              <input
+                type={field.type}
+                id={field.id}
+                name={field.name}
+                class='form__input'
+                required
+              />
+            </div>
+          ))
+        }
+
+        <div class='form__actions'>
+          <button
+            type='submit'
+            class='form__btn form__btn--submit'
+            data-btn='submit'
+          >
+            {formsData.formContacto.buttons.submit}
+          </button>
+          <button
+            type='button'
+            class='form__btn form__btn--success is-hidden'
+            data-btn='success'
+          >
+            {formsData.formContacto.buttons.success}
+            <svg
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              stroke-width='2'
+              aria-hidden='true'
+              ><polyline points='20 6 9 17 4 12'></polyline></svg
+            >
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- FORMULARIO 2: TRABAJA CON NOSOTROS (Oculto por defecto) -->
+  <div
+    class='forms-section__wrapper'
+    id='wrapper-trabaja'
+  >
+    <div class='forms-section__content'>
+      <header class='forms-section__header'>
+        <h2 class='forms-section__title'>
+          <span class='forms-section__title-bold'
+            >{formsData.formTrabajo.title.bold}</span
+          >
+          <span class='forms-section__title-regular'
+            >{formsData.formTrabajo.title.regular}</span
+          >
+          <br />
+          <span class='forms-section__title-bold'
+            >{formsData.formTrabajo.title.bold2}</span
+          >
+        </h2>
+        <p class='forms-section__subtitle'>{formsData.formTrabajo.subtitle}</p>
+      </header>
+
+      <form
+        class='form'
+        id='form-trabaja-con-nosotros'
+        novalidate
+      >
+        {
+          formsData.formTrabajo.fields.map((field) => (
+            <div class='form__group'>
+              <label
+                for={field.id}
+                class='form__label'
+              >
+                {field.label}
+              </label>
+              <input
+                type={field.type}
+                id={field.id}
+                name={field.name}
+                class='form__input'
+                required
+              />
+            </div>
+          ))
+        }
+
+        <div class='form__group form__group--file'>
+          <label
+            for='t-archivo'
+            class='form__label form__label--file'
+          >
+            {formsData.formTrabajo.uploadLabel}
+            <svg
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              stroke-width='2'
+              ><path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'
+              ></path><polyline points='17 8 12 3 7 8'></polyline><line
+                x1='12'
+                y1='3'
+                x2='12'
+                y2='15'
+              ></line></svg
+            >
+          </label>
+          <input
+            type='file'
+            id='t-archivo'
+            name='archivo'
+            class='form__input-file'
+            accept='.pdf,.doc,.docx'
+            required
+          />
+        </div>
+
+        <div class='form__actions'>
+          <button
+            type='submit'
+            class='form__btn form__btn--submit'
+            data-btn='submit'
+          >
+            {formsData.formTrabajo.buttons.submit}
+          </button>
+          <button
+            type='button'
+            class='form__btn form__btn--success is-hidden'
+            data-btn='success'
+          >
+            {formsData.formTrabajo.buttons.success}
+            <svg
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              stroke-width='2'
+              ><polyline points='20 6 9 17 4 12'></polyline></svg
+            >
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Lógica de Cambio de Formularios
+    const triggerButtons = document.querySelectorAll('[data-form-trigger]');
+    const wrapperContacto = document.getElementById('wrapper-contacto');
+    const wrapperTrabaja = document.getElementById('wrapper-trabaja');
+
+    triggerButtons.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = btn.getAttribute('data-form-trigger');
+
+        if (target === 'trabaja') {
+          wrapperContacto.classList.remove('is-active');
+          wrapperTrabaja.classList.add('is-active');
+        } else {
+          wrapperTrabaja.classList.remove('is-active');
+          wrapperContacto.classList.add('is-active');
+        }
+
+        // Scroll suave hacia la sección
+        document
+          .getElementById('contacto')
+          .scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // 2. Lógica de Envío de Formularios
+    const forms = document.querySelectorAll('.form');
+
+    forms.forEach((form) => {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const submitBtn = form.querySelector('[data-btn="submit"]');
+        const successBtn = form.querySelector('[data-btn="success"]');
+
+        // Estado: SUBMIT
+        submitBtn.textContent = 'ENVIANDO...';
+        submitBtn.disabled = true;
+
+        try {
+          // Aquí iría la conexión real con la API: await fetch('/api/endpoint', { ... })
+          // Simulamos latencia de red de 1.5s
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+
+          // Estado: ÉXITO
+          submitBtn.classList.add('is-hidden');
+          successBtn.classList.remove('is-hidden');
+          form.reset();
+        } catch (error) {
+          // Manejo de Errores
+          submitBtn.textContent = 'ERROR. REINTENTAR';
+          submitBtn.disabled = false;
+        }
+      });
+    });
+  });
+</script>

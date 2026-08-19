@@ -1,0 +1,34 @@
+---
+import Cta from '../components/Cta/Cta.astro';
+import Footer from '../components/Footer/Footer.astro';
+import Forms from '../components/Forms/Forms.astro';
+import Layout from '../layouts/Layout.astro';
+
+// import Header from '../components/Header/Header.astro';
+// import Hero from '../components/Hero/Hero.astro';
+---
+
+<Layout
+  title='Landing Page Profesional'
+  description='Proyecto desarrollado con Astro, SCSS y metodología BEM, enfocado en rendimiento y escalabilidad.'
+>
+  <!-- <Header /> -->
+
+  <main class='main-content'>
+    <!-- <Hero /> -->
+    <!-- <Features /> -->
+    <!-- <Services /> -->
+    <!-- <Testimonials /> -->
+    <!-- <FAQ /> -->
+    <Forms />
+    <Cta />
+  </main>
+
+  <Footer />
+</Layout>
+
+<style lang='scss'>
+  .main-content {
+    width: 100%;
+  }
+</style>

@@ -1,0 +1,13 @@
+{
+	"title": {
+		"regular": "¿TIENES LO NECESARIO",
+		"bold": "PARA SER UN MOODER?"
+	},
+	"description": {
+		"textBefore": "Haz",
+		"linkText": "clic,",
+		"linkUrl": "#contacto",
+		"formTrigger": "trabaja",
+		"textAfter": "déjanos tus datos y cuéntanos por qué"
+	}
+}

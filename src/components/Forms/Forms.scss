@@ -1,0 +1,173 @@
+@use '../../styles/variables' as *;
+@use '../../styles/breakpoints' as *;
+
+.forms-section {
+  width: 100%;
+  position: relative;
+
+  &__wrapper {
+    display: none; // Oculto por defecto
+    width: 100%;
+    min-height: 100vh;
+    padding: 4rem 1.5rem;
+    background-color: $color-black;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    // Visibilidad controlada por JS
+    &.is-active {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &#wrapper-contacto {
+      background-image: url('/fondoM_form1.png');
+    }
+
+    &#wrapper-trabaja {
+      background-image: url('/fondoM_form2.png');
+    }
+  }
+
+  &__content {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  &__header {
+    text-align: center;
+    color: $color-white;
+  }
+
+  &__title {
+    font-family: $font-secondary; // Roc Grotesk Condensed
+    text-transform: uppercase;
+    font-size: 2rem;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+
+    @include tablet {
+      font-size: 3rem;
+    }
+  }
+
+  &__title-regular {
+    font-weight: 400;
+  }
+  &__title-bold {
+    font-weight: 700;
+  }
+
+  &__subtitle {
+    font-family: $font-primary;
+    font-size: 1.125rem;
+  }
+}
+
+// Bloque Formulario
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    &--file {
+      align-items: flex-start;
+    }
+  }
+
+  &__label {
+    color: $color-white;
+    font-size: 1rem;
+
+    &--file {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      border-bottom: 1px solid $color-white;
+      padding-bottom: 0.25rem;
+
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+
+  &__input {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border-radius: 10px; // Bordes redondeados de la referencia
+    background-color: $color-white; // Opacidad para evitar grises
+    color: $color-black;
+    font-family: $font-primary;
+    font-size: 1rem;
+
+    &:focus {
+      background-color: $color-white;
+    }
+  }
+
+  &__input-file {
+    display: none; // Ocultamos el input feo por defecto del navegador
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 1rem;
+  }
+
+  &__btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-family: $font-secondary;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 1.25rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: opacity 0.2s ease;
+
+    &.is-hidden {
+      display: none;
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover:not(:disabled) {
+      opacity: 0.8;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    &--submit {
+      background-color: $color-white;
+      color: $color-black;
+    }
+
+    &--success {
+      background-color: $color-green-light;
+      color: $color-black;
+      pointer-events: none; // Un botón de éxito no debería ser clicable
+    }
+  }
+}
