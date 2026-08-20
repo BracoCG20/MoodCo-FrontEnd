@@ -1,0 +1,66 @@
+---
+interface Props {
+  title: string[];
+  description: string;
+  tags: string;
+  link: string;
+  imageSrc: string;
+}
+
+const { title, description, tags, link, imageSrc } = Astro.props;
+---
+
+<article
+  class='case-card'
+  data-case-card
+>
+  <button
+    class='case-card__trigger'
+    data-case-trigger
+    aria-expanded='false'
+  >
+    <div class='case-card__image-wrapper'>
+      <img
+        src={imageSrc}
+        alt={`Caso: ${title.join(' ')}`}
+        class='case-card__image'
+        data-case-img
+        loading='lazy'
+      />
+      <!-- Overlay inferior para el texto (estado normal) -->
+      <div class='case-card__gradient'></div>
+      <!-- Overlay verde para el estado Hover -->
+      <div
+        class='case-card__hover-overlay'
+        data-case-overlay
+      >
+      </div>
+    </div>
+
+    <h3 class='case-card__title'>
+      {
+        title.map((line, index) => (
+          <>
+            {line}
+            {index !== title.length - 1 && <br />}
+          </>
+        ))
+      }
+    </h3>
+  </button>
+
+  <div
+    class='case-card__body'
+    data-case-body
+  >
+    <div class='case-card__content'>
+      <p class='case-card__description'>{description}</p>
+      <span class='case-card__tags'>{tags}</span>
+      <a
+        href={link}
+        class='case-card__link'
+        >VER CASO</a
+      >
+    </div>
+  </div>
+</article>

@@ -1,0 +1,148 @@
+---
+import casesData from '../../data/cases.json';
+import CaseCard from './CaseCard.astro';
+import './Cases.scss';
+
+const imageFiles = import.meta.glob<{ default: { src: string } }>(
+  '../../assets/cases/*.{png,jpg,jpeg,webp}',
+  { eager: true },
+);
+
+const getImagePath = (filename: string) => {
+  const path = `../../assets/cases/${filename}`;
+  const image = imageFiles[path];
+  return image ? image.default.src : '';
+};
+---
+
+<section
+  class='cases'
+  aria-labelledby='cases-title'
+>
+  <header class='cases__header'>
+    <h2
+      id='cases-title'
+      class='cases__heading'
+    >
+      <span class='cases__heading-regular'>{casesData.header.regular}</span>
+      <br />
+      <span class='cases__heading-bold'>{casesData.header.bold}</span>
+    </h2>
+  </header>
+
+  <div class='cases__grid-wrapper'>
+    <div class='cases__grid'>
+      {
+        casesData.items.map((item) => (
+          <CaseCard
+            title={item.title}
+            description={item.description}
+            tags={item.tags}
+            link={item.link}
+            imageSrc={getImagePath(item.image)}
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  // Registramos el plugin necesario para el scroll
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('[data-case-card]');
+    let activeCard: HTMLElement | null = null;
+
+    // Detectamos si el dispositivo soporta hover (evita bugs en touch)
+    const isHoverable = window.matchMedia('(hover: hover)').matches;
+
+    // 1. Animación de Entrada (ScrollTrigger + Stagger + Blur)
+    gsap.from(cards, {
+      scrollTrigger: {
+        trigger: '.cases__grid',
+        start: 'top 80%', // Inicia cuando la grilla llega al 80% de la ventana
+      },
+      y: 60,
+      opacity: 0,
+      scale: 0.95,
+      filter: 'blur(10px)',
+      duration: 0.8,
+      stagger: 0.15, // Aparición en cascada
+      ease: 'power3.out',
+      clearProps: 'all', // Limpia los estilos inline de GSAP al terminar para evitar conflictos
+    });
+
+    cards.forEach((card) => {
+      const trigger = card.querySelector(
+        '[data-case-trigger]',
+      ) as HTMLButtonElement;
+      const body = card.querySelector('[data-case-body]') as HTMLElement;
+      const img = card.querySelector('[data-case-img]') as HTMLElement;
+      const overlay = card.querySelector('[data-case-overlay]') as HTMLElement;
+
+      gsap.set(body, { height: 0, overflow: 'hidden' });
+
+      // 2. Lógica de Hover (Solo en dispositivos que lo soporten)
+      if (isHoverable) {
+        card.addEventListener('mouseenter', () => {
+          // Si la card está activa (abierta), no aplicamos el hover
+          if (card.classList.contains('is-active')) return;
+
+          gsap.to(img, { scale: 0.92, duration: 0.4, ease: 'power2.out' });
+          gsap.to(overlay, { opacity: 0.6, duration: 0.4, ease: 'power2.out' });
+        });
+
+        card.addEventListener('mouseleave', () => {
+          gsap.to(img, { scale: 1, duration: 0.4, ease: 'power2.out' });
+          gsap.to(overlay, { opacity: 0, duration: 0.4, ease: 'power2.out' });
+        });
+      }
+
+      // 3. Lógica de Click (Estado Activo)
+      trigger.addEventListener('click', () => {
+        const isCurrentlyActive = activeCard === card;
+
+        // Cerrar la card anterior si hay una abierta
+        if (activeCard && !isCurrentlyActive) {
+          const activeBody = activeCard.querySelector('[data-case-body]');
+          const activeTrigger = activeCard.querySelector('[data-case-trigger]');
+
+          gsap.to(activeBody, {
+            height: 0,
+            duration: 0.4,
+            ease: 'power2.inOut',
+          });
+          activeTrigger?.setAttribute('aria-expanded', 'false');
+          activeCard.classList.remove('is-active');
+        }
+
+        if (isCurrentlyActive) {
+          // Acción: Cerrar la card actual
+          gsap.to(body, { height: 0, duration: 0.4, ease: 'power2.inOut' });
+          trigger.setAttribute('aria-expanded', 'false');
+          card.classList.remove('is-active');
+          activeCard = null;
+        } else {
+          // Acción: Abrir la nueva card
+          gsap.to(body, {
+            height: 'auto',
+            duration: 0.4,
+            ease: 'power2.inOut',
+          });
+          trigger.setAttribute('aria-expanded', 'true');
+          card.classList.add('is-active');
+          activeCard = card as HTMLElement;
+
+          // Forzamos la limpieza del efecto Hover al abrir
+          gsap.to(img, { scale: 1, duration: 0.4, ease: 'power2.out' });
+          gsap.to(overlay, { opacity: 0, duration: 0.4, ease: 'power2.out' });
+        }
+      });
+    });
+  });
+</script>

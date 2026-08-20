@@ -7,8 +7,13 @@
   color: $color-black;
   text-align: center;
   overflow: hidden;
+  @include desktop {
+    padding: 4rem 0;
+  }
 
   &__container {
+    max-width: 1200px;
+    margin: auto;
     display: flex;
     flex-direction: column;
     gap: 3rem;
@@ -21,14 +26,16 @@
     line-height: 1.2;
     max-width: 900px;
     margin: 0 auto;
-    padding: 0 2rem;
+    width: 330px;
 
     @include tablet {
+      width: 500px;
       font-size: 2.25rem;
     }
 
     @include desktop {
-      font-size: 3rem;
+      width: 100%;
+      font-size: 2.8rem;
     }
   }
 
