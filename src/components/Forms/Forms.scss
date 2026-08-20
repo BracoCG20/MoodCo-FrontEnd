@@ -9,7 +9,7 @@
     display: none; // Oculto por defecto
     width: 100%;
     min-height: 100vh;
-    padding: 4rem 1.5rem;
+    padding: 4rem;
     background-color: $color-black;
     background-size: cover;
     background-position: center;
@@ -20,14 +20,23 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      @include desktop {
+        justify-content: flex-start;
+      }
     }
 
     &#wrapper-contacto {
       background-image: url('/fondoM_form1.png');
+      @include desktop {
+        background-image: url('/fondo_form1.png');
+      }
     }
 
     &#wrapper-trabaja {
       background-image: url('/fondoM_form2.png');
+      @include desktop {
+        background-image: url('/fondo_form2.png');
+      }
     }
   }
 
@@ -79,6 +88,9 @@
   align-items: center;
   gap: 0.7rem;
 
+  @include desktop {
+    align-items: flex-start;
+  }
   &__group {
     width: 100%;
     display: flex;
