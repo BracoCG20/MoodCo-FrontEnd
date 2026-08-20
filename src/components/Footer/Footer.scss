@@ -4,7 +4,7 @@
 .footer {
   background-color: $color-white;
   color: $color-black;
-  padding: 3rem 1.5rem;
+  padding: 3rem;
   font-family: $font-primary;
 
   &__container {
@@ -27,6 +27,12 @@
       justify-content: center;
       gap: 8rem;
     }
+  }
+
+  &__content {
+    display: flex;
+    justify-content: center;
+    gap: 100px;
   }
 
   &__brand {

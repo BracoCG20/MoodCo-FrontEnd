@@ -5,59 +5,64 @@ import './Footer.scss';
 
 <footer class='footer'>
   <div class='footer__container'>
-    <!-- Logo -->
-    <div class='footer__brand'>
-      <img
-        src='/logo_footer.png'
-        alt="What's your Mood"
-        class='footer__logo'
-        width='180'
-        height='auto'
-        loading='lazy'
-      />
-    </div>
+    <div class='footer__content'>
+      <!-- Logo -->
+      <div class='footer__brand'>
+        <img
+          src='/logo_footer.png'
+          alt="What's your Mood"
+          class='footer__logo'
+          width='180'
+          height='auto'
+          loading='lazy'
+        />
+      </div>
 
-    <!-- Enlaces de la empresa -->
-    <nav
-      class='footer__nav'
-      aria-label='Navegación del pie de página'
-    >
+      <!-- Enlaces de la empresa -->
+      <nav
+        class='footer__nav'
+        aria-label='Navegación del pie de página'
+      >
+        <ul class='footer__list'>
+          {
+            footerData.companyLinks.map((link) => (
+              <li class='footer__item'>
+                <a
+                  href={link.url}
+                  class='footer__link'
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
+    <!-- Información de contacto -->
+    <address class='footer__info'>
       <ul class='footer__list'>
         {
-          footerData.companyLinks.map((link) => (
+          footerData.contactInfo.map((info) => (
             <li class='footer__item'>
-              <a
-                href={link.url}
-                class='footer__link'
-              >
-                {link.label}
-              </a>
+              {info.url ? (
+                <a
+                  href={info.url}
+                  class={`footer__link ${info.isBold ? 'footer__link--bold' : ''}`}
+                  data-form-trigger={info.formTrigger || undefined}
+                >
+                  {info.label}
+                </a>
+              ) : (
+                <span
+                  class={`footer__text ${info.isBold ? 'footer__text--bold' : ''}`}
+                >
+                  {info.label}
+                </span>
+              )}
             </li>
           ))
         }
-      </ul>
-    </nav>
-
-    <!-- Información de contacto -->
-    <address class="footer__info">
-      <ul class="footer__list">
-        {footerData.contactInfo.map((info) => (
-          <li class="footer__item">
-            {info.url ? (
-              <a 
-                href={info.url} 
-                class={`footer__link ${info.isBold ? 'footer__link--bold' : ''}`}
-                data-form-trigger={info.formTrigger || undefined}
-              >
-                {info.label}
-              </a>
-            ) : (
-              <span class={`footer__text ${info.isBold ? 'footer__text--bold' : ''}`}>
-                {info.label}
-              </span>
-            )}
-          </li>
-        ))}
       </ul>
     </address>
   </div>
