@@ -12,7 +12,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^7.2.4"
+    "astro": "^7.2.4",
+    "gsap": "^3.15.0"
   },
   "devDependencies": {
     "sass": "^1.102.0"

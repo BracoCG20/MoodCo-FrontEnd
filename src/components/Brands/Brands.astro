@@ -1,0 +1,79 @@
+---
+import brandsData from '../../data/brands.json';
+import './Brands.scss';
+
+// Ajustamos el tipado para indicarle a TypeScript que recibimos un objeto con la propiedad src
+const imageFiles = import.meta.glob<{ default: { src: string } }>(
+  '../../assets/logos/*.{png,jpg,jpeg,svg}',
+  { eager: true },
+);
+
+// Función corregida: ahora extraemos .default.src
+const getImagePath = (filename: string) => {
+  const path = `../../assets/logos/${filename}`;
+  const image = imageFiles[path];
+
+  // Si la imagen existe, devolvemos la propiedad src del objeto, de lo contrario un string vacío
+  return image ? image.default.src : '';
+};
+
+// Duplicamos el array para el efecto de loop infinito continuo
+const loopLogos = [...brandsData.logos, ...brandsData.logos];
+---
+
+<section
+  class='brands'
+  aria-labelledby='brands-title'
+>
+  <div class='brands__container'>
+    <h2
+      id='brands-title'
+      class='brands__title'
+    >
+      <span class='brands__title-regular'>{brandsData.title.regular1}</span>
+      <span class='brands__title-bold'>{brandsData.title.bold1}</span>
+      <span class='brands__title-regular'>{brandsData.title.regular2}</span>
+      <span class='brands__title-bold'>{brandsData.title.bold2}</span>
+    </h2>
+
+    <div class='brands__slider'>
+      <div
+        class='brands__track'
+        data-brands-track
+      >
+        {
+          loopLogos.map((filename, index) => (
+            <div
+              class='brands__item'
+              aria-hidden={index >= brandsData.logos.length ? 'true' : 'false'}
+            >
+              <img
+                src={getImagePath(filename)}
+                alt='Logotipo de cliente'
+                class='brands__logo'
+                loading='lazy'
+              />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const track = document.querySelector('[data-brands-track]');
+
+    if (track) {
+      gsap.to(track, {
+        xPercent: -50,
+        ease: 'none',
+        duration: 50,
+        repeat: -1,
+      });
+    }
+  });
+</script>

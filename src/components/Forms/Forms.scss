@@ -8,8 +8,8 @@
   &__wrapper {
     display: none; // Oculto por defecto
     width: 100%;
-    min-height: 100vh;
-    padding: 4rem;
+    min-height: 80vh;
+    padding: 3rem 2rem;
     background-color: $color-black;
     background-size: cover;
     background-position: center;
@@ -21,7 +21,8 @@
       justify-content: center;
       align-items: center;
       @include desktop {
-        justify-content: flex-start;
+        justify-content: center;
+        padding: 0;
       }
     }
 
@@ -47,7 +48,7 @@
     flex-direction: column;
     gap: 2rem;
     @include desktop {
-      max-width: 650px;
+      max-width: 1200px;
     }
   }
 
@@ -59,6 +60,7 @@
     color: $color-white;
     @include desktop {
       text-align: start;
+      max-width: 650px;
     }
   }
 
@@ -102,6 +104,7 @@
 
   @include desktop {
     align-items: flex-start;
+    max-width: 650px;
   }
   &__group {
     width: 100%;
