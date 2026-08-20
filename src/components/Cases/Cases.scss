@@ -103,6 +103,9 @@
     aspect-ratio: 2/ 1;
     overflow: hidden;
     background-color: $color-green-light; // Fondo visible cuando la imagen retrocede
+    @include tablet {
+      aspect-ratio: 1/1;
+    }
   }
 
   &__image {
