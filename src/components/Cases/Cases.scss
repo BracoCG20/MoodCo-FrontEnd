@@ -3,14 +3,11 @@
 
 .cases {
   width: 100%;
-  max-width: 1000px;
-  padding: 3rem 1rem;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
+  background-color: $color-white;
+  height: 100dvh;
 
   &__header {
+    padding: 4rem 1.5rem 2rem;
     text-align: center;
   }
 
@@ -20,17 +17,12 @@
     line-height: 1.1;
     color: $color-green-dark;
     margin: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
 
     @include tablet {
       font-size: 3rem;
     }
     @include desktop {
-      flex-direction: row;
-      gap: 10px;
-      font-size: 3rem;
+      font-size: 3.5rem;
     }
   }
 
@@ -41,20 +33,115 @@
     font-weight: 700;
   }
 
-  &__grid {
-    max-width: 1100px;
+  // -----------------------------------------
+  // Contenedor principal de la ventana (Máscara)
+  // -----------------------------------------
+  &__carousel-wrapper {
+    width: 100%;
+    // Alturas optimizadas para no dejar grandes espacios vacíos en Desktop
+    height: 75vh;
+    min-height: 550px;
+    max-height: 800px;
+    overflow: hidden;
+    padding: 0 1.5rem;
+    position: relative;
+
+    // Fading superior e inferior
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 80px; // Altura ajustada para ser sutil
+      z-index: 5;
+      pointer-events: none;
+      display: none; // Totalmente oculto en Mobile para evitar líneas no deseadas
+
+      @include tablet {
+        display: block; // Se reactiva desde Tablet hacia adelante
+      }
+    }
+
+    &::before {
+      top: 0;
+      background: linear-gradient(
+        to bottom,
+        $color-white 0%,
+        rgba(255, 255, 255, 0) 100%
+      );
+    }
+
+    &::after {
+      bottom: 0;
+      background: linear-gradient(
+        to top,
+        $color-white 0%,
+        rgba(255, 255, 255, 0) 100%
+      );
+    }
+  }
+
+  // -----------------------------------------
+  // SISTEMA RESPONSIVE CON FLEXBOX
+  // -----------------------------------------
+  &__columns {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    height: 100%;
+    width: 100%;
+    max-width: 1200px;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
 
     @include tablet {
-      grid-template-columns: repeat(2, 1fr);
-      align-items: start;
+      gap: 2rem;
+    }
+    @include desktop {
+      gap: 2.5rem;
+    }
+  }
+
+  &__col {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    overflow: visible;
+    display: none; // Oculto por defecto
+
+    &--1 {
+      display: block;
+    } // Mobile
+
+    @include tablet {
+      &--2 {
+        display: block;
+      } // Tablet
     }
 
     @include desktop {
-      gap: 3rem;
+      &--3 {
+        display: block;
+      } // Desktop
+    }
+  }
+
+  &__track {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-bottom: 1.5rem; // Padding matemático vital para cuadrar el 50% de GSAP sin espacios vacíos
+    height: max-content; // Evita que flexbox estire las columnas
+    margin: 0;
+    will-change: transform;
+
+    @include tablet {
+      gap: 2rem;
+      padding-bottom: 2rem;
+    }
+    @include desktop {
+      gap: 2.5rem;
+      padding-bottom: 2.5rem;
     }
   }
 }
@@ -64,26 +151,12 @@
 ========================================= */
 .case-card {
   background-color: $color-green-light;
-  border-radius: 18px;
+  border-radius: 24px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   position: relative;
-  // Optimizaciones de renderizado para las animaciones GSAP
   will-change: transform, opacity, filter;
-
-  // Lógica de Grid desordenado (Masonry simulado)
-  @include tablet {
-    &:nth-child(even) {
-      margin-top: 4rem; // Empuja las cards de la columna derecha hacia abajo
-    }
-  }
-
-  @include desktop {
-    &:nth-child(even) {
-      margin-top: 6rem;
-    }
-  }
 
   &__trigger {
     background: none;
@@ -100,12 +173,9 @@
   &__image-wrapper {
     position: relative;
     width: 100%;
-    aspect-ratio: 2/ 1;
+    aspect-ratio: 1 / 1;
     overflow: hidden;
-    background-color: $color-green-light; // Fondo visible cuando la imagen retrocede
-    @include tablet {
-      aspect-ratio: 1/1;
-    }
+    background-color: $color-green-dark;
   }
 
   &__image {
@@ -113,10 +183,9 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    transform-origin: center center; // Para que el retroceso (scale) sea hacia el centro
+    transform-origin: center center;
   }
 
-  // Gradiente inferior normal
   &__gradient {
     position: absolute;
     bottom: 0;
@@ -126,20 +195,19 @@
     background: linear-gradient(
       to top,
       rgba($color-black, 0.8) 0%,
-      rgba($color-black, 0) 100%
+      rgba(0, 0, 0, 0) 100%
     );
     pointer-events: none;
     z-index: 1;
   }
 
-  // Capa verde del Hover (controlada por GSAP)
   &__hover-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: $color-green-light;
+    background-color: $color-green-dark;
     opacity: 0;
     pointer-events: none;
     z-index: 2;
@@ -157,7 +225,7 @@
     line-height: 1;
     margin: 0;
     text-transform: uppercase;
-    z-index: 3; // Por encima de todos los overlays
+    z-index: 3;
 
     @include tablet {
       font-size: 2.25rem;
@@ -203,7 +271,7 @@
 
     &:hover,
     &:focus {
-      opacity: 0.5;
+      opacity: 0.6;
     }
   }
 }
