@@ -1,186 +1,188 @@
-@use "../../styles/variables" as *;
-@use "../../styles/breakpoints" as *;
+@use '../../styles/variables' as *;
+@use '../../styles/breakpoints' as *;
 
 .header {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	z-index: 100;
-	padding: 1.5rem;
-	transition: background-color 0.3s ease;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 1.5rem;
+  transition: background-color 0.3s ease;
 
-	// Asegura que los elementos del top bar queden por encima del overlay del menú
-	&__container {
-		position: relative;
-		z-index: 101;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		max-width: 1100px;
-		margin: 0 auto;
-	}
+  // Asegura que los elementos del top bar queden por encima del overlay del menú
+  &__container {
+    position: relative;
+    z-index: 101;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
 
-	&__brand {
-		display: flex;
-		align-items: center;
-		z-index: 101;
-	}
+  &__brand {
+    display: flex;
+    align-items: center;
+    z-index: 101;
+  }
 
-	&__logo {
-		height: 50px;
-		width: auto;
-		object-fit: contain;
-		// Si el logo negro no se ve sobre el fondo oscuro, invertimos a blanco dinámicamente cuando el menú abre
-		transition: filter 0.3s ease;
+  &__logo {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
+    // Si el logo negro no se ve sobre el fondo oscuro, invertimos a blanco dinámicamente cuando el menú abre
+    transition: filter 0.3s ease;
 
-		@include tablet {
-			height: 40px;
-		}
-	}
+    @include tablet {
+      height: 40px;
+    }
+  }
 
-	&__tagline {
-		color: $color-white;
-		font-family: $font-primary;
-		font-size: 0.813rem;
-		letter-spacing: 1px;
-		text-transform: uppercase;
-		font-weight: 400;
+  &__tagline {
+    color: $color-white;
+    font-family: $font-primary;
+    font-size: 0.813rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 400;
 
-		@include tablet {
-		}
-	}
+    @include tablet {
+    }
+  }
 
-	&__toggle {
-		background: transparent;
-		border: none;
-		color: $color-white;
-		font-size: 2.5rem; // Tamaño amplio para el SVG
-		cursor: pointer;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: 0.25rem;
-		z-index: 101;
-		outline: none;
-	}
+  &__toggle {
+    background: transparent;
+    border: none;
+    color: $color-white;
+    font-size: 2.5rem; // Tamaño amplio para el SVG
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+    z-index: 101;
+    outline: none;
+  }
 
-	&__icon {
-		will-change: transform; // Optimización GSAP
-	}
+  &__icon {
+    will-change: transform; // Optimización GSAP
+  }
 
-	/* =========================================
+  /* =========================================
      ESTADOS DINÁMICOS AL ABRIR EL MENÚ
   ========================================= */
-	&.is-open {
-		.header__tagline {
-			opacity: 0; // Ocultamos el lema limpiamente al abrir el menú
-			transition: opacity 0.2s ease;
-		}
-	}
+  &.is-open {
+    .header__tagline {
+      opacity: 0; // Ocultamos el lema limpiamente al abrir el menú
+      transition: opacity 0.2s ease;
+    }
+  }
 
-	/* =========================================
+  /* =========================================
      OVERLAY DEL MENÚ DESPLEGABLE
   ========================================= */
-	&__menu {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100vh;
-		background-color: rgba($color-black, 0.98); // Fondo sólido oscuro
-		z-index: 100;
-		display: flex;
-		align-items: center;
-		padding: 1.5rem;
+  &__menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    // background-color: rgba($color-black, 0.9);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
 
-		// clip-path optimizado en SCSS para la animación GSAP
-		clip-path: inset(0 0 100% 0);
-		visibility: hidden;
-	}
+    // clip-path optimizado en SCSS para la animación GSAP
+    clip-path: inset(0 0 100% 0);
+    visibility: hidden;
+  }
 
-	&__menu-inner {
-		width: 100%;
-		max-width: 1200px;
-		margin: 0 auto;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		height: 100%;
-		gap: 4rem;
+  &__menu-inner {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    gap: 4rem;
 
-		@include desktop {
-			flex-direction: row;
-			justify-content: space-between;
-			align-items: center;
-		}
-	}
+    @include desktop {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
 
-	&__nav {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-	}
+  &__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
 
-	&__nav-item {
-		overflow: hidden; // Limpia las animaciones de subida en el stagger
-	}
+  &__nav-item {
+    overflow: hidden; // Limpia las animaciones de subida en el stagger
+  }
 
-	&__nav-link {
-		color: $color-white;
-		font-family: $font-secondary; // Tipografía condensada de la referencia
-		font-size: 2.5rem;
-		font-weight: 700;
-		text-transform: uppercase;
-		line-height: 1.1;
-		display: inline-block;
-		will-change: transform, color;
+  &__nav-link {
+    color: $color-white;
+    font-family: $font-secondary; // Tipografía condensada de la referencia
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1.1;
+    display: inline-block;
+    will-change: transform, color;
 
-		@include tablet {
-			font-size: 3.5rem;
-		}
-		@include desktop {
-			font-size: 4rem;
-		}
-	}
+    @include tablet {
+      font-size: 3.5rem;
+    }
+    @include desktop {
+      font-size: 4rem;
+    }
+  }
 
-	/* =========================================
+  /* =========================================
      SELECTOR DE IDIOMAS (Diseño píldora)
   ========================================= */
-	&__lang {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border: 1px solid rgba($color-white, 0.5);
-		border-radius: 10px;
-		padding: 0.2rem;
-		width: max-content;
-		align-self: flex-start;
+  &__lang {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba($color-white, 0.5);
+    border-radius: 10px;
+    padding: 0.2rem;
+    width: max-content;
+    align-self: flex-start;
 
-		@include desktop {
-			align-self: center;
-		}
-	}
+    @include desktop {
+      align-self: center;
+    }
+  }
 
-	&__lang-btn {
-		background: transparent;
-		border: none;
-		color: $color-white;
-		font-family: $font-primary;
-		font-size: 1rem;
-		padding: 0.2rem 1rem;
-		border-radius: 8px;
-		cursor: pointer;
-		font-weight: 400;
-		transition:
-			background-color 0.3s,
-			color 0.3s;
-		outline: none;
+  &__lang-btn {
+    background: transparent;
+    border: none;
+    color: $color-white;
+    font-family: $font-primary;
+    font-size: 1rem;
+    padding: 0.2rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 400;
+    transition:
+      background-color 0.3s,
+      color 0.3s;
+    outline: none;
 
-		&.is-active {
-			background-color: $color-white;
-			color: $color-black;
-			font-weight: 700;
-		}
-	}
+    &.is-active {
+      background-color: $color-white;
+      color: $color-black;
+      font-weight: 700;
+    }
+  }
 }
