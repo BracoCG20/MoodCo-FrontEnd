@@ -1,0 +1,54 @@
+---
+import heroData from '../../data/hero.json';
+import './Hero.scss';
+---
+
+<section class="hero" aria-label="Introducción Principal">
+  
+  <!-- 1. Video Background -->
+  <video class="hero__video" autoplay muted loop playsinline>
+    <source src="/fondo_hero.mp4" type="video/mp4" />
+    Tu navegador no soporta la etiqueta de video.
+  </video>
+
+  <!-- 2. Overlay sutil para garantizar legibilidad del texto blanco -->
+  <div class="hero__overlay"></div>
+
+  <!-- 3. Contenedor de contenido -->
+  <div class="hero__content">
+    
+    <!-- SVG Línea Curva (Responsive) 
+         Utilizamos preserveAspectRatio="none" para que se estire con la pantalla, 
+         y vector-effect en el CSS/Path para no deformar el grosor de la línea. -->
+    <svg class="hero__line" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
+      <path
+        d="M 750, 420 C 750, 800 600, 820 400, 820"
+        fill="none"
+        stroke="#FFFFFF"
+        stroke-width="2"
+        vector-effect="non-scaling-stroke"
+      />
+    </svg>
+
+    <!-- Texto Superior -->
+    <h1 class="hero__title hero__title--top">
+      {heroData.topText.map((line, index) => (
+        <>
+          {line}
+          {index < heroData.topText.length - 1 && <br />}
+        </>
+      ))}
+    </h1>
+
+    <!-- Texto Inferior -->
+    <h2 class="hero__title hero__title--bottom">
+      {heroData.bottomText.map((line, index) => (
+        <>
+          {line}
+          {index < heroData.bottomText.length - 1 && <br />}
+        </>
+      ))}
+    </h2>
+
+  </div>
+</section>

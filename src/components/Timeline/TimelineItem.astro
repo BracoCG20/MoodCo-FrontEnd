@@ -1,0 +1,26 @@
+---
+interface Props {
+  number: string;
+  title: string;
+  description: string;
+  align: 'left' | 'right';
+}
+
+const { number, title, description, align } = Astro.props;
+---
+
+<article class={`timeline-item timeline-item--${align}`} data-timeline-item>
+  <!-- Circuito / Conexión SVG -->
+  <div class="timeline-item__circuit">
+    <svg viewBox="0 0 100 20" preserveAspectRatio="none">
+      <path class="timeline-item__circuit-path" data-circuit-path d="M0,10 L95,10" fill="none" stroke="#FFFFFF" stroke-width="2" />
+      <circle class="timeline-item__circuit-node" data-circuit-node cx="95" cy="10" r="5" fill="#F4E26A" stroke="#000000" stroke-width="2" />
+    </svg>
+  </div>
+
+  <div class="timeline-item__content">
+    <span class="timeline-item__number">{number}</span>
+    <h3 class="timeline-item__title">{title}</h3>
+    <p class="timeline-item__description">{description}</p>
+  </div>
+</article>

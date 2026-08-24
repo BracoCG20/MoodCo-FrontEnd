@@ -1,0 +1,70 @@
+---
+import statsData from '../../data/stats.json';
+import './Stats.scss';
+---
+
+<section class="stats" aria-label="Estadísticas de la agencia">
+  <div class="stats__container">
+    
+    <div class="stats__grid">
+      {statsData.items.map((item, index) => (
+        <>
+          <div class="stats__item">
+            <div class="stats__value-wrapper">
+              {item.prefix && <span class="stats__prefix">{item.prefix}</span>}
+              <!-- El contador animado por GSAP -->
+              <span class="stats__value" data-counter data-target={item.target}>0</span>
+              {item.suffix && <span class="stats__suffix">{item.suffix}</span>}
+            </div>
+            <p class="stats__label">{item.label}</p>
+          </div>
+
+          <!-- Línea divisoria como div independiente (Estructura Figma) -->
+          {index < statsData.items.length - 1 && (
+            <div class={`stats__divider ${index === 2 ? 'stats__divider--desktop-only' : ''}`}></div>
+          )}
+
+          <!-- Salto de línea forzado en Mobile para asegurar 3 elementos arriba y 2 abajo -->
+          {index === 2 && <div class="stats__break"></div>}
+        </>
+      ))}
+    </div>
+
+    <p class="stats__paragraph" set:html={statsData.paragraph}></p>
+
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const counters = document.querySelectorAll('[data-counter]');
+
+    if (counters.length > 0) {
+      ScrollTrigger.create({
+        trigger: '.stats',
+        start: 'top 80%', 
+        once: true,       
+        onEnter: () => {
+          counters.forEach(counter => {
+            const target = parseFloat(counter.getAttribute('data-target') || '0');
+            const obj = { val: 0 };
+            
+            gsap.to(obj, {
+              val: target,
+              duration: 2.5, // Sincronización exacta para todos
+              ease: 'power2.out',
+              onUpdate: () => {
+                counter.textContent = Math.floor(obj.val).toString();
+              }
+            });
+          });
+        }
+      });
+    }
+  });
+</script>

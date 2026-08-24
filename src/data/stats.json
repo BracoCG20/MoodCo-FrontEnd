@@ -1,0 +1,35 @@
+{
+	"items": [
+		{
+			"prefix": "+",
+			"target": 15,
+			"suffix": "",
+			"label": "AÑOS"
+		},
+		{
+			"prefix": "",
+			"target": 3,
+			"suffix": " PAÍSES",
+			"label": "PER / COL / CAM"
+		},
+		{
+			"prefix": "",
+			"target": 150,
+			"suffix": "",
+			"label": "PROFESIONALES"
+		},
+		{
+			"prefix": "",
+			"target": 45,
+			"suffix": "+",
+			"label": "CLIENTES"
+		},
+		{
+			"prefix": "",
+			"target": 13,
+			"suffix": "",
+			"label": "PREMIOS"
+		}
+	],
+	"paragraph": "<strong>Somos el socio que transforma creatividad y estrategia en resultados reales.</strong> Leemos el negocio detrás de cada marca, sus objetivos, sus números y sus KPIs antes de crear. Con esa lectura desarrollamos plataformas de marca, campañas, contenidos y ecosistemas que responden a objetivos concretos, con resultados que se miden, se optimizan y se sostienen en el tiempo."
+}
