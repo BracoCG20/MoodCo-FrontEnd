@@ -45,9 +45,8 @@
     width: 2px;
     height: 60px;
     background-color: $color-black;
-    flex-shrink: 0; // Evita que la línea se aplaste
+    flex-shrink: 0;
 
-    // La línea entre "150 Profesionales" y "45+ Clientes" solo debe verse cuando estén en la misma fila (Desktop)
     &--desktop-only {
       display: none;
 
@@ -57,7 +56,6 @@
     }
   }
 
-  // Elemento invisible que fuerza el quiebre de línea en Mobile (3 arriba, 2 abajo)
   &__break {
     flex-basis: 100%;
     height: 0;
@@ -70,22 +68,31 @@
   &__value-wrapper {
     color: $color-green-light2;
     font-family: $font-stat;
-    font-size: clamp(2.5rem, 8vw, 6rem);
+    font-size: clamp(2.5rem, 8vw, 3rem);
     line-height: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     text-transform: uppercase;
+    @include max-desktop {
+      font-size: 4rem;
+    }
   }
 
   &__label {
     color: $color-black;
     font-family: $font-compressed;
-    font-size: clamp(1.4rem, 3vw, 3rem);
+    font-size: clamp(1.4rem, 2vw, 2rem);
     line-height: 1.2;
     text-transform: uppercase;
     margin: 0;
     max-width: 150px;
+    @include desktop {
+      max-width: 350px;
+    }
+    @include max-desktop {
+      font-size: 3rem;
+    }
   }
 
   &__paragraph {
@@ -94,7 +101,7 @@
     line-height: 1.5;
     color: $color-black;
     text-align: center;
-    max-width: 900px;
+    max-width: 1200px;
     margin: 0 auto;
 
     strong {

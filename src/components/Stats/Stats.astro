@@ -37,7 +37,7 @@ import './Stats.scss';
 
 <script>
   import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
   gsap.registerPlugin(ScrollTrigger);
 
@@ -56,7 +56,7 @@ import './Stats.scss';
             
             gsap.to(obj, {
               val: target,
-              duration: 2.5, // Sincronización exacta para todos
+              duration: 2.5,
               ease: 'power2.out',
               onUpdate: () => {
                 counter.textContent = Math.floor(obj.val).toString();
