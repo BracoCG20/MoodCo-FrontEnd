@@ -78,14 +78,17 @@
 
       @include tablet {
         font-size: 4rem;
-        top: 24%;
+        top: 20%;
         right: 8%;
       }
 
       @include desktop {
-        font-size: 6rem;
-        top: 35%;
+        font-size: 4.5rem;
+        top: 15%;
         right: 15%;
+      }
+      @include max-desktop {
+        top: 18%;
       }
     }
 
@@ -104,9 +107,13 @@
       }
 
       @include desktop {
-        font-size: 5.5rem;
-        bottom: 15%;
-        left: 15%;
+        font-size: 5rem;
+        bottom: 10%;
+        left: 10%;
+      }
+
+      @include max-desktop {
+        left: 20%;
       }
     }
   }

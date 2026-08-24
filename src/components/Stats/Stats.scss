@@ -81,7 +81,7 @@
   &__label {
     color: $color-black;
     font-family: $font-compressed;
-    font-size: clamp(1.4rem, 4vw, 4rem);
+    font-size: clamp(1.4rem, 3vw, 3rem);
     line-height: 1.2;
     text-transform: uppercase;
     margin: 0;
@@ -90,7 +90,7 @@
 
   &__paragraph {
     font-family: $font-primary;
-    font-size: clamp(1rem, 3vw, 2rem);
+    font-size: clamp(1rem, 2.2vw, 2rem);
     line-height: 1.5;
     color: $color-black;
     text-align: center;

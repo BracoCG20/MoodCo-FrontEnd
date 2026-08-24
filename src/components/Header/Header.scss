@@ -76,16 +76,6 @@
   }
 
   /* =========================================
-     ESTADOS DINÁMICOS AL ABRIR EL MENÚ
-  ========================================= */
-  &.is-open {
-    .header__tagline {
-      opacity: 0; // Ocultamos el lema limpiamente al abrir el menú
-      transition: opacity 0.2s ease;
-    }
-  }
-
-  /* =========================================
      OVERLAY DEL MENÚ DESPLEGABLE
   ========================================= */
   &__menu {
