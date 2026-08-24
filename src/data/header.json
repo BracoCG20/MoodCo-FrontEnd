@@ -1,15 +1,15 @@
 {
-	"tagline": "AGENCIA CREATIVA DIGITAL",
-	"links": [
-		{ "label": "NOSOTROS", "url": "/nosotros" },
-		{ "label": "WHAT'S YOUR MOOD", "url": "/whats-your-mood" },
-		{ "label": "TRABAJOS", "url": "/trabajos" },
-		{ "label": "MARCAS", "url": "/marcas" },
-		{ "label": "CONTACTO", "url": "#contacto" },
-		{ "label": "MOODERS", "url": "/mooders" }
-	],
-	"languages": [
-		{ "code": "es", "label": "Es", "active": true },
-		{ "code": "in", "label": "In", "active": false }
-	]
+  "tagline": "AGENCIA CREATIVA DIGITAL",
+  "links": [
+    { "label": "NOSOTROS", "url": "#nosotros" },
+    { "label": "WHAT'S YOUR MOOD", "url": "#timeline" },
+    { "label": "TRABAJOS", "url": "#trabajos" },
+    { "label": "MARCAS", "url": "#marcas" },
+    { "label": "CONTACTO", "url": "#contacto" },
+    { "label": "MOODERS", "url": "#cta" }
+  ],
+  "languages": [
+    { "code": "es", "label": "Es", "active": true },
+    { "code": "in", "label": "In", "active": false }
+  ]
 }

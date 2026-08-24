@@ -24,39 +24,41 @@ const loopLogos = [...brandsData.logos, ...brandsData.logos];
 <section
   class='brands'
   aria-labelledby='brands-title'
+  id='marcas"
 >
-  <div class='brands__container'>
-    <h2
-      id='brands-title'
-      class='brands__title'
-    >
-      <span class='brands__title-regular'>{brandsData.title.regular1}</span>
-      <span class='brands__title-bold'>{brandsData.title.bold1}</span>
-      <span class='brands__title-regular'>{brandsData.title.regular2}</span>
-      <span class='brands__title-bold'>{brandsData.title.bold2}</span>
-    </h2>
+  <div class='
+  brands__container'
+>
+  <h2
+    id='brands-title'
+    class='brands__title'
+  >
+    <span class='brands__title-regular'>{brandsData.title.regular1}</span>
+    <span class='brands__title-bold'>{brandsData.title.bold1}</span>
+    <span class='brands__title-regular'>{brandsData.title.regular2}</span>
+    <span class='brands__title-bold'>{brandsData.title.bold2}</span>
+  </h2>
 
-    <div class='brands__slider'>
-      <div
-        class='brands__track'
-        data-brands-track
-      >
-        {
-          loopLogos.map((filename, index) => (
-            <div
-              class='brands__item'
-              aria-hidden={index >= brandsData.logos.length ? 'true' : 'false'}
-            >
-              <img
-                src={getImagePath(filename)}
-                alt='Logotipo de cliente'
-                class='brands__logo'
-                loading='lazy'
-              />
-            </div>
-          ))
-        }
-      </div>
+  <div class='brands__slider'>
+    <div
+      class='brands__track'
+      data-brands-track
+    >
+      {
+        loopLogos.map((filename, index) => (
+          <div
+            class='brands__item'
+            aria-hidden={index >= brandsData.logos.length ? 'true' : 'false'}
+          >
+            <img
+              src={getImagePath(filename)}
+              alt='Logotipo de cliente'
+              class='brands__logo'
+              loading='lazy'
+            />
+          </div>
+        ))
+      }
     </div>
   </div>
 </section>

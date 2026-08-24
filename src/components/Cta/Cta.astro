@@ -6,6 +6,7 @@ import './Cta.scss';
 <section
   class='cta'
   aria-labelledby='cta-title'
+  id='cta'
 >
   <div class='cta__container'>
     <h2
@@ -16,15 +17,15 @@ import './Cta.scss';
       <span class='cta__title-bold'>{ctaData.title.bold}</span>
     </h2>
 
-    <p class="cta__description">
-      {ctaData.description.textBefore} 
-      <a 
-        href={ctaData.description.linkUrl} 
-        class="cta__link"
+    <p class='cta__description'>
+      {ctaData.description.textBefore}
+      <a
+        href={ctaData.description.linkUrl}
+        class='cta__link'
         data-form-trigger={ctaData.description.formTrigger || undefined}
       >
         {ctaData.description.linkText}
-      </a> 
+      </a>
       {ctaData.description.textAfter}
     </p>
   </div>
