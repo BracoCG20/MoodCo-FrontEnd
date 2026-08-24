@@ -5,51 +5,56 @@ import './Timeline.scss';
 ---
 
 <section class="timeline" id="timeline">
-  <!-- Capa 1 y 2: Color de fondo y Textura -->
-  <div class="timeline__bg"></div>
+  
+  <div class="timeline__sticky-scene">
+    <div class="timeline__grid-bg"></div>
 
-  <!-- Capa 3: Escena de Introducción (Sticky) -->
-  <div class="timeline__intro">
-    <div class="timeline__intro-content">
-      <p class="timeline__intro-text timeline__intro-text--top" data-fade-elem>
+    <div class="timeline__intro-texts" data-intro-text>
+      <p class="timeline__intro-text timeline__intro-text--top">
         {timelineData.intro.topText}
       </p>
-
-      <div class="timeline__mood-composition">
-        <img src="/M.png" alt="M" class="timeline__letter timeline__letter--m" data-zoom-elem />
-        <img src="/O.png" alt="O" class="timeline__letter timeline__letter--o1" data-zoom-elem />
-        <img src="/O.png" alt="O" class="timeline__letter timeline__letter--o2" data-zoom-elem />
-        <img src="/D.png" alt="D" class="timeline__letter timeline__letter--d" data-zoom-elem />
-        
-        <img src="/figura_1.png" alt="" class="timeline__figure timeline__figure--1" data-fade-elem aria-hidden="true" />
-        <img src="/figura_2.png" alt="" class="timeline__figure timeline__figure--2" data-fade-elem aria-hidden="true" />
-        <img src="/figura_3.png" alt="" class="timeline__figure timeline__figure--3" data-fade-elem aria-hidden="true" />
-    </div>
-        <img src="/letra_timeline.png" alt="What's your" class="timeline__letter timeline__letter--center" data-zoom-elem />
-      <p class="timeline__intro-text timeline__intro-text--bottom" data-fade-elem>
+      <p class="timeline__intro-text timeline__intro-text--bottom">
         {timelineData.intro.bottomText}
       </p>
     </div>
+
+    <div class="timeline__mood-letters" data-mood-block>
+      <img src="/M.png" alt="M" class="timeline__letter" />
+      <img src="/O.png" alt="O" class="timeline__letter" />
+      <img src="/O.png" alt="O" class="timeline__letter" />
+      <img src="/D.png" alt="D" class="timeline__letter" />
+    </div>
+
+    <div class="timeline__figures">
+      <img src="/figura_1.png" alt="" class="timeline__figure timeline__figure--1" data-figure />
+      <img src="/figura_2.png" alt="" class="timeline__figure timeline__figure--2" data-figure />
+      <img src="/figura_3.png" alt="" class="timeline__figure timeline__figure--3" data-figure />
+    </div>
+
+    <img src="/letra_timeline.png" alt="What's your" class="timeline__whats-your" />
   </div>
 
-  <!-- Capa 4: Contenedor de los Items del Timeline -->
-  <div class="timeline__track">
-    <!-- Línea central permanente -->
-    <div class="timeline__center-line">
-      <div class="timeline__center-line-progress" data-line-progress></div>
-    </div>
-    
-    <div class="timeline__items">
-      {timelineData.items.map((item, index) => (
-        <TimelineItem 
-          number={item.number} 
-          title={item.title} 
-          description={item.description} 
-          align={index % 2 === 0 ? 'left' : 'right'} 
-        />
-      ))}
+  <div class="timeline__scroll-track">
+    <div class="timeline__spacer"></div>
+
+    <div class="timeline__content">
+      <div class="timeline__center-line">
+        <div class="timeline__center-line-progress" data-line-progress></div>
+      </div>
+      
+      <div class="timeline__items">
+        {timelineData.items.map((item, index) => (
+          <TimelineItem 
+            number={item.number} 
+            title={item.title} 
+            description={item.description} 
+            align={index % 2 === 0 ? 'left' : 'right'} 
+          />
+        ))}
+      </div>
     </div>
   </div>
+
 </section>
 
 <script>
@@ -59,45 +64,41 @@ import './Timeline.scss';
   gsap.registerPlugin(ScrollTrigger);
 
   document.addEventListener('DOMContentLoaded', () => {
-    // 1. Animación de Zoom y Profundidad de la Escena Inicial
-    const zoomElems = document.querySelectorAll('[data-zoom-elem]');
-    const fadeElems = document.querySelectorAll('[data-fade-elem]');
-    
-    // Timeline vinculado al scroll general de la sección
     const introTl = gsap.timeline({
       scrollTrigger: {
         trigger: '.timeline',
         start: 'top top',
-        end: '+=150vh',
-        scrub: 1 // Efecto suave al hacer scroll
+        end: '+=100vh', 
+        scrub: 1
       }
     });
 
-    // Desvanecer textos y figuras periféricas
-    introTl.to(fadeElems, { opacity: 0, scale: 0.8, duration: 1 }, 0);
+    introTl.to('[data-intro-text]', { opacity: 0, y: -30, duration: 1 }, 0);
     
-    // Acercar, desenfocar y reducir opacidad de las letras MOOD para pasarlas al fondo
-    introTl.to(zoomElems, {
-      scale: 1.6,
-      filter: 'blur(8px)',
-      opacity: 0.15,
-      y: '+=50',
+    introTl.to('[data-mood-block]', {
+      scale: 0.85, 
+      filter: 'blur(6px)',
+      opacity: 0.4, 
       duration: 2,
       ease: 'power1.inOut'
     }, 0);
 
-    // 2. Animación de Aparición de los Elementos del Timeline
+    introTl.to('[data-figure]', {
+      y: (i, el) => el.classList.contains('timeline__figure--1') ? -40 : 40,
+      duration: 2,
+      ease: 'power1.inOut'
+    }, 0);
+
     const items = document.querySelectorAll('[data-timeline-item]');
     const lineProgress = document.querySelector('[data-line-progress]');
 
-    // Animación de la línea central de progreso
     gsap.fromTo(lineProgress, 
       { height: '0%' },
       { 
         height: '100%',
         ease: 'none',
         scrollTrigger: {
-          trigger: '.timeline__track',
+          trigger: '.timeline__content',
           start: 'top 50%',
           end: 'bottom 80%',
           scrub: true
@@ -105,32 +106,24 @@ import './Timeline.scss';
       }
     );
 
-    // Animación de cada contenedor y circuito
     items.forEach((item) => {
-      const path = item.querySelector('[data-circuit-path]');
       const node = item.querySelector('[data-circuit-node]');
       
-      // Preparar el path de SVG (circuit)
-      const pathLength = (path as SVGPathElement)?.getTotalLength() || 100;
-      gsap.set(path, { strokeDasharray: pathLength, strokeDashoffset: pathLength });
-      gsap.set(node, { scale: 0, transformOrigin: 'center' });
+      gsap.set(node, { scale: 0 });
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: item,
-          start: 'top 80%',
+          start: 'top 85%',
           toggleActions: 'play none none reverse'
         }
       });
 
-      // Secuencia: dibujar línea, aparecer nodo, aparecer contenido
-      tl.to(path, { strokeDashoffset: 0, duration: 0.4, ease: 'power2.out' })
-        .to(node, { scale: 1, duration: 0.3, ease: 'back.out(1.7)' }, '-=0.2')
-        .fromTo(item, 
-          { opacity: 0, y: 30 }, 
-          { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' },
-          '-=0.2'
-        );
+      tl.fromTo(item, 
+          { opacity: 0, y: 50 }, 
+          { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }
+        )
+        .to(node, { scale: 1, duration: 0.4, ease: 'back.out(2)' }, '-=0.3');
     });
   });
 </script>

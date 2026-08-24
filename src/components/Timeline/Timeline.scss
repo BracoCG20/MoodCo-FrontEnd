@@ -5,48 +5,42 @@
 	position: relative;
 	background-color: #549aa7;
 	width: 100%;
-	// Espacio para la intro (100vh) + el recorrido de los items
-	padding-bottom: 5rem;
-	overflow: hidden;
+	overflow-x: clip;
 
-	// Capa 1 y 2: Fondo y Cuadrícula
-	&__bg {
-		position: absolute;
+	/* =========================================
+     ESCENA 1: FONDO STICKY BLOQUEADO
+     ========================================= */
+	&__sticky-scene {
+		position: sticky;
 		top: 0;
 		left: 0;
 		width: 100%;
-		height: 100%;
+		height: 100vh;
+		overflow: hidden;
+		z-index: 1;
+	}
+
+	&__grid-bg {
+		position: absolute;
+		inset: 0;
 		background-image: url("/fondo_cuadricula.png");
+		background-size: cover;
 		background-position: center;
 		background-repeat: repeat-y;
 		opacity: 0.6;
 		z-index: 1;
-		pointer-events: none;
 	}
 
-	// Capa 3: Introducción Sticky
-	&__intro {
-		position: sticky;
-		top: 0;
-		height: 100svh;
-		width: 100%;
-		z-index: 2;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: 2rem;
-	}
-
-	&__intro-content {
-		position: relative;
+	&__intro-texts {
+		position: absolute;
+		inset: 0;
+		z-index: 5;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
 		justify-content: space-between;
-		padding: 5rem 0;
-		width: 100%;
-		height: 100%;
-		max-width: 800px;
+		align-items: center;
+		padding: 6rem 1.5rem;
+		pointer-events: none;
 	}
 
 	&__intro-text {
@@ -55,6 +49,7 @@
 		font-family: $font-primary;
 		line-height: 1.4;
 		font-size: clamp(1rem, 2vw, 1.25rem);
+		max-width: 800px;
 		will-change: opacity, transform;
 
 		&--bottom {
@@ -65,187 +60,215 @@
 		}
 	}
 
-	&__mood-composition {
+	&__mood-letters {
 		position: absolute;
-
+		inset: 0;
+		z-index: 2;
 		display: flex;
 		flex-direction: column;
+		justify-content: space-between;
 		align-items: center;
-		justify-content: center;
-		width: 100%;
-		max-width: 600px;
-		height: 80dvh;
+		padding: 10vh 0;
+		will-change: transform, filter, opacity;
 	}
 
 	&__letter {
+		height: 22%;
+		width: auto;
 		object-fit: contain;
-		will-change: transform, filter, opacity;
-		// Posicionamientos aproximados basados en la captura inicial
-		&--m {
-			top: 0;
-			left: 10%;
-			height: 20%;
-		}
-		&--o1 {
-			top: 30%;
-			left: 15%;
-			height: 20%;
-		}
-		&--center {
-			top: 40%;
-			left: 50%;
-			transform: translateX(-50%);
-			height: 20%;
-			z-index: 5;
-		}
-		&--o2 {
-			top: 45%;
-			right: 15%;
-			height: 20%;
-		}
-		&--d {
-			bottom: 0;
-			right: 10%;
-			height: 20%;
-		}
+	}
+
+	&__figures {
+		position: absolute;
+		inset: 0;
+		z-index: 3;
+		pointer-events: none;
 	}
 
 	&__figure {
 		position: absolute;
+		will-change: transform;
 		&--1 {
-			top: -5%;
-			right: -20%;
-			width: 35%;
+			top: 5%;
+			right: 5%;
+			width: 15%;
+			max-width: 150px;
 		}
 		&--2 {
-			top: 35%;
-			left: -15%;
-			width: 45%;
+			top: 40%;
+			left: -5%;
+			width: 25%;
+			max-width: 250px;
 		}
 		&--3 {
-			bottom: 5%;
-			right: -20%;
-			width: 45%;
+			bottom: 10%;
+			right: -2%;
+			width: 20%;
+			max-width: 200px;
 		}
 	}
 
-	// Capa 4: Contenido del Timeline
-	&__track {
+	&__whats-your {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 90%;
+		max-width: 500px;
+		object-fit: contain;
+		filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.25));
+		z-index: 6;
+
+		@include tablet {
+			max-width: 700px;
+		}
+	}
+
+	/* =========================================
+     ESCENA 2: TRACK SCROLLEABLE
+     ========================================= */
+	&__scroll-track {
 		position: relative;
-		z-index: 3;
-		max-width: 1000px;
+		width: 100%;
+		z-index: 10;
+	}
+
+	&__spacer {
+		height: 100vh;
+		width: 100%;
+	}
+
+	&__content {
+		position: relative;
+		width: 100%;
+		max-width: 1200px;
 		margin: 0 auto;
-		padding-top: 100vh; // Empieza justo debajo de la intro visual inicial
+		padding-bottom: 6rem;
 	}
 
 	&__center-line {
 		position: absolute;
-		left: 1.5rem; // Alineado a la izquierda en Mobile
-		top: 100vh;
+		left: 50%;
+		transform: translateX(-50%);
+		top: 0;
 		bottom: 0;
 		width: 2px;
-		background-color: rgba($color-black, 0.2);
-
-		@include tablet {
-			left: 50%;
-			transform: translateX(-50%);
-		}
+		background-color: rgba($color-white, 0.2);
+		z-index: 1;
 	}
 
 	&__center-line-progress {
 		width: 100%;
 		background-color: $color-black;
-		height: 0; // Animado por GSAP
+		height: 0;
 	}
 
 	&__items {
 		display: flex;
 		flex-direction: column;
 		gap: 4rem;
-		padding: 0 1rem 0 3.5rem; // Padding izquierdo para mobile
-
-		@include tablet {
-			padding: 0 1.5rem;
-		}
+		width: 100%;
+		padding: 0;
 	}
 }
 
-// Estilos del Item Individual
+// -----------------------------------------
+// GEOMETRÍA 50% PARA LOS ITEMS & GLASSMORPHISM
+// -----------------------------------------
 .timeline-item {
+	width: 50%;
 	position: relative;
-	width: 100%;
-	opacity: 0; // Estado inicial para GSAP
+	display: flex;
+	flex-direction: column;
+	z-index: 2;
 
-	@include tablet {
-		width: 45%;
+	&__circuit {
+		position: absolute;
+		top: 2rem; // Ajustado para alinear con el título dentro del glassmorphism
+		width: 0; // Ya no necesitamos ancho, solo que se ancle al borde
+		height: 12px;
+		display: flex;
+		align-items: center;
+	}
+
+	&__circuit-node {
+		position: absolute;
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		background-color: #f4e26a;
+		border: 2px solid #000000;
+		top: 0;
+		bottom: 0;
+		margin: auto;
+		z-index: 2;
 	}
 
 	&--left {
+		align-self: flex-start;
+		text-align: right;
+		padding: 0rem 1rem;
 		@include tablet {
-			align-self: flex-start;
-			text-align: right;
+			padding-right: 3rem;
+		}
 
-			.timeline-item__circuit {
-				left: auto;
-				right: -11%;
-				transform: scaleX(
-					-1
-				); // Invertir SVG para que apunte a la línea central
-			}
-
-			.timeline-item__content {
-				align-items: flex-end;
-			}
+		.timeline-item__circuit {
+			right: 0;
+		}
+		.timeline-item__circuit-node {
+			right: -6px;
+		} // Centra el nodo exacto sobre la línea 2px
+		.timeline-item__content {
+			align-items: flex-end;
 		}
 	}
 
 	&--right {
+		align-self: flex-end;
+		text-align: left;
+		padding: 0rem 1rem;
 		@include tablet {
-			align-self: flex-end;
-			text-align: left;
+			padding-left: 3rem;
+		}
 
-			.timeline-item__circuit {
-				left: -11%;
-			}
+		.timeline-item__circuit {
+			left: 0;
+		}
+		.timeline-item__circuit-node {
+			left: -6px;
+		} // Centra el nodo exacto sobre la línea 2px
+		.timeline-item__content {
+			align-items: flex-start;
 		}
 	}
 
-	&__circuit {
-		position: absolute;
-		top: 2rem;
-		left: -2.5rem;
-		width: 2.5rem;
-		height: 20px;
-
-		@include tablet {
-			width: calc(11% + 2px); // Conecta con la línea central dinámicamente
-		}
-
-		svg {
-			width: 100%;
-			height: 100%;
-			overflow: visible;
-		}
-	}
-
+	/* Estilos Glassmorphism de la Card */
 	&__content {
 		display: flex;
 		flex-direction: column;
-		align-items: flex-start;
+
+		// Glassmorphism
+		background: rgba(255, 255, 255, 0.1);
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		border-radius: 16px;
+		padding: 1.5rem;
+		box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
 	}
 
 	&__number {
 		font-family: $font-secondary;
-		font-size: 2rem;
+		font-size: clamp(1.5rem, 4vw, 2.5rem);
 		font-weight: 700;
 		color: $color-black;
 		line-height: 1;
-		margin-bottom: 0.5rem;
+		margin-bottom: 0.25rem;
 	}
 
 	&__title {
 		font-family: $font-secondary;
-		font-size: 1.75rem;
+		font-size: clamp(1.2rem, 3vw, 2rem);
 		font-weight: 700;
 		color: $color-white;
 		text-transform: uppercase;
@@ -254,8 +277,8 @@
 
 	&__description {
 		font-family: $font-primary;
-		font-size: 1rem;
-		line-height: 1.4;
+		font-size: clamp(0.85rem, 1.5vw, 1rem);
+		line-height: 1.5;
 		color: $color-white;
 		margin: 0;
 	}
