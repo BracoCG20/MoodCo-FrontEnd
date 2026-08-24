@@ -1,285 +1,288 @@
-@use "../../styles/variables" as *;
-@use "../../styles/breakpoints" as *;
+@use '../../styles/variables' as *;
+@use '../../styles/breakpoints' as *;
 
 .timeline {
-	position: relative;
-	background-color: #549aa7;
-	width: 100%;
-	overflow-x: clip;
+  position: relative;
+  //   background-color: #549aa7;
+  //   background-color: linear-gradient();
+  background-image: linear-gradient(
+    to bottom,
+    #4e6e85,
+    #4e6e85,
+    #4e6e85,
+    #4e6e85
+  );
+  width: 100%;
+  overflow-x: clip;
 
-	/* =========================================
+  /* =========================================
      ESCENA 1: FONDO STICKY BLOQUEADO
      ========================================= */
-	&__sticky-scene {
-		position: sticky;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100vh;
-		overflow: hidden;
-		z-index: 1;
-	}
+  &__sticky-scene {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 1;
+  }
 
-	&__grid-bg {
-		position: absolute;
-		inset: 0;
-		background-image: url("/fondo_cuadricula.png");
-		background-size: cover;
-		background-position: center;
-		background-repeat: repeat-y;
-		opacity: 0.6;
-		z-index: 1;
-	}
+  &__grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('/fondo_cuadricula.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: repeat-y;
+    opacity: 0.6;
+    z-index: 1;
+  }
 
-	&__intro-texts {
-		position: absolute;
-		inset: 0;
-		z-index: 5;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		align-items: center;
-		padding: 6rem 1.5rem;
-		pointer-events: none;
-	}
+  &__intro-texts {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6rem 2.5rem;
+    pointer-events: none;
+  }
 
-	&__intro-text {
-		color: $color-white;
-		text-align: center;
-		font-family: $font-primary;
-		line-height: 1.4;
-		font-size: clamp(1rem, 2vw, 1.25rem);
-		max-width: 800px;
-		will-change: opacity, transform;
+  &__intro-text {
+    color: $color-white;
+    text-align: center;
+    font-family: $font-primary;
+    font-size: clamp(1.1rem, 2vw, 1.25rem);
+    max-width: 800px;
+    will-change: opacity, transform;
 
-		&--bottom {
-			text-transform: uppercase;
-			font-family: $font-secondary;
-			font-weight: 700;
-			font-size: clamp(1.2rem, 3vw, 1.5rem);
-		}
-	}
+    &--bottom {
+      text-transform: uppercase;
+      font-family: $font-secondary;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+    }
+  }
 
-	&__mood-letters {
-		position: absolute;
-		inset: 0;
-		z-index: 2;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		align-items: center;
-		padding: 10vh 0;
-		will-change: transform, filter, opacity;
-	}
+  &__mood-letters {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10vh 0;
+    will-change: transform, filter, opacity;
+  }
 
-	&__letter {
-		height: 22%;
-		width: auto;
-		object-fit: contain;
-	}
+  &__letter {
+    height: 22%;
+    width: auto;
+    object-fit: contain;
+  }
 
-	&__figures {
-		position: absolute;
-		inset: 0;
-		z-index: 3;
-		pointer-events: none;
-	}
+  &__figures {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+  }
 
-	&__figure {
-		position: absolute;
-		will-change: transform;
-		&--1 {
-			top: 5%;
-			right: 5%;
-			width: 15%;
-			max-width: 150px;
-		}
-		&--2 {
-			top: 40%;
-			left: -5%;
-			width: 25%;
-			max-width: 250px;
-		}
-		&--3 {
-			bottom: 10%;
-			right: -2%;
-			width: 20%;
-			max-width: 200px;
-		}
-	}
+  &__figure {
+    position: absolute;
+    will-change: transform;
+    &--1 {
+      top: 5%;
+      right: 5%;
+      width: 15%;
+      max-width: 150px;
+    }
+    &--2 {
+      top: 40%;
+      left: -5%;
+      width: 25%;
+      max-width: 250px;
+    }
+    &--3 {
+      bottom: 10%;
+      right: -2%;
+      width: 20%;
+      max-width: 200px;
+    }
+  }
 
-	&__whats-your {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		width: 90%;
-		max-width: 500px;
-		object-fit: contain;
-		filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.25));
-		z-index: 6;
+  &__whats-your {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    max-width: 400px;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.25));
+    z-index: 6;
 
-		@include tablet {
-			max-width: 700px;
-		}
-	}
+    @include tablet {
+      max-width: 700px;
+    }
+  }
 
-	/* =========================================
+  /* =========================================
      ESCENA 2: TRACK SCROLLEABLE
      ========================================= */
-	&__scroll-track {
-		position: relative;
-		width: 100%;
-		z-index: 10;
-	}
+  &__scroll-track {
+    position: relative;
+    width: 100%;
+    z-index: 10;
+  }
 
-	&__spacer {
-		height: 100vh;
-		width: 100%;
-	}
+  &__spacer {
+    height: 100vh;
+    width: 100%;
+  }
 
-	&__content {
-		position: relative;
-		width: 100%;
-		max-width: 1200px;
-		margin: 0 auto;
-		padding-bottom: 6rem;
-	}
+  &__content {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 6rem;
+  }
 
-	&__center-line {
-		position: absolute;
-		left: 50%;
-		transform: translateX(-50%);
-		top: 0;
-		bottom: 0;
-		width: 2px;
-		background-color: rgba($color-white, 0.2);
-		z-index: 1;
-	}
+  &__center-line {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: rgba($color-white, 0.2);
+    z-index: 1;
+  }
 
-	&__center-line-progress {
-		width: 100%;
-		background-color: $color-black;
-		height: 0;
-	}
+  &__center-line-progress {
+    width: 100%;
+    background-color: $color-black;
+    height: 0;
+  }
 
-	&__items {
-		display: flex;
-		flex-direction: column;
-		gap: 4rem;
-		width: 100%;
-		padding: 0;
-	}
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    width: 100%;
+    padding: 0;
+  }
 }
 
 // -----------------------------------------
 // GEOMETRÍA 50% PARA LOS ITEMS & GLASSMORPHISM
 // -----------------------------------------
 .timeline-item {
-	width: 50%;
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	z-index: 2;
+  width: 50%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
 
-	&__circuit {
-		position: absolute;
-		top: 2rem; // Ajustado para alinear con el título dentro del glassmorphism
-		width: 0; // Ya no necesitamos ancho, solo que se ancle al borde
-		height: 12px;
-		display: flex;
-		align-items: center;
-	}
+  &__circuit {
+    position: absolute;
+    top: 2rem; // Ajustado para alinear con el título dentro del glassmorphism
+    width: 0; // Ya no necesitamos ancho, solo que se ancle al borde
+    height: 12px;
+    display: flex;
+    align-items: center;
+  }
 
-	&__circuit-node {
-		position: absolute;
-		width: 12px;
-		height: 12px;
-		border-radius: 50%;
-		background-color: #f4e26a;
-		border: 2px solid #000000;
-		top: 0;
-		bottom: 0;
-		margin: auto;
-		z-index: 2;
-	}
+  &__circuit-node {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #f4e26a;
+    border: 2px solid #000000;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    z-index: 2;
+  }
 
-	&--left {
-		align-self: flex-start;
-		text-align: right;
-		padding: 0rem 1rem;
-		@include tablet {
-			padding-right: 3rem;
-		}
+  &--left {
+    align-self: flex-start;
+    text-align: right;
+    padding: 0rem 0.5rem;
+    @include tablet {
+      padding-right: 3rem;
+    }
 
-		.timeline-item__circuit {
-			right: 0;
-		}
-		.timeline-item__circuit-node {
-			right: -6px;
-		} // Centra el nodo exacto sobre la línea 2px
-		.timeline-item__content {
-			align-items: flex-end;
-		}
-	}
+    .timeline-item__circuit {
+      right: 0;
+    }
+    .timeline-item__circuit-node {
+      right: -6px;
+    } // Centra el nodo exacto sobre la línea 2px
+    .timeline-item__content {
+      align-items: flex-end;
+    }
+  }
 
-	&--right {
-		align-self: flex-end;
-		text-align: left;
-		padding: 0rem 1rem;
-		@include tablet {
-			padding-left: 3rem;
-		}
+  &--right {
+    align-self: flex-end;
+    text-align: left;
+    padding: 0rem 0.5rem;
+    @include tablet {
+      padding-left: 3rem;
+    }
 
-		.timeline-item__circuit {
-			left: 0;
-		}
-		.timeline-item__circuit-node {
-			left: -6px;
-		} // Centra el nodo exacto sobre la línea 2px
-		.timeline-item__content {
-			align-items: flex-start;
-		}
-	}
+    .timeline-item__circuit {
+      left: 0;
+    }
+    .timeline-item__circuit-node {
+      left: -6px;
+    } // Centra el nodo exacto sobre la línea 2px
+    .timeline-item__content {
+      align-items: flex-start;
+    }
+  }
 
-	/* Estilos Glassmorphism de la Card */
-	&__content {
-		display: flex;
-		flex-direction: column;
+  /* Estilos Glassmorphism de la Card */
+  &__content {
+    display: flex;
+    flex-direction: column;
 
-		// Glassmorphism
-		background: rgba(255, 255, 255, 0.1);
-		backdrop-filter: blur(12px);
-		-webkit-backdrop-filter: blur(12px);
-		border: 1px solid rgba(255, 255, 255, 0.2);
-		border-radius: 16px;
-		padding: 1.5rem;
-		box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
-	}
+    // Glassmorphism
+    background: rgba(2, 2, 2, 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 1rem 0.8rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+  }
 
-	&__number {
-		font-family: $font-secondary;
-		font-size: clamp(1.5rem, 4vw, 2.5rem);
-		font-weight: 700;
-		color: $color-black;
-		line-height: 1;
-		margin-bottom: 0.25rem;
-	}
+  &__number {
+    font-family: $font-primary;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    color: $color-black;
+    line-height: 1;
+  }
 
-	&__title {
-		font-family: $font-secondary;
-		font-size: clamp(1.2rem, 3vw, 2rem);
-		font-weight: 700;
-		color: $color-white;
-		text-transform: uppercase;
-		margin-bottom: 0.75rem;
-	}
+  &__title {
+    font-family: $font-secondary;
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    font-weight: 700;
+    color: $color-white;
+    text-transform: uppercase;
+  }
 
-	&__description {
-		font-family: $font-primary;
-		font-size: clamp(0.85rem, 1.5vw, 1rem);
-		line-height: 1.5;
-		color: $color-white;
-		margin: 0;
-	}
+  &__description {
+    font-family: $font-primary;
+    font-size: clamp(0.85rem, 1.5vw, 1rem);
+    line-height: 1.1;
+    color: $color-white;
+    margin: 0;
+  }
 }

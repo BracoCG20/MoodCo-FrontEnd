@@ -4,57 +4,107 @@ import TimelineItem from './TimelineItem.astro';
 import './Timeline.scss';
 ---
 
-<section class="timeline" id="timeline">
-  
-  <div class="timeline__sticky-scene">
-    <div class="timeline__grid-bg"></div>
+<section
+  class='timeline'
+  id='timeline'
+>
+  <div class='timeline__sticky-scene'>
+    <div class='timeline__grid-bg'></div>
 
-    <div class="timeline__intro-texts" data-intro-text>
-      <p class="timeline__intro-text timeline__intro-text--top">
-        {timelineData.intro.topText}
-      </p>
-      <p class="timeline__intro-text timeline__intro-text--bottom">
-        {timelineData.intro.bottomText}
-      </p>
+    <div
+      class='timeline__intro-texts'
+      data-intro-text
+    >
+      <p
+        class='timeline__intro-text timeline__intro-text--top'
+        set:html={timelineData.intro.topText}
+      />
+      <p
+        class='timeline__intro-text timeline__intro-text--bottom'
+        set:html={timelineData.intro.bottomText}
+      />
     </div>
 
-    <div class="timeline__mood-letters" data-mood-block>
-      <img src="/M.png" alt="M" class="timeline__letter" />
-      <img src="/O.png" alt="O" class="timeline__letter" />
-      <img src="/O.png" alt="O" class="timeline__letter" />
-      <img src="/D.png" alt="D" class="timeline__letter" />
+    <div
+      class='timeline__mood-letters'
+      data-mood-block
+    >
+      <img
+        src='/M.png'
+        alt='M'
+        class='timeline__letter'
+      />
+      <img
+        src='/O.png'
+        alt='O'
+        class='timeline__letter'
+      />
+      <img
+        src='/O.png'
+        alt='O'
+        class='timeline__letter'
+      />
+      <img
+        src='/D.png'
+        alt='D'
+        class='timeline__letter'
+      />
     </div>
 
-    <div class="timeline__figures">
-      <img src="/figura_1.png" alt="" class="timeline__figure timeline__figure--1" data-figure />
-      <img src="/figura_2.png" alt="" class="timeline__figure timeline__figure--2" data-figure />
-      <img src="/figura_3.png" alt="" class="timeline__figure timeline__figure--3" data-figure />
+    <div class='timeline__figures'>
+      <img
+        src='/figura_1.png'
+        alt=''
+        class='timeline__figure timeline__figure--1'
+        data-figure
+      />
+      <img
+        src='/figura_2.png'
+        alt=''
+        class='timeline__figure timeline__figure--2'
+        data-figure
+      />
+      <img
+        src='/figura_3.png'
+        alt=''
+        class='timeline__figure timeline__figure--3'
+        data-figure
+      />
     </div>
 
-    <img src="/letra_timeline.png" alt="What's your" class="timeline__whats-your" />
+    <img
+      src='/letra_timeline.png'
+      alt="What's your"
+      class='timeline__whats-your'
+    />
   </div>
 
-  <div class="timeline__scroll-track">
-    <div class="timeline__spacer"></div>
+  <div class='timeline__scroll-track'>
+    <div class='timeline__spacer'></div>
 
-    <div class="timeline__content">
-      <div class="timeline__center-line">
-        <div class="timeline__center-line-progress" data-line-progress></div>
+    <div class='timeline__content'>
+      <div class='timeline__center-line'>
+        <div
+          class='timeline__center-line-progress'
+          data-line-progress
+        >
+        </div>
       </div>
-      
-      <div class="timeline__items">
-        {timelineData.items.map((item, index) => (
-          <TimelineItem 
-            number={item.number} 
-            title={item.title} 
-            description={item.description} 
-            align={index % 2 === 0 ? 'left' : 'right'} 
-          />
-        ))}
+
+      <div class='timeline__items'>
+        {
+          timelineData.items.map((item, index) => (
+            <TimelineItem
+              number={item.number}
+              title={item.title}
+              description={item.description}
+              align={index % 2 === 0 ? 'left' : 'right'}
+            />
+          ))
+        }
       </div>
     </div>
   </div>
-
 </section>
 
 <script>
@@ -68,62 +118,71 @@ import './Timeline.scss';
       scrollTrigger: {
         trigger: '.timeline',
         start: 'top top',
-        end: '+=100vh', 
-        scrub: 1
-      }
+        end: '+=150vh',
+        scrub: 2,
+      },
     });
 
-    introTl.to('[data-intro-text]', { opacity: 0, y: -30, duration: 1 }, 0);
-    
-    introTl.to('[data-mood-block]', {
-      scale: 0.85, 
-      filter: 'blur(6px)',
-      opacity: 0.4, 
-      duration: 2,
-      ease: 'power1.inOut'
-    }, 0);
+    introTl.to('[data-intro-text]', { opacity: 0, y: -10, duration: 1 }, 0);
 
-    introTl.to('[data-figure]', {
-      y: (i, el) => el.classList.contains('timeline__figure--1') ? -40 : 40,
-      duration: 2,
-      ease: 'power1.inOut'
-    }, 0);
+    introTl.to(
+      '[data-mood-block]',
+      {
+        scale: 1.2,
+        filter: 'blur(6px)',
+        opacity: 0.4,
+        duration: 2,
+        ease: 'power1.inOut',
+      },
+      0,
+    );
+
+    introTl.to(
+      '[data-figure]',
+      {
+        y: (i, el) => (el.classList.contains('timeline__figure--1') ? -40 : 40),
+        duration: 2,
+        ease: 'power1.inOut',
+      },
+      0,
+    );
 
     const items = document.querySelectorAll('[data-timeline-item]');
     const lineProgress = document.querySelector('[data-line-progress]');
 
-    gsap.fromTo(lineProgress, 
+    gsap.fromTo(
+      lineProgress,
       { height: '0%' },
-      { 
+      {
         height: '100%',
         ease: 'none',
         scrollTrigger: {
           trigger: '.timeline__content',
           start: 'top 50%',
           end: 'bottom 80%',
-          scrub: true
-        }
-      }
+          scrub: true,
+        },
+      },
     );
 
     items.forEach((item) => {
       const node = item.querySelector('[data-circuit-node]');
-      
+
       gsap.set(node, { scale: 0 });
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: item,
           start: 'top 85%',
-          toggleActions: 'play none none reverse'
-        }
+          toggleActions: 'play none none reverse',
+        },
       });
 
-      tl.fromTo(item, 
-          { opacity: 0, y: 50 }, 
-          { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }
-        )
-        .to(node, { scale: 1, duration: 0.4, ease: 'back.out(2)' }, '-=0.3');
+      tl.fromTo(
+        item,
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
+      ).to(node, { scale: 1, duration: 0.4, ease: 'back.out(2)' }, '-=0.3');
     });
   });
 </script>

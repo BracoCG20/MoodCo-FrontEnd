@@ -1,48 +1,48 @@
 {
-	"intro": {
-		"topText": "No todas las marcas están en el mismo lugar. Algunas están naciendo. Otras están creciendo. Otras están redefiniendo lo que serán mañana.",
-		"bottomText": "LEER ESE MOOD ES LEER EL NEGOCIO Y ENTENDERLO LO TRANSFORMA TODO."
-	},
-	"items": [
-		{
-			"number": "01",
-			"title": "LAUNCH MOOD",
-			"description": "Tu marca nació y está lista para salir al mundo. Construimos contigo la plataforma de marca que le da dirección desde el día uno: estrategia y branding pensados para que llegue al mercado con un rumbo claro, no solo con un logo."
-		},
-		{
-			"number": "02",
-			"title": "VISIBILITY MOOD",
-			"description": "Necesitas llamar la atención y quedarte en la mente de las personas. Creamos ideas con dirección: creatividad diseñada para hacer que tu marca sea imposible de ignorar y que esa atención se convierta en valor para el negocio."
-		},
-		{
-			"number": "03",
-			"title": "GROWTH MOOD",
-			"description": "Quieres acelerar el crecimiento de tu marca. Nuestro equipo de estrategia y performance lee las oportunidades detrás de tus números y las transforma en crecimiento medible."
-		},
-		{
-			"number": "04",
-			"title": "CONNECTION MOOD",
-			"description": "Buscas que las personas hablen de tu marca. Conectamos creatividad y creadores para generar conversaciones con afinidad y relevancia cultural, con un objetivo claro: que esa conversación mueva el negocio."
-		},
-		{
-			"number": "05",
-			"title": "EVOLUTION MOOD",
-			"description": "Quieres transformar la experiencia de quienes interactúan con tu marca. Performance, pauta y UX trabajando juntos para que cada interacción entre personas y marca se traduzca en resultados que puedes medir."
-		},
-		{
-			"number": "06",
-			"title": "CREATOR MOOD",
-			"description": "Buscas que las personas creen más en tu marca. Nuestro Hub de Creadores conecta tu marca con las voces y comunidades correctas para construir influencia real y credibilidad que se sostiene en el tiempo."
-		},
-		{
-			"number": "07",
-			"title": "BUILD MOOD",
-			"description": "Tu marca necesita infraestructura digital para operar y vender. Diseñamos y desarrollamos sitios, plataformas y ecosistemas web construidos desde la estrategia: pensados para convertir visitas en clientes y soportar el crecimiento de tu negocio."
-		},
-		{
-			"number": "08",
-			"title": "AI MOOD",
-			"description": "Tu objetivo es multiplicar tus capacidades. Producimos con inteligencia artificial: videos y contenido de calidad broadcast con presupuestos mucho más ajustados y tiempos de producción más cortos, sin afectar el resultado final. Más producción, la misma exigencia creativa, mejores números para tu negocio."
-		}
-	]
+  "intro": {
+    "topText": "No todas las marcas están en el mismo lugar. Algunas están naciendo. Otras están creciendo.<strong> Otras están redefiniendo lo que serán mañana.</strong>",
+    "bottomText": "<strong>LEER ESE MOOD</strong> ES LEER EL NEGOCIO Y ENTENDERLO <strong>LO TRANSFORMA TODO.</strong>"
+  },
+  "items": [
+    {
+      "number": "01",
+      "title": "LAUNCH MOOD",
+      "description": "Tu marca nació y está lista para salir al mundo. Construimos contigo la plataforma de marca que le da dirección desde el día uno: estrategia y branding pensados para que llegue al mercado con un rumbo claro, no solo con un logo."
+    },
+    {
+      "number": "02",
+      "title": "VISIBILITY MOOD",
+      "description": "Necesitas llamar la atención y quedarte en la mente de las personas. Creamos ideas con dirección: creatividad diseñada para hacer que tu marca sea imposible de ignorar y que esa atención se convierta en valor para el negocio."
+    },
+    {
+      "number": "03",
+      "title": "GROWTH MOOD",
+      "description": "Quieres acelerar el crecimiento de tu marca. Nuestro equipo de estrategia y performance lee las oportunidades detrás de tus números y las transforma en crecimiento medible."
+    },
+    {
+      "number": "04",
+      "title": "CONNECTION MOOD",
+      "description": "Buscas que las personas hablen de tu marca. Conectamos creatividad y creadores para generar conversaciones con afinidad y relevancia cultural, con un objetivo claro: que esa conversación mueva el negocio."
+    },
+    {
+      "number": "05",
+      "title": "EVOLUTION MOOD",
+      "description": "Quieres transformar la experiencia de quienes interactúan con tu marca. Performance, pauta y UX trabajando juntos para que cada interacción entre personas y marca se traduzca en resultados que puedes medir."
+    },
+    {
+      "number": "06",
+      "title": "CREATOR MOOD",
+      "description": "Buscas que las personas creen más en tu marca. Nuestro Hub de Creadores conecta tu marca con las voces y comunidades correctas para construir influencia real y credibilidad que se sostiene en el tiempo."
+    },
+    {
+      "number": "07",
+      "title": "BUILD MOOD",
+      "description": "Tu marca necesita infraestructura digital para operar y vender. Diseñamos y desarrollamos sitios, plataformas y ecosistemas web construidos desde la estrategia: pensados para convertir visitas en clientes y soportar el crecimiento de tu negocio."
+    },
+    {
+      "number": "08",
+      "title": "AI MOOD",
+      "description": "Tu objetivo es multiplicar tus capacidades. Producimos con inteligencia artificial: videos y contenido de calidad broadcast con presupuestos mucho más ajustados y tiempos de producción más cortos, sin afectar el resultado final. Más producción, la misma exigencia creativa, mejores números para tu negocio."
+    }
+  ]
 }
