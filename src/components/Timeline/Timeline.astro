@@ -10,7 +10,7 @@ import './Timeline.scss';
 >
   <div class='timeline__sticky-scene'>
     <div class='timeline__grid-bg'></div>
-
+    <div class='timeline__grid-bg2'></div>
     <div
       class='timeline__intro-texts'
       data-intro-text
@@ -104,6 +104,13 @@ import './Timeline.scss';
         }
       </div>
     </div>
+
+    <!-- NUEVO: Espaciador final para desencadenar el regreso de la Capa 1 -->
+    <div
+      class='timeline__spacer'
+      data-outro-spacer
+    >
+    </div>
   </div>
 </section>
 
@@ -114,6 +121,7 @@ import './Timeline.scss';
   gsap.registerPlugin(ScrollTrigger);
 
   document.addEventListener('DOMContentLoaded', () => {
+    // === ANIMACIÓN DE ENTRADA (Mantenida intacta) ===
     const introTl = gsap.timeline({
       scrollTrigger: {
         trigger: '.timeline',
@@ -128,7 +136,7 @@ import './Timeline.scss';
     introTl.to(
       '[data-mood-block]',
       {
-        scale: 1.2,
+        scale: 1.4,
         filter: 'blur(6px)',
         opacity: 0.4,
         duration: 2,
@@ -141,12 +149,14 @@ import './Timeline.scss';
       '[data-figure]',
       {
         y: (i, el) => (el.classList.contains('timeline__figure--1') ? -40 : 40),
+        filter: 'blur(2px)',
         duration: 2,
         ease: 'power1.inOut',
       },
       0,
     );
 
+    // === LÓGICA DEL TIMELINE (Mantenida intacta) ===
     const items = document.querySelectorAll('[data-timeline-item]');
     const lineProgress = document.querySelector('[data-line-progress]');
 
@@ -184,5 +194,41 @@ import './Timeline.scss';
         { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
       ).to(node, { scale: 1, duration: 0.4, ease: 'back.out(2)' }, '-=0.3');
     });
+
+    // === NUEVO: ANIMACIÓN DE SALIDA (Regreso a la Capa 1) ===
+    // Se ejecuta al scrollear el nuevo espaciador final
+    const outroTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '[data-outro-spacer]',
+        start: 'top bottom', // Inicia cuando el espaciador aparece (fin del timeline)
+        end: 'bottom bottom', // Termina cuando la sección está a punto de abandonarse
+        scrub: 2,
+      },
+    });
+
+    outroTl.to('[data-intro-text]', { opacity: 1, y: 0, duration: 1 }, 0);
+
+    outroTl.to(
+      '[data-mood-block]',
+      {
+        scale: 1,
+        filter: 'blur(0px)',
+        opacity: 1,
+        duration: 2,
+        ease: 'power1.inOut',
+      },
+      0,
+    );
+
+    outroTl.to(
+      '[data-figure]',
+      {
+        y: 0,
+        filter: 'blur(0px)',
+        duration: 2,
+        ease: 'power1.inOut',
+      },
+      0,
+    );
   });
 </script>

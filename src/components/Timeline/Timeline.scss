@@ -6,6 +6,7 @@
   background-color: #549aa7;
   width: 100%;
   overflow-x: clip;
+  z-index: 1000;
 
   /* =========================================
      ESCENA 1: FONDO STICKY BLOQUEADO
@@ -27,8 +28,16 @@
     background-size: cover;
     background-position: center;
     background-repeat: repeat-y;
-    opacity: 0.6;
     z-index: 1;
+  }
+  &__grid-bg2 {
+    position: absolute;
+    inset: 0;
+    background-image: url('/fondo_timeline.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: repeat-y;
+    z-index: 2;
   }
 
   &__intro-texts {
@@ -39,7 +48,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 6rem 2.5rem;
+    padding: 3rem 3.5rem;
     pointer-events: none;
   }
 
@@ -47,9 +56,9 @@
     color: $color-white;
     text-align: center;
     font-family: $font-primary;
-    font-size: clamp(1.1rem, 2vw, 1.25rem);
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
     max-width: 800px;
-    will-change: opacity, transform;
+    line-height: 1.2;
 
     &--bottom {
       text-transform: uppercase;
@@ -64,14 +73,15 @@
     z-index: 2;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    gap: 2px;
     padding: 10vh 0;
     will-change: transform, filter, opacity;
   }
 
   &__letter {
-    height: 22%;
+    height: 19%;
     width: auto;
     object-fit: contain;
   }
@@ -86,22 +96,23 @@
   &__figure {
     position: absolute;
     will-change: transform;
+    filter: blur(1px);
     &--1 {
-      top: 5%;
-      right: 5%;
-      width: 15%;
+      top: 18%;
+      right: -10%;
+      width: 35%;
       max-width: 150px;
     }
     &--2 {
-      top: 40%;
-      left: -5%;
-      width: 25%;
+      top: 32%;
+      left: -12%;
+      width: 45%;
       max-width: 250px;
     }
     &--3 {
-      bottom: 10%;
-      right: -2%;
-      width: 20%;
+      bottom: 25%;
+      right: -4%;
+      width: 40%;
       max-width: 200px;
     }
   }
@@ -111,7 +122,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 70%;
+    width: 50%;
     max-width: 400px;
     object-fit: contain;
     filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.25));
@@ -182,8 +193,8 @@
 
   &__circuit {
     position: absolute;
-    top: 2rem; // Ajustado para alinear con el título dentro del glassmorphism
-    width: 0; // Ya no necesitamos ancho, solo que se ancle al borde
+    top: 2rem;
+    width: 0;
     height: 12px;
     display: flex;
     align-items: center;
@@ -215,7 +226,7 @@
     }
     .timeline-item__circuit-node {
       right: -6px;
-    } // Centra el nodo exacto sobre la línea 2px
+    }
     .timeline-item__content {
       align-items: flex-end;
     }
@@ -234,7 +245,7 @@
     }
     .timeline-item__circuit-node {
       left: -6px;
-    } // Centra el nodo exacto sobre la línea 2px
+    }
     .timeline-item__content {
       align-items: flex-start;
     }
