@@ -4,7 +4,8 @@
 .cases {
   width: 100%;
   background-color: $color-white;
-  height: 100dvh;
+  // ELIMINADO: height: 100dvh;
+  // Esto previene que el contenedor corte el contenido y se superponga sobre la siguiente sección en móvil.
 
   &__header {
     padding: 4rem 1.5rem 2rem;
@@ -56,7 +57,7 @@
       height: 80px; // Altura ajustada para ser sutil
       z-index: 5;
       pointer-events: none;
-      display: none; // Totalmente oculto en Mobile para evitar líneas no deseadas
+      // display: none; // Totalmente oculto en Mobile para evitar líneas no deseadas
 
       @include tablet {
         display: block; // Se reactiva desde Tablet hacia adelante

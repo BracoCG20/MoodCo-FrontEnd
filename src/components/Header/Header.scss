@@ -8,6 +8,9 @@
   z-index: 1000;
   padding: 1.5rem;
   transition: background-color 0.3s ease;
+  @include tablet {
+    padding: 2rem 3rem;
+  }
 
   // Asegura que los elementos del top bar queden por encima del overlay del menú
   &__container {
@@ -34,7 +37,7 @@
     transition: filter 0.3s ease;
 
     @include tablet {
-      height: 40px;
+      height: 60px;
     }
   }
 
@@ -47,6 +50,7 @@
     font-weight: 400;
 
     @include tablet {
+      font-size: 1.2rem;
     }
   }
 
@@ -62,6 +66,9 @@
     padding: 0.25rem;
     z-index: 101;
     outline: none;
+    @include tablet {
+      font-size: 3rem;
+    }
   }
 
   &__icon {
@@ -99,6 +106,9 @@
     // clip-path optimizado en SCSS para la animación GSAP
     clip-path: inset(0 0 100% 0);
     visibility: hidden;
+    @include tablet {
+      padding: 3rem;
+    }
   }
 
   &__menu-inner {
@@ -178,6 +188,9 @@
       background-color 0.3s,
       color 0.3s;
     outline: none;
+    @include tablet {
+      font-size: 1.4rem;
+    }
 
     &.is-active {
       background-color: $color-white;

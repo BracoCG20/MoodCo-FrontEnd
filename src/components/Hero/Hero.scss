@@ -1,113 +1,113 @@
-@use "../../styles/variables" as *;
-@use "../../styles/breakpoints" as *;
+@use '../../styles/variables' as *;
+@use '../../styles/breakpoints' as *;
 
 .hero {
-	position: relative;
-	width: 100%;
-	min-height: 100dvh;
-	overflow: hidden;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	background-color: $color-black; // Fallback mientras carga el video
+  position: relative;
+  width: 100%;
+  min-height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $color-black; // Fallback mientras carga el video
 
-	// Capa 1: Video
-	&__video {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		z-index: 1;
-		pointer-events: none;
-	}
+  // Capa 1: Video
+  &__video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    pointer-events: none;
+  }
 
-	// Capa 2: Overlay
-	&__overlay {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: 2;
-		pointer-events: none;
-	}
+  // Capa 2: Overlay
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+  }
 
-	// Capa 3: Contenedor
-	&__content {
-		position: absolute;
-		top: 0;
-		left: 50%;
-		transform: translateX(-50%);
-		width: 100%;
-		height: 100%;
-		max-width: 1400px;
-		z-index: 3;
-		pointer-events: none; // Evita bloquear interacciones con el fondo si las hubiera
-	}
+  // Capa 3: Contenedor
+  &__content {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 100%;
+    max-width: 1400px;
+    z-index: 3;
+    pointer-events: none; // Evita bloquear interacciones con el fondo si las hubiera
+  }
 
-	// Capa 4: Línea SVG
-	&__line {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: 4;
-	}
+  // Capa 4: Línea SVG
+  &__line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+  }
 
-	// Capa 5: Textos
-	&__title {
-		position: absolute;
-		color: $color-white;
-		font-family: $font-secondary; // Roc Grotesk Condensed
-		text-transform: uppercase;
-		line-height: 0.95;
-		margin: 0;
-		z-index: 5;
-		// Sombra sutil para despegar el texto del video ruidoso
-		text-shadow: 0 4px 16px rgba($color-black, 0.4);
+  // Capa 5: Textos
+  &__title {
+    position: absolute;
+    color: $color-white;
+    font-family: $font-secondary; // Roc Grotesk Condensed
+    text-transform: uppercase;
+    line-height: 0.95;
+    margin: 0;
+    z-index: 5;
+    // Sombra sutil para despegar el texto del video ruidoso
+    text-shadow: 0 4px 16px rgba($color-black, 0.4);
 
-		// Bloque Superior
-		&--top {
-			font-weight: 700; // Bold según referencia
-			font-size: 2.55rem;
-			top: 26%;
-			right: 5%;
+    // Bloque Superior
+    &--top {
+      font-weight: 700; // Bold según referencia
+      font-size: 2.55rem;
+      top: 26%;
+      right: 5%;
 
-			@include tablet {
-				font-size: 4.5rem;
-				top: 32%;
-				right: 15%;
-			}
+      @include tablet {
+        font-size: 4rem;
+        top: 24%;
+        right: 8%;
+      }
 
-			@include desktop {
-				font-size: 6rem;
-				top: 35%;
-				right: 15%;
-			}
-		}
+      @include desktop {
+        font-size: 6rem;
+        top: 35%;
+        right: 15%;
+      }
+    }
 
-		// Bloque Inferior
-		&--bottom {
-			font-weight: 300; // Light según referencia
-			font-size: 2.5rem;
-			bottom: 13%;
-			left: 5%;
-			text-align: left;
+    // Bloque Inferior
+    &--bottom {
+      font-weight: 300; // Light según referencia
+      font-size: 2.5rem;
+      bottom: 13%;
+      left: 5%;
+      text-align: left;
 
-			@include tablet {
-				font-size: 4rem;
-				bottom: 25%;
-				left: 10%;
-			}
+      @include tablet {
+        font-size: 4rem;
+        bottom: 12%;
+        left: 10%;
+      }
 
-			@include desktop {
-				font-size: 5.5rem;
-				bottom: 15%;
-				left: 15%;
-			}
-		}
-	}
+      @include desktop {
+        font-size: 5.5rem;
+        bottom: 15%;
+        left: 15%;
+      }
+    }
+  }
 }

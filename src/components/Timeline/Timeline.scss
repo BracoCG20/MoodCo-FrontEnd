@@ -50,20 +50,23 @@
     align-items: center;
     padding: 3rem 3.5rem;
     pointer-events: none;
+    @include tablet {
+      padding: 4rem 6rem;
+    }
   }
 
   &__intro-text {
     color: $color-white;
     text-align: center;
     font-family: $font-primary;
-    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    font-size: clamp(1.2rem, 3vw, 2.5rem);
     max-width: 800px;
     line-height: 1.2;
 
     &--bottom {
       text-transform: uppercase;
       font-family: $font-secondary;
-      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-size: clamp(1.5rem, 5vw, 3rem);
     }
   }
 
@@ -218,7 +221,8 @@
     text-align: right;
     padding: 0rem 0.5rem;
     @include tablet {
-      padding-right: 3rem;
+      padding-right: 1rem;
+      padding-left: 2.5rem;
     }
 
     .timeline-item__circuit {
@@ -237,7 +241,8 @@
     text-align: left;
     padding: 0rem 0.5rem;
     @include tablet {
-      padding-left: 3rem;
+      padding-left: 1rem;
+      padding-right: 2.5rem;
     }
 
     .timeline-item__circuit {
@@ -264,18 +269,21 @@
     border-radius: 16px;
     padding: 1rem 0.8rem;
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+    @include tablet {
+      padding: 1.5rem;
+    }
   }
 
   &__number {
     font-family: $font-primary;
-    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-size: clamp(2rem, 6vw, 6rem);
     color: $color-black;
     line-height: 1;
   }
 
   &__title {
     font-family: $font-secondary;
-    font-size: clamp(1.2rem, 3vw, 2rem);
+    font-size: clamp(1.2rem, 5vw, 2rem);
     font-weight: 700;
     color: $color-white;
     text-transform: uppercase;
@@ -283,7 +291,7 @@
 
   &__description {
     font-family: $font-primary;
-    font-size: clamp(0.85rem, 1.5vw, 1rem);
+    font-size: clamp(0.85rem, 2.4vw, 3rem);
     line-height: 1.1;
     color: $color-white;
     margin: 0;
