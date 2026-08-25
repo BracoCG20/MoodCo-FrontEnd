@@ -28,7 +28,6 @@ const track3 = [...col3, ...col3];
 <section
   class='cases'
   aria-labelledby='cases-title'
-  id='trabajos'
 >
   <header class='cases__header'>
     <h2
@@ -43,72 +42,48 @@ const track3 = [...col3, ...col3];
 
   <div class='cases__carousel-wrapper'>
     <div class='cases__columns'>
-      <!-- Columna 1 (Índice 0: Hacia abajo) -->
-      <div
-        class='cases__col cases__col--1'
-        data-col-index='0'
-      >
-        <div
-          class='cases__track'
-          data-carousel-track
-        >
-          {
-            track1.map((item) => (
-              <CaseCard
-                title={item.title}
-                description={item.description}
-                tags={item.tags}
-                link={item.link}
-                imageSrc={getImagePath(item.image)}
-              />
-            ))
-          }
+      <!-- Columna 1 -->
+      <div class='cases__col cases__col--1' data-col-index='0'>
+        <div class='cases__track' data-carousel-track>
+          {track1.map((item) => (
+            <CaseCard
+              title={item.title}
+              description={item.description}
+              tags={item.tags}
+              link={item.link}
+              imageSrc={getImagePath(item.image)}
+            />
+          ))}
         </div>
       </div>
 
-      <!-- Columna 2 (Índice 1: Hacia arriba | Visible desde Tablet) -->
-      <div
-        class='cases__col cases__col--2'
-        data-col-index='1'
-      >
-        <div
-          class='cases__track'
-          data-carousel-track
-        >
-          {
-            track2.map((item) => (
-              <CaseCard
-                title={item.title}
-                description={item.description}
-                tags={item.tags}
-                link={item.link}
-                imageSrc={getImagePath(item.image)}
-              />
-            ))
-          }
+      <!-- Columna 2 -->
+      <div class='cases__col cases__col--2' data-col-index='1'>
+        <div class='cases__track' data-carousel-track>
+          {track2.map((item) => (
+            <CaseCard
+              title={item.title}
+              description={item.description}
+              tags={item.tags}
+              link={item.link}
+              imageSrc={getImagePath(item.image)}
+            />
+          ))}
         </div>
       </div>
 
-      <!-- Columna 3 (Índice 2: Hacia abajo | Visible desde Desktop) -->
-      <div
-        class='cases__col cases__col--3'
-        data-col-index='2'
-      >
-        <div
-          class='cases__track'
-          data-carousel-track
-        >
-          {
-            track3.map((item) => (
-              <CaseCard
-                title={item.title}
-                description={item.description}
-                tags={item.tags}
-                link={item.link}
-                imageSrc={getImagePath(item.image)}
-              />
-            ))
-          }
+      <!-- Columna 3 -->
+      <div class='cases__col cases__col--3' data-col-index='2'>
+        <div class='cases__track' data-carousel-track>
+          {track3.map((item) => (
+            <CaseCard
+              title={item.title}
+              description={item.description}
+              tags={item.tags}
+              link={item.link}
+              imageSrc={getImagePath(item.image)}
+            />
+          ))}
         </div>
       </div>
     </div>
@@ -122,21 +97,18 @@ const track3 = [...col3, ...col3];
   gsap.registerPlugin(ScrollTrigger);
 
   document.addEventListener('DOMContentLoaded', () => {
-    // 1. Lógica del Carrusel Infinito Alternado
     const tracks = document.querySelectorAll('[data-carousel-track]');
 
     const carousels = Array.from(tracks).map((track, index) => {
       const isMovingUp = index % 2 !== 0;
 
       if (isMovingUp) {
-        // Movimiento hacia ARRIBA
         return gsap.fromTo(
           track,
           { yPercent: 0 },
           { yPercent: -50, duration: 40, ease: 'none', repeat: -1 },
         );
       } else {
-        // Movimiento hacia ABAJO
         return gsap.fromTo(
           track,
           { yPercent: -50 },
@@ -151,7 +123,6 @@ const track3 = [...col3, ...col3];
       '(hover: none), (pointer: coarse)',
     ).matches;
 
-    // 2. Lógica de las Cards (Hover y Activo controlan su propia columna)
     const cards = document.querySelectorAll('[data-case-card]');
     let activeCard: HTMLElement | null = null;
 
@@ -162,16 +133,13 @@ const track3 = [...col3, ...col3];
         ? parseInt(col.getAttribute('data-col-index') || '-1', 10)
         : -1;
 
-      const trigger = card.querySelector(
-        '[data-case-trigger]',
-      ) as HTMLButtonElement;
+      const trigger = card.querySelector('[data-case-trigger]') as HTMLButtonElement;
       const body = card.querySelector('[data-case-body]') as HTMLElement;
       const img = card.querySelector('[data-case-img]') as HTMLElement;
       const overlay = card.querySelector('[data-case-overlay]') as HTMLElement;
 
       gsap.set(body, { height: 0, overflow: 'hidden' });
 
-      // HOVER: Detiene ÚNICAMENTE la columna a la que pertenece
       if (isHoverable) {
         card.addEventListener('mouseenter', () => {
           if (colIndex >= 0 && colIndex < carousels.length) {
@@ -180,20 +148,17 @@ const track3 = [...col3, ...col3];
 
           if (card.classList.contains('is-active')) return;
 
-          // Visual hover
           gsap.to(img, { scale: 1.2, duration: 0.4, ease: 'power2.out' });
           gsap.to(overlay, { opacity: 0.6, duration: 0.4, ease: 'power2.out' });
         });
 
         card.addEventListener('mouseleave', () => {
-          // Si está activa, la cerramos automáticamente al retirar el mouse
           if (card.classList.contains('is-active')) {
             gsap.to(body, { height: 0, duration: 0.4, ease: 'power2.inOut' });
             trigger.setAttribute('aria-expanded', 'false');
             card.classList.remove('is-active');
             activeCard = null;
 
-            // Retiramos el ajuste de centrado y reanudamos la animación
             gsap.to(track, {
               y: 0,
               duration: 0.4,
@@ -205,25 +170,21 @@ const track3 = [...col3, ...col3];
               },
             });
           } else {
-            // Si no estaba activa, simplemente reanudamos
             if (colIndex >= 0 && colIndex < carousels.length) {
               carousels[colIndex].play();
             }
           }
 
-          // Revertir visual hover
           gsap.to(img, { scale: 1, duration: 0.4, ease: 'power2.out' });
           gsap.to(overlay, { opacity: 0, duration: 0.4, ease: 'power2.out' });
         });
       }
 
-      // CLICK: Abre y centra la card
       trigger.addEventListener('click', (e) => {
         if (isTouch) e.stopPropagation();
 
         const isCurrentlyActive = activeCard === card;
 
-        // Si es táctil y hay otra activa, la cerramos (en Desktop esto se maneja con mouseleave)
         if (isTouch && activeCard && !isCurrentlyActive) {
           const activeBody = activeCard.querySelector('[data-case-body]');
           const activeTrigger = activeCard.querySelector('[data-case-trigger]');
@@ -254,7 +215,6 @@ const track3 = [...col3, ...col3];
         }
 
         if (isCurrentlyActive) {
-          // Cierra la card actual si se vuelve a hacer click
           gsap.to(body, { height: 0, duration: 0.4, ease: 'power2.inOut' });
           trigger.setAttribute('aria-expanded', 'false');
           card.classList.remove('is-active');
@@ -271,9 +231,8 @@ const track3 = [...col3, ...col3];
             },
           });
         } else {
-          // Abre la card
           if (isTouch && colIndex >= 0 && colIndex < carousels.length) {
-            carousels[colIndex].pause(); // Asegura pausa en táctil
+            carousels[colIndex].pause(); 
           }
 
           gsap.to(body, {
@@ -285,13 +244,11 @@ const track3 = [...col3, ...col3];
           card.classList.add('is-active');
           activeCard = card as HTMLElement;
 
-          // Cálculo para centrar dinámicamente la card en la columna
           if (carouselWrapper) {
             const wrapperRect = carouselWrapper.getBoundingClientRect();
             const cardRect = card.getBoundingClientRect();
 
             const wrapperCenter = wrapperRect.top + wrapperRect.height / 2;
-            // El centro final considera el alto que tomará el body al expandirse
             const expandedCardCenter =
               cardRect.top + cardRect.height / 2 + body.scrollHeight / 2;
 
@@ -303,7 +260,6 @@ const track3 = [...col3, ...col3];
             });
           }
 
-          // Limpia el visual hover al abrirse
           gsap.to(img, { scale: 1, duration: 0.4, ease: 'power2.out' });
           gsap.to(overlay, { opacity: 0, duration: 0.4, ease: 'power2.out' });
         }

@@ -4,114 +4,110 @@ import TimelineItem from './TimelineItem.astro';
 import './Timeline.scss';
 ---
 
-<section
-  class='timeline'
-  id='timeline'
->
-  <div class='timeline__sticky-scene'>
-    <div class='timeline__grid-bg'></div>
-    <div class='timeline__grid-bg2'></div>
-    <div
-      class='timeline__intro-texts'
-      data-intro-text
-    >
-      <p
-        class='timeline__intro-text timeline__intro-text--top'
-        set:html={timelineData.intro.topText}
-      />
-      <p
-        class='timeline__intro-text timeline__intro-text--bottom'
-        set:html={timelineData.intro.bottomText}
-      />
-    </div>
-
-    <div
-      class='timeline__mood-letters'
-      data-mood-block
-    >
-      <img
-        src='/M.png'
-        alt='M'
-        class='timeline__letter'
-      />
-      <img
-        src='/O.png'
-        alt='O'
-        class='timeline__letter'
-      />
-      <img
-        src='/O.png'
-        alt='O'
-        class='timeline__letter'
-      />
-      <img
-        src='/D.png'
-        alt='D'
-        class='timeline__letter'
-      />
-    </div>
-
-    <div class='timeline__figures'>
-      <img
-        src='/figura_1.png'
-        alt=''
-        class='timeline__figure timeline__figure--1'
-        data-figure
-      />
-      <img
-        src='/figura_2.png'
-        alt=''
-        class='timeline__figure timeline__figure--2'
-        data-figure
-      />
-      <img
-        src='/figura_3.png'
-        alt=''
-        class='timeline__figure timeline__figure--3'
-        data-figure
-      />
-    </div>
-
-    <img
-      src='/letra_timeline.png'
-      alt="What's your"
-      class='timeline__whats-your'
-    />
-  </div>
-
-  <div class='timeline__scroll-track'>
-    <div class='timeline__spacer'></div>
-
-    <div class='timeline__content'>
-      <div class='timeline__center-line'>
-        <div
-          class='timeline__center-line-progress'
-          data-line-progress
-        >
-        </div>
+<section class='timeline' id='timeline'>
+  
+  <!-- VERSIÓN MOBILE / TABLET (< 1024px) -->
+  <div class="timeline__mobile-only">
+    <div class='timeline-mobile__sticky-scene'>
+      <div class='timeline__grid-bg'></div>
+      <div class='timeline__grid-bg2'></div>
+      <div class='timeline-mobile__intro-texts' data-intro-text="mobile">
+        <p class='timeline-mobile__intro-text timeline-mobile__intro-text--top' set:html={timelineData.intro.topText} />
+        <p class='timeline-mobile__intro-text timeline-mobile__intro-text--bottom' set:html={timelineData.intro.bottomText} />
       </div>
 
-      <div class='timeline__items'>
-        {
-          timelineData.items.map((item, index) => (
+      <div class='timeline-mobile__mood-letters' data-mood-block="mobile">
+        <img src='/M.png' alt='M' class='timeline-mobile__letter' />
+        <img src='/O.png' alt='O' class='timeline-mobile__letter' />
+        <img src='/O.png' alt='O' class='timeline-mobile__letter' />
+        <img src='/D.png' alt='D' class='timeline-mobile__letter' />
+      </div>
+
+      <div class='timeline-mobile__figures'>
+        <img src='/figura_1.png' alt='' class='timeline-mobile__figure timeline-mobile__figure--1' data-figure="mobile" />
+        <img src='/figura_2.png' alt='' class='timeline-mobile__figure timeline-mobile__figure--2' data-figure="mobile" />
+        <img src='/figura_3.png' alt='' class='timeline-mobile__figure timeline-mobile__figure--3' data-figure="mobile" />
+      </div>
+
+      <img src='/letra_timeline.png' alt="What's your" class='timeline-mobile__whats-your' />
+    </div>
+
+    <div class='timeline-mobile__scroll-track'>
+      <div class='timeline-mobile__spacer'></div>
+
+      <div class='timeline-mobile__content'>
+        <div class='timeline-mobile__center-line'>
+          <div class='timeline-mobile__center-line-progress' data-line-progress="mobile"></div>
+        </div>
+
+        <div class='timeline-mobile__items'>
+          {timelineData.items.map((item, index) => (
             <TimelineItem
               number={item.number}
               title={item.title}
               description={item.description}
               align={index % 2 === 0 ? 'left' : 'right'}
+              context="mobile"
             />
-          ))
-        }
+          ))}
+        </div>
       </div>
-    </div>
 
-    <!-- NUEVO: Espaciador final para desencadenar el regreso de la Capa 1 -->
-    <div
-      class='timeline__spacer'
-      data-outro-spacer
-    >
+      <div class='timeline-mobile__spacer' data-outro-spacer="mobile"></div>
     </div>
   </div>
+
+  <!-- VERSIÓN DESKTOP (>= 1024px) -->
+  <div class="timeline__desktop-only">
+    <div class='timeline-desktop__sticky-scene'>
+      <div class='timeline__grid-bg'></div>
+      <div class='timeline__grid-bg2'></div>
+      <div class='timeline-desktop__intro-texts' data-intro-text="desktop">
+        <p class='timeline-desktop__intro-text timeline-desktop__intro-text--top' set:html={timelineData.intro.topText} />
+        <p class='timeline-desktop__intro-text timeline-desktop__intro-text--bottom' set:html={timelineData.intro.bottomText} />
+      </div>
+
+      <div class='timeline-desktop__mood-letters' data-mood-block="desktop">
+        <img src='/M.png' alt='M' class='timeline-desktop__letter' />
+        <img src='/O.png' alt='O' class='timeline-desktop__letter' />
+        <img src='/O.png' alt='O' class='timeline-desktop__letter' />
+        <img src='/D.png' alt='D' class='timeline-desktop__letter' />
+      </div>
+
+      <div class='timeline-desktop__figures'>
+        <img src='/figura_1.png' alt='' class='timeline-desktop__figure timeline-desktop__figure--1' data-figure="desktop" />
+        <img src='/figura_2.png' alt='' class='timeline-desktop__figure timeline-desktop__figure--2' data-figure="desktop" />
+        <img src='/figura_3.png' alt='' class='timeline-desktop__figure timeline-desktop__figure--3' data-figure="desktop" />
+      </div>
+
+      <img src='/letra_timeline.png' alt="What's your" class='timeline-desktop__whats-your' />
+    </div>
+
+    <div class='timeline-desktop__scroll-track'>
+      <div class='timeline-desktop__spacer'></div>
+
+      <div class='timeline-desktop__content'>
+        <div class='timeline-desktop__items'>
+          <div class='timeline-desktop__center-line'>
+            <div class='timeline-desktop__center-line-progress' data-line-progress="desktop"></div>
+          </div>
+
+          {timelineData.items.map((item, index) => (
+            <TimelineItem
+              number={item.number}
+              title={item.title}
+              description={item.description}
+              align={index % 2 === 0 ? 'left' : 'right'}
+              context="desktop"
+            />
+          ))}
+        </div>
+      </div>
+
+      <div class='timeline-desktop__spacer' data-outro-spacer="desktop"></div>
+    </div>
+  </div>
+
 </section>
 
 <script>
@@ -121,114 +117,90 @@ import './Timeline.scss';
   gsap.registerPlugin(ScrollTrigger);
 
   document.addEventListener('DOMContentLoaded', () => {
-    // === ANIMACIÓN DE ENTRADA (Mantenida intacta) ===
-    const introTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '.timeline',
-        start: 'top top',
-        end: '+=150vh',
-        scrub: 2,
-      },
-    });
+    let mm = gsap.matchMedia();
 
-    introTl.to('[data-intro-text]', { opacity: 0, y: -10, duration: 1 }, 0);
-
-    introTl.to(
-      '[data-mood-block]',
-      {
-        scale: 1.4,
-        filter: 'blur(6px)',
-        opacity: 0.4,
-        duration: 2,
-        ease: 'power1.inOut',
-      },
-      0,
-    );
-
-    introTl.to(
-      '[data-figure]',
-      {
-        y: (i, el) => (el.classList.contains('timeline__figure--1') ? -40 : 40),
-        filter: 'blur(2px)',
-        duration: 2,
-        ease: 'power1.inOut',
-      },
-      0,
-    );
-
-    // === LÓGICA DEL TIMELINE (Mantenida intacta) ===
-    const items = document.querySelectorAll('[data-timeline-item]');
-    const lineProgress = document.querySelector('[data-line-progress]');
-
-    gsap.fromTo(
-      lineProgress,
-      { height: '0%' },
-      {
-        height: '100%',
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '.timeline__content',
-          start: 'top 50%',
-          end: 'bottom 80%',
-          scrub: true,
-        },
-      },
-    );
-
-    items.forEach((item) => {
-      const node = item.querySelector('[data-circuit-node]');
-
-      gsap.set(node, { scale: 0 });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: item,
-          start: 'top 85%',
-          toggleActions: 'play none none reverse',
-        },
+    // =====================================
+    // MOBILE / TABLET (< 1024px)
+    // =====================================
+    mm.add("(max-width: 1023px)", () => {
+      
+      const introTl = gsap.timeline({
+        scrollTrigger: { trigger: '.timeline__mobile-only', start: 'top top', end: '+=150vh', scrub: 2 }
       });
 
-      tl.fromTo(
-        item,
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
-      ).to(node, { scale: 1, duration: 0.4, ease: 'back.out(2)' }, '-=0.3');
+      introTl.to('[data-intro-text="mobile"]', { opacity: 0, y: -10, duration: 1 }, 0);
+      introTl.to('[data-mood-block="mobile"]', { scale: 1.4, filter: 'blur(6px)', opacity: 0.4, duration: 2, force3D: true, rotationZ: 0.01, ease: 'power1.inOut' }, 0);
+      introTl.to('[data-figure="mobile"]', { y: (i, el) => (el.classList.contains('timeline-mobile__figure--1') ? -40 : 40), filter: 'blur(2px)', duration: 2, force3D: true, rotationZ: 0.01, ease: 'power1.inOut' }, 0);
+
+      const items = document.querySelectorAll('[data-timeline-item="mobile"]');
+      const lineProgress = document.querySelector('[data-line-progress="mobile"]');
+
+      gsap.fromTo(lineProgress, { height: '0%' }, { height: '100%', ease: 'none', scrollTrigger: { trigger: '.timeline-mobile__content', start: 'top 50%', end: 'bottom 80%', scrub: true } });
+
+      items.forEach((item) => {
+        const node = item.querySelector('[data-circuit-node]');
+        const wrapper = item.querySelector('.timeline-item__content-wrapper');
+        gsap.set(node, { scale: 0 });
+
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: item, start: 'top 85%', toggleActions: 'play none none reverse' },
+        });
+
+        tl.fromTo(wrapper, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', force3D: true }).to(node, { scale: 1, duration: 0.4, ease: 'back.out(2)' }, '-=0.5');
+      });
+
+      const outroTl = gsap.timeline({ scrollTrigger: { trigger: '[data-outro-spacer="mobile"]', start: 'top bottom', end: 'bottom bottom', scrub: 2 } });
+      outroTl.to('[data-intro-text="mobile"]', { opacity: 1, y: 0, duration: 1 }, 0);
+      outroTl.to('[data-mood-block="mobile"]', { scale: 1, filter: 'blur(0px)', opacity: 1, duration: 2, force3D: true, rotationZ: 0.01, ease: 'power1.inOut' }, 0);
+      outroTl.to('[data-figure="mobile"]', { y: 0, filter: 'blur(0px)', duration: 2, force3D: true, rotationZ: 0.01, ease: 'power1.inOut' }, 0);
     });
 
-    // === NUEVO: ANIMACIÓN DE SALIDA (Regreso a la Capa 1) ===
-    // Se ejecuta al scrollear el nuevo espaciador final
-    const outroTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '[data-outro-spacer]',
-        start: 'top bottom', // Inicia cuando el espaciador aparece (fin del timeline)
-        end: 'bottom bottom', // Termina cuando la sección está a punto de abandonarse
-        scrub: 2,
-      },
+    // =====================================
+    // DESKTOP (>= 1024px)
+    // =====================================
+    mm.add("(min-width: 1024px)", () => {
+      
+      const introTl = gsap.timeline({
+        scrollTrigger: { trigger: '.timeline__desktop-only', start: 'top top', end: '+=150vh', scrub: 2 }
+      });
+
+      introTl.to('[data-intro-text="desktop"]', { opacity: 0, y: -10, duration: 1 }, 0);
+      introTl.to('[data-mood-block="desktop"]', { scale: 1.4, filter: 'blur(6px)', opacity: 0.4, duration: 2, force3D: true, rotationZ: 0.01, ease: 'power1.inOut' }, 0);
+      introTl.to('[data-figure="desktop"]', { x: (i, el) => (el.classList.contains('timeline-desktop__figure--1') ? -40 : 40), filter: 'blur(2px)', duration: 2, force3D: true, rotationZ: 0.01, ease: 'power1.inOut' }, 0);
+
+      const content = document.querySelector('.timeline-desktop__content');
+      const itemsContainer = document.querySelector('.timeline-desktop__items');
+      const items = document.querySelectorAll('[data-timeline-item="desktop"]');
+      const lineProgress = document.querySelector('[data-line-progress="desktop"]');
+
+      const getScrollAmount = () => (itemsContainer as HTMLElement).scrollWidth - window.innerWidth;
+
+      const scrollTween = gsap.to(itemsContainer, {
+        x: () => -getScrollAmount(),
+        ease: 'none',
+        scrollTrigger: { trigger: content, pin: true, start: 'top top', end: () => `+=${getScrollAmount()}`, scrub: 1, invalidateOnRefresh: true }
+      });
+
+      gsap.fromTo(lineProgress, { width: '0%' }, { width: '100%', ease: 'none', scrollTrigger: { trigger: content, start: 'top top', end: () => `+=${getScrollAmount()}`, scrub: true, invalidateOnRefresh: true } });
+
+      items.forEach((item) => {
+        const node = item.querySelector('[data-circuit-node]');
+        const wrapper = item.querySelector('.timeline-item__content-wrapper');
+        gsap.set(node, { scale: 0 });
+
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: item, containerAnimation: scrollTween, start: 'left 85%', toggleActions: 'play none none reverse' },
+        });
+
+        // Entran de manera fluida y lateral sin tocar el eje Y ni generar Lag
+        tl.fromTo(wrapper, { opacity: 0, x: 100 }, { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out', force3D: true }).to(node, { scale: 1, duration: 0.4, ease: 'back.out(2)' }, '-=0.5');
+      });
+
+      const outroTl = gsap.timeline({ scrollTrigger: { trigger: '[data-outro-spacer="desktop"]', start: 'top bottom', end: 'bottom bottom', scrub: 2 } });
+      outroTl.to('[data-intro-text="desktop"]', { opacity: 1, y: 0, duration: 1 }, 0);
+      outroTl.to('[data-mood-block="desktop"]', { scale: 1, filter: 'blur(0px)', opacity: 1, duration: 2, force3D: true, rotationZ: 0.01, ease: 'power1.inOut' }, 0);
+      outroTl.to('[data-figure="desktop"]', { x: 0, filter: 'blur(0px)', duration: 2, force3D: true, rotationZ: 0.01, ease: 'power1.inOut' }, 0);
     });
 
-    outroTl.to('[data-intro-text]', { opacity: 1, y: 0, duration: 1 }, 0);
-
-    outroTl.to(
-      '[data-mood-block]',
-      {
-        scale: 1,
-        filter: 'blur(0px)',
-        opacity: 1,
-        duration: 2,
-        ease: 'power1.inOut',
-      },
-      0,
-    );
-
-    outroTl.to(
-      '[data-figure]',
-      {
-        y: 0,
-        filter: 'blur(0px)',
-        duration: 2,
-        ease: 'power1.inOut',
-      },
-      0,
-    );
   });
 </script>
