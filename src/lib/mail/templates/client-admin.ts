@@ -20,7 +20,7 @@ export const getClientAdminTemplate = (data: {
             <p style="color: #64748b; font-size: 14px; margin: 0 0 24px 0;">Se ha recibido un nuevo contacto desde el sitio web.</p>
             
             <!-- Data Table (Shadcn UI style) -->
-            <table border="0" cellpadding="0" cellspacing="0" style="width: 100%; border: 1px solid #e2e8f0; border-radius: 6px; border-collapse: collapse;">
+            <table border="0" cellpadding="0" cellspacing="0" style="width: 100%; border: 1px solid #e2e8f0; border-radius: 10px; border-collapse: collapse;">
               <tr>
                 <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; background-color: #f8fafc; color: #475569; font-size: 13px; font-weight: 600; width: 30%;">Nombre</td>
                 <td style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #0f172a; font-size: 14px;">${data.nombre}</td>

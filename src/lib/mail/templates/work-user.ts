@@ -13,7 +13,7 @@ export const getWorkUserTemplate = (name: string) => {
             
             <h1 style="color: #0f172a; font-size: 20px; font-weight: 600; margin: 0 0 16px 0;">¡Hola, ${name}!</h1>
             <p style="color: #334155; font-size: 15px; line-height: 1.6; margin: 0 0 16px 0;">
-              Hemos recibido tu postulación y tu archivo adjunto con éxito. Nos emociona saber que te interesa formar parte del equipo de <strong>Mood Agencia</strong>.
+              Hemos recibido tu postulación y tu HV con éxito. Nos emociona saber que te interesa formar parte del equipo de <strong>Mood Agencia</strong>.
             </p>
             <p style="color: #334155; font-size: 15px; line-height: 1.6; margin: 0 0 16px 0;">
               Estaremos revisando tu perfil a detalle. Si hace "match" con lo que estamos buscando actualmente, nos pondremos en contacto contigo muy pronto para dar el siguiente paso.
