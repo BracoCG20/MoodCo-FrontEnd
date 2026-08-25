@@ -7,7 +7,9 @@ import './Forms.scss';
   class='forms-section'
   id='contacto'
 >
-  <!-- FORMULARIO 1: CONTACTO (Visible por defecto) -->
+  <!-- ============================================== -->
+  <!-- FORMULARIO 1: CONTACTO                         -->
+  <!-- ============================================== -->
   <div
     class='forms-section__wrapper is-active'
     id='wrapper-contacto'
@@ -30,6 +32,22 @@ import './Forms.scss';
         id='form-contacto'
         novalidate
       >
+        <!-- CAMPOS OCULTOS DE SEGURIDAD E IDENTIFICACIÓN -->
+        <input
+          type='hidden'
+          name='formType'
+          value='contacto'
+        />
+        <!-- Honeypot: Se agrega aria-hidden para que los lectores de pantalla lo ignoren y no afecte accesibilidad -->
+        <input
+          type='text'
+          name='bot_check'
+          style='display: none;'
+          tabindex='-1'
+          autocomplete='off'
+          aria-hidden='true'
+        />
+
         {
           formsData.formContacto.fields.map((field) => (
             <div class='form__group'>
@@ -45,6 +63,10 @@ import './Forms.scss';
                 name={field.name}
                 class='form__input'
                 required
+              />
+              <span
+                class='form__error'
+                data-error-for={field.id}
               />
             </div>
           ))
@@ -90,7 +112,9 @@ import './Forms.scss';
     </div>
   </div>
 
-  <!-- FORMULARIO 2: TRABAJA CON NOSOTROS (Oculto por defecto) -->
+  <!-- ============================================== -->
+  <!-- FORMULARIO 2: TRABAJA CON NOSOTROS             -->
+  <!-- ============================================== -->
   <div
     class='forms-section__wrapper'
     id='wrapper-trabaja'
@@ -117,6 +141,20 @@ import './Forms.scss';
         id='form-trabaja-con-nosotros'
         novalidate
       >
+        <input
+          type='hidden'
+          name='formType'
+          value='trabaja'
+        />
+        <input
+          type='text'
+          name='bot_check'
+          style='display: none;'
+          tabindex='-1'
+          autocomplete='off'
+          aria-hidden='true'
+        />
+
         {
           formsData.formTrabajo.fields.map((field) => (
             <div class='form__group'>
@@ -132,6 +170,10 @@ import './Forms.scss';
                 name={field.name}
                 class='form__input'
                 required
+              />
+              <span
+                class='form__error'
+                data-error-for={field.id}
               />
             </div>
           ))
@@ -167,6 +209,10 @@ import './Forms.scss';
             accept='.pdf,.doc,.docx'
             required
           />
+          <span
+            class='form__error'
+            data-error-for='t-archivo'
+          ></span>
         </div>
 
         <div class='form__actions'>
@@ -190,10 +236,7 @@ import './Forms.scss';
               stroke-width='2.5'
               stroke-linecap='round'
               stroke-linejoin='round'
-              import
-              gsap
-              from
-              'gsap';
+              aria-hidden='true'
             >
               <circle
                 data-check-circle
@@ -217,7 +260,6 @@ import './Forms.scss';
   import gsap from 'gsap';
 
   document.addEventListener('DOMContentLoaded', () => {
-    // 1. Lógica de Cambio de Formularios
     const triggerButtons = document.querySelectorAll('[data-form-trigger]');
     const wrapperContacto = document.getElementById('wrapper-contacto');
     const wrapperTrabaja = document.getElementById('wrapper-trabaja');
@@ -234,39 +276,139 @@ import './Forms.scss';
           wrapperTrabaja?.classList.remove('is-active');
           wrapperContacto?.classList.add('is-active');
         }
-
-        // Scroll suave hacia la sección
         document
           .getElementById('contacto')
           ?.scrollIntoView({ behavior: 'smooth' });
       });
     });
 
-    // 2. Lógica de Envío de Formularios con Animaciones GSAP
+    // 1. FUNCIÓN DE VALIDACIÓN ESTRICTA FRONTEND
+    const validateForm = (formElement: HTMLFormElement): boolean => {
+      let isValid = true;
+      const inputs = formElement.querySelectorAll(
+        'input:not([type="hidden"]):not([type="file"])',
+      );
+      const fileInput = formElement.querySelector(
+        'input[type="file"]',
+      ) as HTMLInputElement;
+
+      // Limpiamos errores previos
+      formElement
+        .querySelectorAll('.is-invalid')
+        .forEach((el) => el.classList.remove('is-invalid'));
+      formElement
+        .querySelectorAll('.form__error')
+        .forEach((el) => (el.textContent = ''));
+
+      inputs.forEach((input) => {
+        const inputEl = input as HTMLInputElement;
+        const name = inputEl.name;
+        const value = inputEl.value.trim();
+        const errorEl = formElement.querySelector(
+          `[data-error-for="${inputEl.id}"]`,
+        );
+        let errorMessage = '';
+
+        if (inputEl.required && !value) {
+          errorMessage = 'Este campo es obligatorio.';
+        } else if (value) {
+          if (name === 'nombre') {
+            if (!/^[a-zA-ZÀ-ÿ\u00f1\u00d1\s]+$/.test(value)) {
+              errorMessage = 'Solo se permiten letras y espacios.';
+            } else if (value.length < 2 || value.length > 50) {
+              errorMessage = 'Debe tener entre 2 y 50 caracteres.';
+            }
+          } else if (name === 'correo') {
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+              errorMessage = 'Por favor, ingresa un correo válido.';
+            }
+          } else if (name === 'telefono') {
+            if (!/^\+?[\d\s\-]{6,20}$/.test(value)) {
+              errorMessage = 'Solo números, espacios y +. (6-20 caracteres).';
+            }
+          } else if (name === 'mensaje') {
+            if (value.length > 2000) {
+              errorMessage = 'El mensaje no puede exceder 2000 caracteres.';
+            }
+          }
+        }
+
+        if (errorMessage) {
+          inputEl.classList.add('is-invalid');
+          if (errorEl) {
+            errorEl.textContent = errorMessage;
+            gsap.fromTo(
+              errorEl,
+              { opacity: 0, y: -5 },
+              { opacity: 1, y: 0, duration: 0.3 },
+            );
+          }
+          isValid = false;
+        }
+      });
+
+      // Validar archivo si existe en el form
+      if (fileInput && fileInput.required) {
+        const errorEl = formElement.querySelector(
+          `[data-error-for="${fileInput.id}"]`,
+        );
+        const file = fileInput.files?.[0];
+        let errorMessage = '';
+
+        if (!file) {
+          errorMessage = 'Debes adjuntar un archivo (CV).';
+        } else {
+          const validTypes = [
+            'application/pdf',
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          ];
+          if (!validTypes.includes(file.type)) {
+            errorMessage = 'Solo se aceptan archivos PDF, DOC o DOCX.';
+          } else if (file.size > 5 * 1024 * 1024) {
+            errorMessage = 'El archivo supera los 5MB permitidos.';
+          }
+        }
+
+        if (errorMessage) {
+          if (errorEl) {
+            errorEl.textContent = errorMessage;
+            gsap.fromTo(
+              errorEl,
+              { opacity: 0, y: -5 },
+              { opacity: 1, y: 0, duration: 0.3 },
+            );
+          }
+          isValid = false;
+        }
+      }
+
+      return isValid;
+    };
+
     const forms = document.querySelectorAll('.form');
 
     forms.forEach((form) => {
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
+        const formElement = form as HTMLFormElement;
 
-        const submitBtn = form.querySelector(
+        // Validamos el frontend antes de enviar nada
+        if (!validateForm(formElement)) return;
+
+        const submitBtn = formElement.querySelector(
           '[data-btn="submit"]',
         ) as HTMLButtonElement;
-        const successBtn = form.querySelector(
+        const successBtn = formElement.querySelector(
           '[data-btn="success"]',
         ) as HTMLButtonElement;
-
         const circlePath = successBtn?.querySelector('[data-check-circle]');
         const checkPath = successBtn?.querySelector('[data-check-path]');
 
-        // Guardamos el texto original para poder restaurarlo después
         const originalText = submitBtn.textContent;
-
-        // Estado: SUBMIT (Animación de carga)
         submitBtn.textContent = 'ENVIANDO...';
         submitBtn.disabled = true;
 
-        // Animación de pulso continuo indicando "procesando"
         const loadingTween = gsap.to(submitBtn, {
           opacity: 0.6,
           repeat: -1,
@@ -276,27 +418,32 @@ import './Forms.scss';
         });
 
         try {
-          // Simulamos latencia de red (Aquí iría la conexión real con tu API)
-          await new Promise((resolve) => setTimeout(resolve, 1500));
+          const formData = new FormData(formElement);
 
-          // Detenemos la animación de carga
+          const response = await fetch('/api/forms/submit', {
+            method: 'POST',
+            body: formData,
+          });
+
+          const result = await response.json();
+
+          if (!response.ok || !result.success) {
+            throw new Error(result.message || 'Error en el servidor');
+          }
+
           loadingTween.kill();
           gsap.set(submitBtn, { opacity: 1 });
 
-          // Estado: ÉXITO (Ocultamos envío, mostramos éxito)
           submitBtn.classList.add('is-hidden');
           successBtn.classList.remove('is-hidden');
 
-          // Animamos la aparición fluida del botón Success
           gsap.fromTo(
             successBtn,
             { opacity: 0, scale: 0.95 },
             { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.5)' },
           );
 
-          // Animamos el check dibujándose progresivamente (Círculo primero, luego Check)
           if (circlePath && checkPath) {
-            // Circunferencia aprox de un radio 10 es ~63
             gsap.fromTo(
               circlePath,
               { strokeDasharray: 65, strokeDashoffset: 65 },
@@ -307,7 +454,6 @@ import './Forms.scss';
                 delay: 0.1,
               },
             );
-            // Largo del path del check es aprox 15, usamos 20 por seguridad
             gsap.fromTo(
               checkPath,
               { strokeDasharray: 20, strokeDashoffset: 20 },
@@ -320,9 +466,14 @@ import './Forms.scss';
             );
           }
 
-          (form as HTMLFormElement).reset();
+          formElement.reset();
+          formElement
+            .querySelectorAll('.is-invalid')
+            .forEach((el) => el.classList.remove('is-invalid'));
+          formElement
+            .querySelectorAll('.form__error')
+            .forEach((el) => (el.textContent = ''));
 
-          // 3. Regresar al Estado Original después de unos segundos
           setTimeout(() => {
             gsap.to(successBtn, {
               opacity: 0,
@@ -333,8 +484,6 @@ import './Forms.scss';
                 submitBtn.classList.remove('is-hidden');
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
-
-                // Aparecemos suavemente el botón restaurado
                 gsap.fromTo(
                   submitBtn,
                   { opacity: 0 },
@@ -342,13 +491,15 @@ import './Forms.scss';
                 );
               },
             });
-          }, 4000); // El botón vuelve a la normalidad 4 segundos después de haber enviado el mensaje
-        } catch (error) {
-          // Manejo de Errores
+          }, 4000);
+        } catch (error: any) {
           loadingTween.kill();
           gsap.set(submitBtn, { opacity: 1 });
-          submitBtn.textContent = 'ERROR. REINTENTAR';
+          submitBtn.textContent = error.message || 'ERROR. REINTENTAR';
           submitBtn.disabled = false;
+          setTimeout(() => {
+            submitBtn.textContent = originalText;
+          }, 3000);
         }
       });
     });

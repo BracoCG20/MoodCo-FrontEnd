@@ -99,10 +99,15 @@
   }
 
   &__title {
+    display: flex;
+    // align-items: center;
+    justify-content: center;
+    gap: 0 0.2rem;
+    flex-wrap: wrap;
     font-family: $font-secondary; // Roc Grotesk Condensed
     text-transform: uppercase;
     font-size: 1.75rem;
-    line-height: 1.1;
+    line-height: 1;
     margin: 0;
 
     @include tablet {
@@ -241,5 +246,23 @@
       color: $color-black;
       pointer-events: none; // Un botón de éxito no debería ser clicable
     }
+  }
+
+  &__input.is-invalid {
+    border: 1px solid #ff4d4d;
+    background-color: rgba(255, 255, 255, 0.95);
+  }
+
+  // Contenedor del mensaje de error
+  &__error {
+    color: #ff4d4d;
+    font-size: 0.85rem;
+    font-family: $font-primary;
+    margin-top: -0.25rem;
+    min-height: 1rem; // Evita saltos de layout cuando aparece el texto
+    display: block;
+    text-align: left;
+    width: 100%;
+    will-change: opacity, transform;
   }
 }
