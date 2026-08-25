@@ -42,13 +42,14 @@
   }
 
   &__content {
+    padding: 5rem 0rem;
     width: 100%;
     max-width: 600px;
     display: flex;
     flex-direction: column;
     gap: 2rem;
     @include desktop {
-      max-width: 1200px;
+      max-width: 800px;
     }
   }
 
