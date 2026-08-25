@@ -49,7 +49,7 @@
 }
 
 /* =========================================
-   ESTILOS MOBILE / TABLET (Original Inalterado)
+   ESTILOS MOBILE / TABLET (Optimizados para Rendimiento)
    ========================================= */
 .timeline-mobile {
   &__sticky-scene {
@@ -98,12 +98,22 @@
     align-items: center;
     gap: 2px;
     padding: 10vh 0;
+
+    // OPTIMIZACIÓN GPU: Previene el repintado y recalculo del layout de flex al hacer scale
     will-change: transform, filter, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    transform-style: preserve-3d;
   }
   &__letter {
     height: 19%;
     width: auto;
     object-fit: contain;
+
+    // OPTIMIZACIÓN GPU: Bloquea las dimensiones de las imágenes para que no vibren al heredar el scale
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
   &__figures {
     position: absolute;
@@ -115,6 +125,12 @@
     position: absolute;
     will-change: transform;
     filter: blur(1px);
+
+    // OPTIMIZACIÓN GPU: Mantiene las figuras fluidas en su capa aislada
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+
     &--1 {
       top: 18%;
       right: -10%;
@@ -144,6 +160,10 @@
     object-fit: contain;
     filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.25));
     z-index: 6;
+
+    // OPTIMIZACIÓN GPU
+    backface-visibility: hidden;
+
     @include tablet {
       max-width: 700px;
     }
@@ -189,7 +209,7 @@
 }
 
 /* =========================================
-   ESTILOS DESKTOP (Nueva Versión Horizontal)
+   ESTILOS DESKTOP (Intactos)
    ========================================= */
 .timeline-desktop {
   &__sticky-scene {
@@ -303,7 +323,6 @@
     overflow: hidden;
   }
 
-  // Contenedor que avanza de la derecha a la izquierda
   &__items {
     display: flex;
     flex-direction: row;
@@ -314,10 +333,8 @@
     padding-left: 100vw;
     padding-right: 50vw;
     position: relative;
-    // ELIMINADO: top: 50%; (Esto era lo que rompía el centrado y lo enviaba al borde inferior)
   }
 
-  // La línea vive DENTRO del track horizontal
   &__center-line {
     position: absolute;
     left: 100vw;
@@ -461,7 +478,6 @@
 
   // ------------------------------------
   // CONTEXTO: DESKTOP
-  // (Sin líneas de unión, solo círculos flotando exactamente en el eje matemático 0)
   // ------------------------------------
   &--desktop {
     width: 500px;
@@ -499,7 +515,6 @@
     }
   }
   &--desktop-left {
-    // Corresponde al ITEM 01: Va Abajo
     text-align: center;
     padding: 0;
     .timeline-item__circuit {
@@ -516,7 +531,6 @@
     }
   }
   &--desktop-right {
-    // Corresponde al ITEM 02: Va Arriba
     text-align: center;
     padding: 0;
     .timeline-item__circuit {
