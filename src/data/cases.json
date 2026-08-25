@@ -10,7 +10,7 @@
       "description": "Transformamos el clima en el motor de nuestra campaña.",
       "tags": "Visibility Mood · Connection Mood",
       "link": "#",
-      "image": "case_brand_1.png"
+      "image": "case_brand_1.webp"
     },
     {
       "id": "case-02",
@@ -18,7 +18,7 @@
       "description": "Nos apropiamos de la temporada más importante del año como nadie lo había hecho en la categoría.",
       "tags": "Growth Mood · Visibility Mood · Connection Mood",
       "link": "#",
-      "image": "case_brand_2.png"
+      "image": "case_brand_2.webp"
     },
     {
       "id": "case-03",
@@ -26,7 +26,7 @@
       "description": "Cada estreno es una nueva historia que contar.",
       "tags": "Launch Mood · Visibility Mood · Evolution Mood",
       "link": "#",
-      "image": "case_brand_3.png"
+      "image": "case_brand_3.webp"
     },
     {
       "id": "case-04",
@@ -34,7 +34,7 @@
       "description": "Mejoramos la salud mental viendo videos de mascotas. ¡Lo hicimos real!",
       "tags": "Connection Mood · Evolution Mood",
       "link": "#",
-      "image": "case_brand_4.png"
+      "image": "case_brand_4.webp"
     },
     {
       "id": "case-05",
@@ -42,7 +42,7 @@
       "description": "Un grupo, diez marcas gastronómicas, un solo ecosistema digital. Desarrollamos el hub de DLK y los sitios de sus diez restaurantes en Colombia, con reservas integradas en cada marca: cada visita a un clic de convertirse en una mesa ocupada.",
       "tags": "Build Mood · Evolution Mood",
       "link": "#",
-      "image": "case_brand_5.png"
+      "image": "case_brand_5.webp"
     }
   ]
 }
