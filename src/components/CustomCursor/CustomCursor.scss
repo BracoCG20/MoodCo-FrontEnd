@@ -1,0 +1,84 @@
+@use '../../styles/variables' as *;
+@use '../../styles/breakpoints' as *;
+
+// 1. Ocultar el cursor nativo condicionalmente
+html.has-custom-cursor {
+  &,
+  * {
+    cursor: none !important;
+  }
+
+  // Mantenemos el cursor nativo de texto en los inputs para usabilidad pura
+  input,
+  textarea,
+  [contenteditable='true'] {
+    cursor: text !important;
+  }
+}
+
+// 2. Contenedor invisible (Solo se encarga de seguir al mouse en el eje X/Y)
+.custom-cursor-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform;
+  opacity: 0; // Oculto inicialmente
+  transition: opacity 0.3s ease;
+
+  &.is-visible {
+    opacity: 1;
+  }
+}
+
+// 3. El elemento visual interactivo (La Esfera Dinámica)
+.custom-cursor-visual {
+  position: absolute;
+  top: -10px; // Centrado exacto respecto al wrapper (mitad del width/height)
+  left: -10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+
+  // Efecto 3D de "Esfera Líquida / Energía"
+  background: radial-gradient(
+    circle at 35% 35%,
+    #ffffff 0%,
+    $color-green-light 30%,
+    #2f8e4a 90%
+  );
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+
+  transform-origin: center center;
+  will-change: transform, background, border;
+
+  // Transición suave nativa para cambios de color y borde en hovers
+  transition:
+    background 0.3s ease,
+    border 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+// 4. Estilos de las ondas (Ripples) - Totalmente desvinculadas del cursor
+.custom-cursor-ripple {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 1px solid rgba($color-green-light, 0.8);
+  background: radial-gradient(
+    circle,
+    rgba($color-green-light, 0.2) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 9998;
+  will-change: transform, opacity;
+  opacity: 0;
+  transform-origin: center center;
+}

@@ -1,0 +1,195 @@
+---
+import './CustomCursor.scss';
+---
+
+<!-- 1. Contenedor de Posición (Nunca se escala ni deforma) -->
+<div
+  class='custom-cursor-wrapper'
+  data-cursor-wrapper
+>
+  <!-- 2. Elemento Visual (Se escala y reacciona a los clics) -->
+  <div
+    class='custom-cursor-visual'
+    data-cursor-visual
+  >
+  </div>
+</div>
+
+<!-- 3. Object Pool de Ripples (Independientes del cursor) -->
+<div data-cursor-ripples>
+  <div
+    class='custom-cursor-ripple'
+    data-ripple
+  >
+  </div>
+  <div
+    class='custom-cursor-ripple'
+    data-ripple
+  >
+  </div>
+  <div
+    class='custom-cursor-ripple'
+    data-ripple
+  >
+  </div>
+  <div
+    class='custom-cursor-ripple'
+    data-ripple
+  >
+  </div>
+  <div
+    class='custom-cursor-ripple'
+    data-ripple
+  >
+  </div>
+</div>
+
+<script>
+  import gsap from 'gsap';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const mm = gsap.matchMedia();
+
+    // Solo se activa en dispositivos con Mouse real y si no hay preferencia de reducción de movimiento
+    mm.add(
+      '(pointer: fine) and (prefers-reduced-motion: no-preference)',
+      () => {
+        const wrapper = document.querySelector(
+          '[data-cursor-wrapper]',
+        ) as HTMLElement;
+        const visual = document.querySelector(
+          '[data-cursor-visual]',
+        ) as HTMLElement;
+        const ripples = document.querySelectorAll('[data-ripple]');
+
+        // Ocultamos el cursor nativo de forma segura tras verificar compatibilidad
+        document.documentElement.classList.add('has-custom-cursor');
+
+        // Centramos las ondas usando xPercent/yPercent
+        gsap.set(ripples, { xPercent: -50, yPercent: -50 });
+
+        // TRACKING INDEPENDIENTE: El wrapper solo sigue al mouse. No se sobreescribe jamás.
+        // Ajustamos la inercia (duration) para darle un flujo orgánico.
+        const xTo = gsap.quickTo(wrapper, 'x', {
+          duration: 0.15,
+          ease: 'power3.out',
+        });
+        const yTo = gsap.quickTo(wrapper, 'y', {
+          duration: 0.15,
+          ease: 'power3.out',
+        });
+
+        let isVisible = false;
+        let rippleIndex = 0;
+
+        // --- EVENTOS BASE ---
+
+        window.addEventListener('mousemove', (e) => {
+          if (!isVisible) {
+            wrapper.classList.add('is-visible');
+            isVisible = true;
+          }
+          xTo(e.clientX);
+          yTo(e.clientY);
+        });
+
+        // --- ANIMACIÓN DE CLIC (Sin congelar el seguimiento) ---
+
+        window.addEventListener('mousedown', (e) => {
+          // 1. Contracción sutil del elemento visual (NO del wrapper)
+          gsap.to(visual, {
+            scale: 0.6,
+            duration: 0.15,
+            ease: 'power2.out',
+            overwrite: 'auto',
+          });
+
+          // 2. Lógica del Ripple (Posicionado exactamente donde se hizo clic)
+          const currentRipple = ripples[rippleIndex];
+
+          // Lo teletransportamos al clic exacto
+          gsap.set(currentRipple, { x: e.clientX, y: e.clientY });
+
+          // Animamos la onda
+          gsap.fromTo(
+            currentRipple,
+            { scale: 0, opacity: 1 },
+            {
+              scale: 1.5,
+              opacity: 0,
+              duration: 0.6,
+              ease: 'power2.out',
+              overwrite: true,
+            },
+          );
+
+          // Rotamos el pool cíclicamente
+          rippleIndex = (rippleIndex + 1) % ripples.length;
+        });
+
+        window.addEventListener('mouseup', () => {
+          // La esfera recupera su volumen orgánico
+          gsap.to(visual, {
+            scale: 1,
+            duration: 0.4,
+            ease: 'elastic.out(1, 0.5)',
+            overwrite: 'auto',
+          });
+        });
+
+        // --- ESTADOS INTERACTIVOS ---
+
+        document.addEventListener('mouseover', (e) => {
+          const target = e.target as HTMLElement;
+
+          // Hover en Enlaces o Botones: Se convierte en un anillo magnético
+          if (target.closest('a, button, [data-lang-btn]')) {
+            gsap.to(visual, {
+              scale: 2.2,
+              background: 'transparent',
+              border: '1px solid rgba(255, 255, 255, 0.8)',
+              boxShadow: 'none',
+              duration: 0.3,
+              ease: 'power2.out',
+              overwrite: 'auto',
+            });
+          }
+          // Hover en Inputs/Textareas: Se encoge a un micropunto para no molestar la escritura
+          else if (target.closest('input, textarea')) {
+            gsap.to(visual, {
+              scale: 0.2,
+              background: '#ffffff', // Punto sólido claro
+              boxShadow: 'none',
+              border: 'none',
+              duration: 0.2,
+              overwrite: 'auto',
+            });
+          }
+        });
+
+        document.addEventListener('mouseout', (e) => {
+          const target = e.target as HTMLElement;
+
+          // Restaurar a la Esfera Líquida 3D
+          if (target.closest('a, button, input, textarea, [data-lang-btn]')) {
+            gsap.to(visual, {
+              scale: 1,
+              background:
+                'radial-gradient(circle at 35% 35%, #ffffff 0%, #A8F48F 30%, #2f8e4a 90%)',
+              border: 'none',
+              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+              duration: 0.3,
+              ease: 'power2.out',
+              overwrite: 'auto',
+            });
+          }
+        });
+
+        // Limpieza (Cleanup) para desmontar el efecto si es necesario
+        return () => {
+          document.documentElement.classList.remove('has-custom-cursor');
+        };
+      },
+    );
+  });
+</script>
