@@ -14,12 +14,12 @@ const getImagePath = (filename: string) => {
   return image ? image.default.src : '';
 };
 
-// Generamos desfases para que las columnas no se vean exactamente iguales lado a lado
+// Generamos desfases
 const col1 = [...casesData.items];
 const col2 = [...casesData.items.slice(2), ...casesData.items.slice(0, 2)];
 const col3 = [...casesData.items.slice(4), ...casesData.items.slice(0, 4)];
 
-// Duplicamos cada array para poder crear el loop infinito fluido
+// Duplicamos para loop infinito
 const track1 = [...col1, ...col1];
 const track2 = [...col2, ...col2];
 const track3 = [...col3, ...col3];
@@ -42,48 +42,72 @@ const track3 = [...col3, ...col3];
 
   <div class='cases__carousel-wrapper'>
     <div class='cases__columns'>
-      <!-- Columna 1 -->
-      <div class='cases__col cases__col--1' data-col-index='0'>
-        <div class='cases__track' data-carousel-track>
-          {track1.map((item) => (
-            <CaseCard
-              title={item.title}
-              description={item.description}
-              tags={item.tags}
-              link={item.link}
-              imageSrc={getImagePath(item.image)}
-            />
-          ))}
+      <!-- Columna 1 (Mobile / Tablet / Desktop) -->
+      <div
+        class='cases__col cases__col--1'
+        data-col-index='0'
+      >
+        <div
+          class='cases__track'
+          data-carousel-track
+        >
+          {
+            track1.map((item) => (
+              <CaseCard
+                title={item.title}
+                description={item.description}
+                tags={item.tags}
+                link={item.link}
+                imageSrc={getImagePath(item.image)}
+              />
+            ))
+          }
         </div>
       </div>
 
-      <!-- Columna 2 -->
-      <div class='cases__col cases__col--2' data-col-index='1'>
-        <div class='cases__track' data-carousel-track>
-          {track2.map((item) => (
-            <CaseCard
-              title={item.title}
-              description={item.description}
-              tags={item.tags}
-              link={item.link}
-              imageSrc={getImagePath(item.image)}
-            />
-          ))}
+      <!-- Columna 2 (Tablet / Desktop) -->
+      <div
+        class='cases__col cases__col--2'
+        data-col-index='1'
+      >
+        <div
+          class='cases__track'
+          data-carousel-track
+        >
+          {
+            track2.map((item) => (
+              <CaseCard
+                title={item.title}
+                description={item.description}
+                tags={item.tags}
+                link={item.link}
+                imageSrc={getImagePath(item.image)}
+              />
+            ))
+          }
         </div>
       </div>
 
-      <!-- Columna 3 -->
-      <div class='cases__col cases__col--3' data-col-index='2'>
-        <div class='cases__track' data-carousel-track>
-          {track3.map((item) => (
-            <CaseCard
-              title={item.title}
-              description={item.description}
-              tags={item.tags}
-              link={item.link}
-              imageSrc={getImagePath(item.image)}
-            />
-          ))}
+      <!-- Columna 3 (Desktop) -->
+      <div
+        class='cases__col cases__col--3'
+        data-col-index='2'
+      >
+        <div
+          class='cases__track'
+          data-carousel-track
+        >
+          {
+            track3.map((item) => (
+              <CaseCard
+                title={item.title}
+                description={item.description}
+                tags={item.tags}
+                link={item.link}
+                imageSrc={getImagePath(item.image)}
+              />
+            ))
+          }
         </div>
       </div>
     </div>
@@ -98,34 +122,105 @@ const track3 = [...col3, ...col3];
 
   document.addEventListener('DOMContentLoaded', () => {
     const tracks = document.querySelectorAll('[data-carousel-track]');
-
-    const carousels = Array.from(tracks).map((track, index) => {
-      const isMovingUp = index % 2 !== 0;
-
-      if (isMovingUp) {
-        return gsap.fromTo(
-          track,
-          { yPercent: 0 },
-          { yPercent: -50, duration: 40, ease: 'none', repeat: -1 },
-        );
-      } else {
-        return gsap.fromTo(
-          track,
-          { yPercent: -50 },
-          { yPercent: 0, duration: 40, ease: 'none', repeat: -1 },
-        );
-      }
-    });
-
     const carouselWrapper = document.querySelector('.cases__carousel-wrapper');
+    const cards = document.querySelectorAll('[data-case-card]');
+    const col1 = document.querySelector('.cases__col--1') as HTMLElement;
+    const track1 = col1?.querySelector('.cases__track') as HTMLElement;
+
     const isHoverable = window.matchMedia('(hover: hover)').matches;
     const isTouch = window.matchMedia(
       '(hover: none), (pointer: coarse)',
     ).matches;
 
-    const cards = document.querySelectorAll('[data-case-card]');
+    let carousels: gsap.core.Tween[] = [];
     let activeCard: HTMLElement | null = null;
+    let isCardActive = false;
+    let isTouching = false;
+    let autoScrollReq: number;
 
+    let mm = gsap.matchMedia();
+
+    // =========================================================
+    // LÓGICA RESPONSIVE (Aísla Mobile de Desktop dinámicamente)
+    // =========================================================
+    mm.add(
+      {
+        isMobile: '(max-width: 1023px)',
+        isDesktop: '(min-width: 1024px)',
+      },
+      (context) => {
+        let { isMobile, isDesktop } = context.conditions as any;
+
+        // Limpieza preventiva
+        if (autoScrollReq) cancelAnimationFrame(autoScrollReq);
+        carousels.forEach((c) => c.kill());
+        carousels = [];
+        gsap.set(col1, { clearProps: 'overflowY,overflowX' });
+
+        // LÓGICA DESKTOP (Mantiene el loop intacto de GSAP)
+        if (isDesktop) {
+          carousels = Array.from(tracks).map((track, index) => {
+            const isMovingUp = index % 2 !== 0;
+            return gsap.fromTo(
+              track,
+              { yPercent: isMovingUp ? 0 : -50 },
+              {
+                yPercent: isMovingUp ? -50 : 0,
+                duration: 40,
+                ease: 'none',
+                repeat: -1,
+              },
+            );
+          });
+        }
+
+        // LÓGICA MOBILE/TABLET (Permite scroll nativo + chaining)
+        if (isMobile && col1 && track1) {
+          // Habilita el scroll vertical nativo
+          gsap.set(col1, { overflowY: 'auto', overflowX: 'hidden' });
+
+          const resetPosition = () => {
+            if (col1 && track1) col1.scrollTop = track1.scrollHeight / 2;
+          };
+          setTimeout(resetPosition, 100);
+
+          // Bucle de auto-scroll suave
+          const tick = () => {
+            if (!isTouching && !isCardActive) {
+              col1.scrollTop -= 0.5; // Baja visualmente
+              if (col1.scrollTop <= 0) {
+                col1.scrollTop = track1.scrollHeight / 2;
+              }
+            }
+            autoScrollReq = requestAnimationFrame(tick);
+          };
+          tick();
+
+          // Cuando la sección desaparece de la pantalla, resetea el loop nativo
+          ScrollTrigger.create({
+            trigger: '.cases',
+            start: 'top bottom',
+            end: 'bottom top',
+            onLeave: resetPosition,
+            onLeaveBack: resetPosition,
+          });
+        }
+      },
+    );
+
+    // Detectores de interacción táctil (Solo actúan en la columna 1 para mobile)
+    if (col1) {
+      col1.addEventListener('touchstart', () => {
+        isTouching = true;
+      });
+      col1.addEventListener('touchend', () => {
+        isTouching = false;
+      });
+    }
+
+    // =========================================================
+    // EVENTOS DE INTERACCIÓN DE CARDS
+    // =========================================================
     cards.forEach((card) => {
       const track = card.closest('[data-carousel-track]') as HTMLElement;
       const col = card.closest('[data-col-index]');
@@ -133,16 +228,20 @@ const track3 = [...col3, ...col3];
         ? parseInt(col.getAttribute('data-col-index') || '-1', 10)
         : -1;
 
-      const trigger = card.querySelector('[data-case-trigger]') as HTMLButtonElement;
+      const trigger = card.querySelector(
+        '[data-case-trigger]',
+      ) as HTMLButtonElement;
       const body = card.querySelector('[data-case-body]') as HTMLElement;
       const img = card.querySelector('[data-case-img]') as HTMLElement;
       const overlay = card.querySelector('[data-case-overlay]') as HTMLElement;
 
       gsap.set(body, { height: 0, overflow: 'hidden' });
 
+      // HOVER (Solo interrumpe en Desktop)
       if (isHoverable) {
         card.addEventListener('mouseenter', () => {
-          if (colIndex >= 0 && colIndex < carousels.length) {
+          const isDesktop = window.innerWidth >= 1024;
+          if (isDesktop && colIndex >= 0 && colIndex < carousels.length) {
             carousels[colIndex].pause();
           }
 
@@ -153,24 +252,33 @@ const track3 = [...col3, ...col3];
         });
 
         card.addEventListener('mouseleave', () => {
+          const isDesktop = window.innerWidth >= 1024;
+
           if (card.classList.contains('is-active')) {
             gsap.to(body, { height: 0, duration: 0.4, ease: 'power2.inOut' });
             trigger.setAttribute('aria-expanded', 'false');
             card.classList.remove('is-active');
             activeCard = null;
+            isCardActive = false;
 
-            gsap.to(track, {
-              y: 0,
-              duration: 0.4,
-              ease: 'power2.inOut',
-              onComplete: () => {
-                if (colIndex >= 0 && colIndex < carousels.length) {
-                  carousels[colIndex].play();
-                }
-              },
-            });
+            if (isDesktop) {
+              gsap.to(track, {
+                y: 0,
+                duration: 0.4,
+                ease: 'power2.inOut',
+                onComplete: () => {
+                  if (
+                    window.innerWidth >= 1024 &&
+                    colIndex >= 0 &&
+                    colIndex < carousels.length
+                  ) {
+                    carousels[colIndex].play();
+                  }
+                },
+              });
+            }
           } else {
-            if (colIndex >= 0 && colIndex < carousels.length) {
+            if (isDesktop && colIndex >= 0 && colIndex < carousels.length) {
               carousels[colIndex].play();
             }
           }
@@ -180,11 +288,14 @@ const track3 = [...col3, ...col3];
         });
       }
 
+      // CLICK (Abre card y controla GSAP o Native Scroll según viewport)
       trigger.addEventListener('click', (e) => {
         if (isTouch) e.stopPropagation();
 
+        const isDesktop = window.innerWidth >= 1024;
         const isCurrentlyActive = activeCard === card;
 
+        // Cierra una card activa diferente
         if (isTouch && activeCard && !isCurrentlyActive) {
           const activeBody = activeCard.querySelector('[data-case-body]');
           const activeTrigger = activeCard.querySelector('[data-case-trigger]');
@@ -202,37 +313,49 @@ const track3 = [...col3, ...col3];
           activeTrigger?.setAttribute('aria-expanded', 'false');
           activeCard.classList.remove('is-active');
 
-          gsap.to(activeTrack, {
-            y: 0,
-            duration: 0.4,
-            ease: 'power2.inOut',
-            onComplete: () => {
-              if (activeColIndex >= 0 && activeColIndex < carousels.length) {
-                carousels[activeColIndex].play();
-              }
-            },
-          });
+          if (isDesktop && activeTrack) {
+            gsap.to(activeTrack, {
+              y: 0,
+              duration: 0.4,
+              ease: 'power2.inOut',
+              onComplete: () => {
+                if (activeColIndex >= 0 && activeColIndex < carousels.length)
+                  carousels[activeColIndex].play();
+              },
+            });
+          }
         }
 
+        // Cierra la card actual si le volvemos a dar click
         if (isCurrentlyActive) {
           gsap.to(body, { height: 0, duration: 0.4, ease: 'power2.inOut' });
           trigger.setAttribute('aria-expanded', 'false');
           card.classList.remove('is-active');
           activeCard = null;
+          isCardActive = false;
 
-          gsap.to(track, {
-            y: 0,
-            duration: 0.4,
-            ease: 'power2.inOut',
-            onComplete: () => {
-              if (isTouch && colIndex >= 0 && colIndex < carousels.length) {
-                carousels[colIndex].play();
-              }
-            },
-          });
-        } else {
-          if (isTouch && colIndex >= 0 && colIndex < carousels.length) {
-            carousels[colIndex].pause(); 
+          if (isDesktop) {
+            gsap.to(track, {
+              y: 0,
+              duration: 0.4,
+              ease: 'power2.inOut',
+              onComplete: () => {
+                if (isTouch && colIndex >= 0 && colIndex < carousels.length) {
+                  carousels[colIndex].play();
+                }
+              },
+            });
+          }
+        }
+        // Abre una nueva card
+        else {
+          if (
+            isDesktop &&
+            isTouch &&
+            colIndex >= 0 &&
+            colIndex < carousels.length
+          ) {
+            carousels[colIndex].pause();
           }
 
           gsap.to(body, {
@@ -243,8 +366,10 @@ const track3 = [...col3, ...col3];
           trigger.setAttribute('aria-expanded', 'true');
           card.classList.add('is-active');
           activeCard = card as HTMLElement;
+          isCardActive = true; // Pausa el auto-scroll de requestAnimationFrame en Mobile
 
-          if (carouselWrapper) {
+          // Centrado dinámico en Desktop
+          if (isDesktop && carouselWrapper) {
             const wrapperRect = carouselWrapper.getBoundingClientRect();
             const cardRect = card.getBoundingClientRect();
 

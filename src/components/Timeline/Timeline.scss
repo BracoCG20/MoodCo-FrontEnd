@@ -216,8 +216,8 @@
     color: $color-white;
     text-align: center;
     font-family: $font-primary;
-    font-size: clamp(1.2rem, 2.5vw, 2.5rem);
-    max-width: 600px;
+    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    max-width: 700px;
     line-height: 1.2;
     &--bottom {
       text-transform: uppercase;

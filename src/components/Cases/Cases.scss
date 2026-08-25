@@ -1,287 +1,294 @@
-@use "../../styles/variables" as *;
-@use "../../styles/breakpoints" as *;
+@use '../../styles/variables' as *;
+@use '../../styles/breakpoints' as *;
 
 .cases {
-	width: 100%;
-	background-color: $color-white;
+  width: 100%;
+  background-color: $color-white;
+  padding-bottom: 5rem;
 
-	// NUEVO: Espacio inferior para separar el carrusel de la siguiente sección
-	padding-bottom: 5rem;
+  // SOLUCIÓN ESTRICTA: Evita absolutamente que el contenido se superponga o salga de la sección
+  overflow: clip;
+  contain: paint;
 
-	@include tablet {
-		padding-bottom: 7rem;
-	}
+  @include tablet {
+    padding-bottom: 7rem;
+  }
 
-	@include desktop {
-		padding-bottom: 9rem;
-	}
+  @include desktop {
+    padding-bottom: 9rem;
+  }
 
-	&__header {
-		padding: 4rem 1.5rem 2rem;
-		text-align: center;
-	}
+  &__header {
+    padding: 4rem 1.5rem 2rem;
+    text-align: center;
+  }
 
-	&__heading {
-		font-family: $font-secondary;
-		font-size: 2rem;
-		line-height: 1.1;
-		color: $color-green-dark;
-		margin: 0;
+  &__heading {
+    font-family: $font-secondary;
+    font-size: 2rem;
+    line-height: 1.1;
+    color: $color-green-dark;
+    margin: 0;
 
-		@include tablet {
-			font-size: 3rem;
-		}
-		@include desktop {
-			font-size: 3.5rem;
-		}
-	}
+    @include tablet {
+      font-size: 3rem;
+    }
+    @include desktop {
+      font-size: 3.5rem;
+    }
+  }
 
-	&__heading-regular {
-		font-weight: 400;
-	}
-	&__heading-bold {
-		font-weight: 700;
-	}
+  &__heading-regular {
+    font-weight: 400;
+  }
+  &__heading-bold {
+    font-weight: 700;
+  }
 
-	// -----------------------------------------
-	// Contenedor principal de la ventana (Máscara)
-	// -----------------------------------------
-	&__carousel-wrapper {
-		width: 100%;
-		// Alturas optimizadas para no dejar grandes espacios vacíos en Desktop
-		height: 75vh;
-		min-height: 550px;
-		max-height: 800px;
-		overflow: hidden; // Previene que el carrusel desborde su propia sección
-		padding: 0 1.5rem;
-		position: relative;
+  // -----------------------------------------
+  // Contenedor principal de la ventana (Máscara)
+  // -----------------------------------------
+  &__carousel-wrapper {
+    width: 100%;
+    height: 75vh;
+    min-height: 550px;
+    max-height: 800px;
+    overflow: hidden;
+    padding: 0 1.5rem;
+    position: relative;
 
-		// Fading superior e inferior
-		&::before,
-		&::after {
-			content: "";
-			position: absolute;
-			left: 0;
-			width: 100%;
-			height: 80px;
-			z-index: 5;
-			pointer-events: none;
-			display: none;
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      z-index: 5;
+      pointer-events: none;
+      display: none;
 
-			@include tablet {
-				display: block;
-			}
-		}
+      @include tablet {
+        display: block;
+      }
+    }
 
-		&::before {
-			top: 0;
-			background: linear-gradient(
-				to bottom,
-				$color-white 0%,
-				rgba(255, 255, 255, 0) 100%
-			);
-		}
+    &::before {
+      top: 0;
+      background: linear-gradient(
+        to bottom,
+        $color-white 0%,
+        rgba(255, 255, 255, 0) 100%
+      );
+    }
 
-		&::after {
-			bottom: 0;
-			background: linear-gradient(
-				to top,
-				$color-white 0%,
-				rgba(255, 255, 255, 0) 100%
-			);
-		}
-	}
+    &::after {
+      bottom: 0;
+      background: linear-gradient(
+        to top,
+        $color-white 0%,
+        rgba(255, 255, 255, 0) 100%
+      );
+    }
+  }
 
-	// -----------------------------------------
-	// SISTEMA RESPONSIVE CON FLEXBOX
-	// -----------------------------------------
-	&__columns {
-		display: flex;
-		flex-direction: row;
-		gap: 1.5rem;
-		height: 100%;
-		width: 100%;
-		max-width: 1200px;
-		margin: 0 auto;
+  // -----------------------------------------
+  // SISTEMA RESPONSIVE CON FLEXBOX
+  // -----------------------------------------
+  &__columns {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    height: 100%;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
 
-		@include tablet {
-			gap: 2rem;
-		}
-		@include desktop {
-			gap: 2.5rem;
-		}
-	}
+    @include tablet {
+      gap: 2rem;
+    }
+    @include desktop {
+      gap: 2.5rem;
+    }
+  }
 
-	&__col {
-		flex: 1;
-		min-width: 0;
-		height: 100%;
-		overflow: visible;
-		display: none;
+  &__col {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    overflow: visible; // En desktop necesita desbordar visualmente las sombras
+    display: none;
 
-		&--1 {
-			display: block;
-		}
+    // Ocultar scrollbar nativo para Mobile/Tablet
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 
-		@include tablet {
-			&--2 {
-				display: block;
-			}
-		}
+    &--1 {
+      display: block;
+    }
 
-		@include desktop {
-			&--3 {
-				display: block;
-			}
-		}
-	}
+    @include tablet {
+      &--2 {
+        display: block;
+      }
+    }
 
-	&__track {
-		display: flex;
-		flex-direction: column;
-		gap: 1.5rem;
-		padding-bottom: 1.5rem;
-		height: max-content;
-		margin: 0;
-		will-change: transform;
+    @include desktop {
+      &--3 {
+        display: block;
+      }
+    }
+  }
 
-		@include tablet {
-			gap: 2rem;
-			padding-bottom: 2rem;
-		}
-		@include desktop {
-			gap: 2.5rem;
-			padding-bottom: 2.5rem;
-		}
-	}
+  &__track {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-bottom: 1.5rem;
+    height: max-content;
+    margin: 0;
+    will-change: transform;
+
+    @include tablet {
+      gap: 2rem;
+      padding-bottom: 2rem;
+    }
+    @include desktop {
+      gap: 2.5rem;
+      padding-bottom: 2.5rem;
+    }
+  }
 }
 
 /* =========================================
    Estilos de la Card Individual
 ========================================= */
 .case-card {
-	background-color: $color-green-light;
-	border-radius: 24px;
-	overflow: hidden;
-	display: flex;
-	flex-direction: column;
-	position: relative;
-	will-change: transform, opacity, filter;
+  background-color: $color-green-light;
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  will-change: transform, opacity, filter;
 
-	&__trigger {
-		background: none;
-		border: none;
-		padding: 0;
-		margin: 0;
-		width: 100%;
-		cursor: pointer;
-		text-align: left;
-		position: relative;
-		outline: none;
-	}
+  &__trigger {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    cursor: pointer;
+    text-align: left;
+    position: relative;
+    outline: none;
+  }
 
-	&__image-wrapper {
-		position: relative;
-		width: 100%;
-		aspect-ratio: 1 / 1;
-		overflow: hidden;
-		background-color: $color-green-light;
-	}
+  &__image-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background-color: $color-green-light;
+  }
 
-	&__image {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		display: block;
-		transform-origin: center center;
-	}
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transform-origin: center center;
+  }
 
-	&__gradient {
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		width: 100%;
-		height: 70%;
-		background: linear-gradient(
-			to top,
-			rgba($color-green-dark, 0.8) 0%,
-			rgba(0, 0, 0, 0) 100%
-		);
-		pointer-events: none;
-		z-index: 1;
-	}
+  &__gradient {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70%;
+    background: linear-gradient(
+      to top,
+      rgba($color-green-dark, 0.8) 0%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
 
-	&__hover-overlay {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background-color: $color-green-light;
-		opacity: 0;
-		pointer-events: none;
-		z-index: 2;
-		mix-blend-mode: multiply;
-	}
+  &__hover-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: $color-green-light;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 2;
+    mix-blend-mode: multiply;
+  }
 
-	&__title {
-		position: absolute;
-		bottom: 1.5rem;
-		left: 1.5rem;
-		color: $color-white;
-		font-family: $font-secondary;
-		font-weight: 700;
-		font-size: 1.75rem;
-		line-height: 1;
-		margin: 0;
-		text-transform: uppercase;
-		z-index: 3;
+  &__title {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    color: $color-white;
+    font-family: $font-secondary;
+    font-weight: 700;
+    font-size: 1.75rem;
+    line-height: 1;
+    margin: 0;
+    text-transform: uppercase;
+    z-index: 3;
 
-		@include tablet {
-			font-size: 2.25rem;
-		}
-	}
+    @include tablet {
+      font-size: 2.25rem;
+    }
+  }
 
-	&__body {
-		background-color: $color-green-light;
-		width: 100%;
-	}
+  &__body {
+    background-color: $color-green-light;
+    width: 100%;
+  }
 
-	&__content {
-		padding: 1.5rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-	}
+  &__content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
 
-	&__description {
-		color: $color-black;
-		font-family: $font-primary;
-		font-size: 1rem;
-		line-height: 1.4;
-		margin: 0;
-	}
+  &__description {
+    color: $color-black;
+    font-family: $font-primary;
+    font-size: 1rem;
+    line-height: 1.4;
+    margin: 0;
+  }
 
-	&__tags {
-		color: $color-black;
-		font-family: $font-primary;
-		font-size: 0.875rem;
-		text-decoration: underline;
-	}
+  &__tags {
+    color: $color-black;
+    font-family: $font-primary;
+    font-size: 0.875rem;
+    text-decoration: underline;
+  }
 
-	&__link {
-		display: inline-block;
-		margin-top: 0.5rem;
-		color: $color-black;
-		font-family: $font-secondary;
-		font-weight: 700;
-		font-size: 1.25rem;
-		text-transform: uppercase;
-		transition: opacity 0.2s ease;
+  &__link {
+    display: inline-block;
+    margin-top: 0.5rem;
+    color: $color-black;
+    font-family: $font-secondary;
+    font-weight: 700;
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    transition: opacity 0.2s ease;
 
-		&:hover,
-		&:focus {
-			opacity: 0.6;
-		}
-	}
+    &:hover,
+    &:focus {
+      opacity: 0.6;
+    }
+  }
 }
