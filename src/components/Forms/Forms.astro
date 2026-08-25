@@ -40,7 +40,7 @@ import './Forms.scss';
                 {field.label}
               </label>
               <input
-                type={field.type}
+                type={field.type as any}
                 id={field.id}
                 name={field.name}
                 class='form__input'
@@ -68,10 +68,22 @@ import './Forms.scss';
               viewBox='0 0 24 24'
               fill='none'
               stroke='currentColor'
-              stroke-width='2'
+              stroke-width='2.5'
+              stroke-linecap='round'
+              stroke-linejoin='round'
               aria-hidden='true'
-              ><polyline points='20 6 9 17 4 12'></polyline></svg
             >
+              <circle
+                data-check-circle
+                cx='12'
+                cy='12'
+                r='10'
+              ></circle>
+              <path
+                data-check-path
+                d='M8 12l3 3 6-6'
+              ></path>
+            </svg>
           </button>
         </div>
       </form>
@@ -115,7 +127,7 @@ import './Forms.scss';
                 {field.label}
               </label>
               <input
-                type={field.type}
+                type={field.type as any}
                 id={field.id}
                 name={field.name}
                 class='form__input'
@@ -136,14 +148,16 @@ import './Forms.scss';
               fill='none'
               stroke='currentColor'
               stroke-width='2'
-              ><path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'
-              ></path><polyline points='17 8 12 3 7 8'></polyline><line
+            >
+              <path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'></path>
+              <polyline points='17 8 12 3 7 8'></polyline>
+              <line
                 x1='12'
                 y1='3'
                 x2='12'
                 y2='15'
-              ></line></svg
-            >
+              ></line>
+            </svg>
           </label>
           <input
             type='file'
@@ -173,9 +187,25 @@ import './Forms.scss';
               viewBox='0 0 24 24'
               fill='none'
               stroke='currentColor'
-              stroke-width='2'
-              ><polyline points='20 6 9 17 4 12'></polyline></svg
+              stroke-width='2.5'
+              stroke-linecap='round'
+              stroke-linejoin='round'
+              import
+              gsap
+              from
+              'gsap';
             >
+              <circle
+                data-check-circle
+                cx='12'
+                cy='12'
+                r='10'
+              ></circle>
+              <path
+                data-check-path
+                d='M8 12l3 3 6-6'
+              ></path>
+            </svg>
           </button>
         </div>
       </form>
@@ -184,6 +214,8 @@ import './Forms.scss';
 </section>
 
 <script>
+  import gsap from 'gsap';
+
   document.addEventListener('DOMContentLoaded', () => {
     // 1. Lógica de Cambio de Formularios
     const triggerButtons = document.querySelectorAll('[data-form-trigger]');
@@ -196,45 +228,125 @@ import './Forms.scss';
         const target = btn.getAttribute('data-form-trigger');
 
         if (target === 'trabaja') {
-          wrapperContacto.classList.remove('is-active');
-          wrapperTrabaja.classList.add('is-active');
+          wrapperContacto?.classList.remove('is-active');
+          wrapperTrabaja?.classList.add('is-active');
         } else {
-          wrapperTrabaja.classList.remove('is-active');
-          wrapperContacto.classList.add('is-active');
+          wrapperTrabaja?.classList.remove('is-active');
+          wrapperContacto?.classList.add('is-active');
         }
 
         // Scroll suave hacia la sección
         document
           .getElementById('contacto')
-          .scrollIntoView({ behavior: 'smooth' });
+          ?.scrollIntoView({ behavior: 'smooth' });
       });
     });
 
-    // 2. Lógica de Envío de Formularios
+    // 2. Lógica de Envío de Formularios con Animaciones GSAP
     const forms = document.querySelectorAll('.form');
 
     forms.forEach((form) => {
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const submitBtn = form.querySelector('[data-btn="submit"]');
-        const successBtn = form.querySelector('[data-btn="success"]');
+        const submitBtn = form.querySelector(
+          '[data-btn="submit"]',
+        ) as HTMLButtonElement;
+        const successBtn = form.querySelector(
+          '[data-btn="success"]',
+        ) as HTMLButtonElement;
 
-        // Estado: SUBMIT
+        const circlePath = successBtn?.querySelector('[data-check-circle]');
+        const checkPath = successBtn?.querySelector('[data-check-path]');
+
+        // Guardamos el texto original para poder restaurarlo después
+        const originalText = submitBtn.textContent;
+
+        // Estado: SUBMIT (Animación de carga)
         submitBtn.textContent = 'ENVIANDO...';
         submitBtn.disabled = true;
 
+        // Animación de pulso continuo indicando "procesando"
+        const loadingTween = gsap.to(submitBtn, {
+          opacity: 0.6,
+          repeat: -1,
+          yoyo: true,
+          duration: 0.4,
+          ease: 'power1.inOut',
+        });
+
         try {
-          // Aquí iría la conexión real con la API: await fetch('/api/endpoint', { ... })
-          // Simulamos latencia de red de 1.5s
+          // Simulamos latencia de red (Aquí iría la conexión real con tu API)
           await new Promise((resolve) => setTimeout(resolve, 1500));
 
-          // Estado: ÉXITO
+          // Detenemos la animación de carga
+          loadingTween.kill();
+          gsap.set(submitBtn, { opacity: 1 });
+
+          // Estado: ÉXITO (Ocultamos envío, mostramos éxito)
           submitBtn.classList.add('is-hidden');
           successBtn.classList.remove('is-hidden');
-          form.reset();
+
+          // Animamos la aparición fluida del botón Success
+          gsap.fromTo(
+            successBtn,
+            { opacity: 0, scale: 0.95 },
+            { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.5)' },
+          );
+
+          // Animamos el check dibujándose progresivamente (Círculo primero, luego Check)
+          if (circlePath && checkPath) {
+            // Circunferencia aprox de un radio 10 es ~63
+            gsap.fromTo(
+              circlePath,
+              { strokeDasharray: 65, strokeDashoffset: 65 },
+              {
+                strokeDashoffset: 0,
+                duration: 0.5,
+                ease: 'power2.out',
+                delay: 0.1,
+              },
+            );
+            // Largo del path del check es aprox 15, usamos 20 por seguridad
+            gsap.fromTo(
+              checkPath,
+              { strokeDasharray: 20, strokeDashoffset: 20 },
+              {
+                strokeDashoffset: 0,
+                duration: 0.4,
+                ease: 'power2.out',
+                delay: 0.4,
+              },
+            );
+          }
+
+          (form as HTMLFormElement).reset();
+
+          // 3. Regresar al Estado Original después de unos segundos
+          setTimeout(() => {
+            gsap.to(successBtn, {
+              opacity: 0,
+              scale: 0.95,
+              duration: 0.3,
+              onComplete: () => {
+                successBtn.classList.add('is-hidden');
+                submitBtn.classList.remove('is-hidden');
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+
+                // Aparecemos suavemente el botón restaurado
+                gsap.fromTo(
+                  submitBtn,
+                  { opacity: 0 },
+                  { opacity: 1, duration: 0.3 },
+                );
+              },
+            });
+          }, 4000); // El botón vuelve a la normalidad 4 segundos después de haber enviado el mensaje
         } catch (error) {
           // Manejo de Errores
+          loadingTween.kill();
+          gsap.set(submitBtn, { opacity: 1 });
           submitBtn.textContent = 'ERROR. REINTENTAR';
           submitBtn.disabled = false;
         }
