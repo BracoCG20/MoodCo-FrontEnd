@@ -12,7 +12,6 @@
     padding: 2rem 3rem;
   }
 
-  // Asegura que los elementos del top bar queden por encima del overlay del menú
   &__container {
     position: relative;
     z-index: 101;
@@ -33,7 +32,6 @@
     height: 50px;
     width: auto;
     object-fit: contain;
-    // Si el logo negro no se ve sobre el fondo oscuro, invertimos a blanco dinámicamente cuando el menú abre
     transition: filter 0.3s ease;
 
     @include tablet {
@@ -58,7 +56,7 @@
     background: transparent;
     border: none;
     color: $color-white;
-    font-size: 2.5rem; // Tamaño amplio para el SVG
+    font-size: 2.5rem;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -72,7 +70,7 @@
   }
 
   &__icon {
-    will-change: transform; // Optimización GSAP
+    will-change: transform;
   }
 
   /* =========================================
@@ -84,7 +82,6 @@
     left: 0;
     width: 100%;
     height: 100vh;
-    // background-color: rgba($color-black, 0.9);
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
@@ -93,7 +90,6 @@
     align-items: center;
     padding: 1.5rem;
 
-    // clip-path optimizado en SCSS para la animación GSAP
     clip-path: inset(0 0 100% 0);
     visibility: hidden;
     @include tablet {
@@ -125,12 +121,12 @@
   }
 
   &__nav-item {
-    overflow: hidden; // Limpia las animaciones de subida en el stagger
+    overflow: hidden;
   }
 
   &__nav-link {
     color: $color-white;
-    font-family: $font-secondary; // Tipografía condensada de la referencia
+    font-family: $font-secondary;
     font-size: 2.5rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -150,6 +146,7 @@
      SELECTOR DE IDIOMAS (Diseño píldora)
   ========================================= */
   &__lang {
+    position: relative; // Fundamental para que la burbuja se posicione correctamente
     display: flex;
     align-items: center;
     justify-content: center;
@@ -164,8 +161,22 @@
     }
   }
 
+  // Capa física de la burbuja (Fondo blanco)
+  &__lang-bubble {
+    position: absolute;
+    top: 0.2rem;
+    bottom: 0.2rem;
+    background-color: $color-white;
+    border-radius: 8px;
+    z-index: 0;
+    pointer-events: none; // Evita que bloquee los clicks de los botones
+    transform-origin: center center;
+  }
+
   &__lang-btn {
-    background: transparent;
+    position: relative; // Pone el texto por encima de la burbuja
+    z-index: 1;
+    background: transparent !important; // El fondo ahora es provisto por la burbuja
     border: none;
     color: $color-white;
     font-family: $font-primary;
@@ -174,16 +185,15 @@
     border-radius: 8px;
     cursor: pointer;
     font-weight: 400;
-    transition:
-      background-color 0.3s,
-      color 0.3s;
+    transition: color 0.3s;
     outline: none;
+
     @include tablet {
       font-size: 1.4rem;
     }
 
     &.is-active {
-      background-color: $color-white;
+      // El color de fondo fue eliminado porque .header__lang-bubble asume su rol
       color: $color-black;
       font-weight: 700;
     }
