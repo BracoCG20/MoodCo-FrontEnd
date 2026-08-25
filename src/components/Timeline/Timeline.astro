@@ -6,7 +6,9 @@ import './Timeline.scss';
 
 <section class='timeline' id='timeline'>
   
-  <!-- VERSIÓN MOBILE / TABLET (< 1024px) -->
+  <!-- ======================================================= -->
+  <!-- VERSIÓN MOBILE / TABLET (< 1024px)                      -->
+  <!-- ======================================================= -->
   <div class="timeline__mobile-only">
     <div class='timeline-mobile__sticky-scene'>
       <div class='timeline__grid-bg'></div>
@@ -57,7 +59,9 @@ import './Timeline.scss';
     </div>
   </div>
 
-  <!-- VERSIÓN DESKTOP (>= 1024px) -->
+  <!-- ======================================================= -->
+  <!-- VERSIÓN DESKTOP (>= 1024px)                             -->
+  <!-- ======================================================= -->
   <div class="timeline__desktop-only">
     <div class='timeline-desktop__sticky-scene'>
       <div class='timeline__grid-bg'></div>
@@ -119,23 +123,35 @@ import './Timeline.scss';
   document.addEventListener('DOMContentLoaded', () => {
     let mm = gsap.matchMedia();
 
-    // =====================================
-    // MOBILE / TABLET (< 1024px)
-    // =====================================
+    // =======================================================
+    // CONTEXTO MOBILE / TABLET (< 1024px)
+    // =======================================================
     mm.add("(max-width: 1023px)", () => {
       
       const introTl = gsap.timeline({
-        scrollTrigger: { trigger: '.timeline__mobile-only', start: 'top top', end: '+=150vh', scrub: 2 }
+        scrollTrigger: { trigger: '.timeline__mobile-only', start: 'top top', end: '+=150vh', scrub: 2 },
       });
 
       introTl.to('[data-intro-text="mobile"]', { opacity: 0, y: -10, duration: 1 }, 0);
-      introTl.to('[data-mood-block="mobile"]', { scale: 1.4, filter: 'blur(6px)', opacity: 0.4, duration: 2, force3D: true, rotationZ: 0.01, ease: 'power1.inOut' }, 0);
-      introTl.to('[data-figure="mobile"]', { y: (i, el) => (el.classList.contains('timeline-mobile__figure--1') ? -40 : 40), filter: 'blur(2px)', duration: 2, force3D: true, rotationZ: 0.01, ease: 'power1.inOut' }, 0);
+      introTl.to(
+        '[data-mood-block="mobile"]',
+        { scale: 1.4, filter: 'blur(6px)', opacity: 0.4, duration: 2, force3D: true, rotationZ: 0.01, ease: 'power1.inOut' }, 0
+      );
+      
+      // SOLUCIÓN TS: Tipado estricto en los parámetros i, el
+      introTl.to(
+        '[data-figure="mobile"]',
+        { y: (i: number, el: HTMLElement) => (el.classList.contains('timeline-mobile__figure--1') ? -40 : 40), filter: 'blur(2px)', duration: 2, force3D: true, rotationZ: 0.01, ease: 'power1.inOut' }, 0
+      );
 
       const items = document.querySelectorAll('[data-timeline-item="mobile"]');
       const lineProgress = document.querySelector('[data-line-progress="mobile"]');
 
-      gsap.fromTo(lineProgress, { height: '0%' }, { height: '100%', ease: 'none', scrollTrigger: { trigger: '.timeline-mobile__content', start: 'top 50%', end: 'bottom 80%', scrub: true } });
+      gsap.fromTo(
+        lineProgress,
+        { height: '0%' },
+        { height: '100%', ease: 'none', scrollTrigger: { trigger: '.timeline-mobile__content', start: 'top 50%', end: 'bottom 80%', scrub: true } }
+      );
 
       items.forEach((item) => {
         const node = item.querySelector('[data-circuit-node]');
@@ -146,27 +162,42 @@ import './Timeline.scss';
           scrollTrigger: { trigger: item, start: 'top 85%', toggleActions: 'play none none reverse' },
         });
 
-        tl.fromTo(wrapper, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', force3D: true }).to(node, { scale: 1, duration: 0.4, ease: 'back.out(2)' }, '-=0.5');
+        tl.fromTo(
+          wrapper,
+          { opacity: 0, y: 50 },
+          { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', force3D: true }
+        ).to(node, { scale: 1, duration: 0.4, ease: 'back.out(2)' }, '-=0.5');
       });
 
-      const outroTl = gsap.timeline({ scrollTrigger: { trigger: '[data-outro-spacer="mobile"]', start: 'top bottom', end: 'bottom bottom', scrub: 2 } });
+      const outroTl = gsap.timeline({
+        scrollTrigger: { trigger: '[data-outro-spacer="mobile"]', start: 'top bottom', end: 'bottom bottom', scrub: 2 },
+      });
+
       outroTl.to('[data-intro-text="mobile"]', { opacity: 1, y: 0, duration: 1 }, 0);
       outroTl.to('[data-mood-block="mobile"]', { scale: 1, filter: 'blur(0px)', opacity: 1, duration: 2, force3D: true, rotationZ: 0.01, ease: 'power1.inOut' }, 0);
       outroTl.to('[data-figure="mobile"]', { y: 0, filter: 'blur(0px)', duration: 2, force3D: true, rotationZ: 0.01, ease: 'power1.inOut' }, 0);
     });
 
-    // =====================================
-    // DESKTOP (>= 1024px)
-    // =====================================
+    // =======================================================
+    // CONTEXTO DESKTOP (>= 1024px)
+    // =======================================================
     mm.add("(min-width: 1024px)", () => {
       
       const introTl = gsap.timeline({
-        scrollTrigger: { trigger: '.timeline__desktop-only', start: 'top top', end: '+=150vh', scrub: 2 }
+        scrollTrigger: { trigger: '.timeline__desktop-only', start: 'top top', end: '+=150vh', scrub: 2 },
       });
 
       introTl.to('[data-intro-text="desktop"]', { opacity: 0, y: -10, duration: 1 }, 0);
-      introTl.to('[data-mood-block="desktop"]', { scale: 1.4, filter: 'blur(6px)', opacity: 0.4, duration: 2, force3D: true, rotationZ: 0.01, ease: 'power1.inOut' }, 0);
-      introTl.to('[data-figure="desktop"]', { x: (i, el) => (el.classList.contains('timeline-desktop__figure--1') ? -40 : 40), filter: 'blur(2px)', duration: 2, force3D: true, rotationZ: 0.01, ease: 'power1.inOut' }, 0);
+      introTl.to(
+        '[data-mood-block="desktop"]',
+        { scale: 1.4, filter: 'blur(6px)', opacity: 0.4, duration: 2, force3D: true, rotationZ: 0.01, ease: 'power1.inOut' }, 0
+      );
+      
+      // SOLUCIÓN TS: Tipado estricto en los parámetros i, el
+      introTl.to(
+        '[data-figure="desktop"]',
+        { x: (i: number, el: HTMLElement) => (el.classList.contains('timeline-desktop__figure--1') ? -40 : 40), filter: 'blur(2px)', duration: 2, force3D: true, rotationZ: 0.01, ease: 'power1.inOut' }, 0
+      );
 
       const content = document.querySelector('.timeline-desktop__content');
       const itemsContainer = document.querySelector('.timeline-desktop__items');
@@ -178,10 +209,21 @@ import './Timeline.scss';
       const scrollTween = gsap.to(itemsContainer, {
         x: () => -getScrollAmount(),
         ease: 'none',
-        scrollTrigger: { trigger: content, pin: true, start: 'top top', end: () => `+=${getScrollAmount()}`, scrub: 1, invalidateOnRefresh: true }
+        scrollTrigger: {
+          trigger: content,
+          pin: true,
+          start: 'top top',
+          end: () => `+=${getScrollAmount()}`,
+          scrub: 1,
+          invalidateOnRefresh: true,
+        }
       });
 
-      gsap.fromTo(lineProgress, { width: '0%' }, { width: '100%', ease: 'none', scrollTrigger: { trigger: content, start: 'top top', end: () => `+=${getScrollAmount()}`, scrub: true, invalidateOnRefresh: true } });
+      gsap.fromTo(
+        lineProgress,
+        { width: '0%' },
+        { width: '100%', ease: 'none', scrollTrigger: { trigger: content, start: 'top top', end: () => `+=${getScrollAmount()}`, scrub: true, invalidateOnRefresh: true } }
+      );
 
       items.forEach((item) => {
         const node = item.querySelector('[data-circuit-node]');
@@ -189,14 +231,25 @@ import './Timeline.scss';
         gsap.set(node, { scale: 0 });
 
         const tl = gsap.timeline({
-          scrollTrigger: { trigger: item, containerAnimation: scrollTween, start: 'left 85%', toggleActions: 'play none none reverse' },
+          scrollTrigger: {
+            trigger: item,
+            containerAnimation: scrollTween,
+            start: 'left 85%',
+            toggleActions: 'play none none reverse',
+          },
         });
 
-        // Entran de manera fluida y lateral sin tocar el eje Y ni generar Lag
-        tl.fromTo(wrapper, { opacity: 0, x: 100 }, { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out', force3D: true }).to(node, { scale: 1, duration: 0.4, ease: 'back.out(2)' }, '-=0.5');
+        tl.fromTo(
+          wrapper,
+          { opacity: 0, x: 100 },
+          { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out', force3D: true }
+        ).to(node, { scale: 1, duration: 0.4, ease: 'back.out(2)' }, '-=0.5');
       });
 
-      const outroTl = gsap.timeline({ scrollTrigger: { trigger: '[data-outro-spacer="desktop"]', start: 'top bottom', end: 'bottom bottom', scrub: 2 } });
+      const outroTl = gsap.timeline({
+        scrollTrigger: { trigger: '[data-outro-spacer="desktop"]', start: 'top bottom', end: 'bottom bottom', scrub: 2 },
+      });
+
       outroTl.to('[data-intro-text="desktop"]', { opacity: 1, y: 0, duration: 1 }, 0);
       outroTl.to('[data-mood-block="desktop"]', { scale: 1, filter: 'blur(0px)', opacity: 1, duration: 2, force3D: true, rotationZ: 0.01, ease: 'power1.inOut' }, 0);
       outroTl.to('[data-figure="desktop"]', { x: 0, filter: 'blur(0px)', duration: 2, force3D: true, rotationZ: 0.01, ease: 'power1.inOut' }, 0);
