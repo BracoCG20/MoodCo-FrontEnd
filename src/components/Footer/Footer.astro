@@ -3,11 +3,11 @@ import footerData from '../../data/footer.json';
 import './Footer.scss';
 ---
 
-<footer class='footer'>
+<footer class='footer' data-animate-section>
   <div class='footer__container'>
     <div class='footer__content'>
       <!-- Logo -->
-      <div class='footer__brand'>
+      <div class='footer__brand' data-animate-element>
         <img
           src='/logo_footer.png'
           alt="What's your Mood"
@@ -22,6 +22,7 @@ import './Footer.scss';
       <nav
         class='footer__nav'
         aria-label='Navegación del pie de página'
+        data-animate-element
       >
         <ul class='footer__list'>
           {
@@ -40,7 +41,7 @@ import './Footer.scss';
       </nav>
     </div>
     <!-- Información de contacto -->
-    <address class='footer__info'>
+    <address class='footer__info' data-animate-element>
       <ul class='footer__list'>
         {
           footerData.contactInfo.map((info) => (

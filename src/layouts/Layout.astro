@@ -37,5 +37,13 @@ const {
     <slot />
     <WhatsAppButton />
     <CustomCursor />
+    <script>
+      import { initLenis, initScrollAnimations } from '../utils/animations';
+      
+      document.addEventListener('DOMContentLoaded', () => {
+        initLenis();
+        initScrollAnimations();
+      });
+    </script>
   </body>
 </html>

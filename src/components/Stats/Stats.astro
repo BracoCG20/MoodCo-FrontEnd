@@ -3,13 +3,13 @@ import statsData from '../../data/stats.json';
 import './Stats.scss';
 ---
 
-<section class="stats" aria-label="Estadísticas de la agencia" id="nosotros">
+<section class="stats" aria-label="Estadísticas de la agencia" id="nosotros" data-animate-section>
   <div class="stats__container">
     
     <div class="stats__grid">
       {statsData.items.map((item, index) => (
         <>
-          <div class="stats__item">
+          <div class="stats__item" data-animate-element>
             <div class="stats__value-wrapper">
               {item.prefix && <span class="stats__prefix">{item.prefix}</span>}
               <!-- El contador animado por GSAP -->
@@ -30,7 +30,7 @@ import './Stats.scss';
       ))}
     </div>
 
-    <p class="stats__paragraph" set:html={statsData.paragraph}></p>
+    <p class="stats__paragraph" set:html={statsData.paragraph} data-animate-element></p>
 
   </div>
 </section>

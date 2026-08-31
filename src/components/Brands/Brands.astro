@@ -24,14 +24,14 @@ const loopLogos = [...brandsData.logos, ...brandsData.logos];
 <section
   class='brands'
   aria-labelledby='brands-title'
-  id='marcas"
+  id='marcas'
+  data-animate-section
 >
-  <div class='
-  brands__container'
->
+  <div class='brands__container'>
   <h2
     id='brands-title'
     class='brands__title'
+    data-animate-element
   >
     <span class='brands__title-regular'>{brandsData.title.regular1}</span>
     <span class='brands__title-bold'>{brandsData.title.bold1}</span>
@@ -60,6 +60,7 @@ const loopLogos = [...brandsData.logos, ...brandsData.logos];
         ))
       }
     </div>
+  </div>
   </div>
 </section>
 

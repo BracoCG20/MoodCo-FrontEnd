@@ -7,17 +7,19 @@ import './Cta.scss';
   class='cta'
   aria-labelledby='cta-title'
   id='cta'
+  data-animate-section
 >
   <div class='cta__container'>
     <h2
       id='cta-title'
       class='cta__title'
+      data-animate-element
     >
       <span class='cta__title-regular'>{ctaData.title.regular}</span>
       <span class='cta__title-bold'>{ctaData.title.bold}</span>
     </h2>
 
-    <p class='cta__description'>
+    <p class='cta__description' data-animate-element>
       {ctaData.description.textBefore}
       <a
         href={ctaData.description.linkUrl}
