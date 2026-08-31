@@ -4,6 +4,10 @@ dist/
 # generated types
 .astro/
 
+# file claude
+.claude/
+CLAUDE.md
+
 # dependencies
 node_modules/
 
