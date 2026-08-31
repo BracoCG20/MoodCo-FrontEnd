@@ -258,6 +258,7 @@
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     gap: 0.75rem;
   }
 
@@ -277,8 +278,6 @@
   }
 
   &__link {
-    display: inline-block;
-    margin-top: 0.5rem;
     color: $color-black;
     font-family: $font-secondary;
     font-weight: 700;
@@ -286,10 +285,7 @@
     text-transform: uppercase;
     transition: opacity 0.2s ease;
     background: none;
-    border: 2px solid $color-black;
-    padding: 0.4rem 1rem;
     cursor: pointer;
-    letter-spacing: 0.05em;
 
     &:hover,
     &:focus {
@@ -327,7 +323,6 @@
   &__container {
     position: relative;
     z-index: 1;
-    background-color: $color-white;
     width: 100%;
     max-width: 860px;
     border-radius: 4px;
@@ -338,18 +333,20 @@
 
   // ----- Header: título + botón cerrar -----
   &__header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0.75rem 1.25rem;
-    background-color: $color-white;
   }
 
   &__title {
-    font-family: $font-primary;
-    font-size: 0.9rem;
-    font-weight: 400;
-    color: $color-green-dark;
+    font-family: $font-secondary;
+    font-size: 1rem;
+    color: $color-white;
     text-transform: uppercase;
     letter-spacing: 0.06em;
   }
@@ -358,13 +355,13 @@
     background: none;
     border: none;
     cursor: pointer;
-    font-family: $font-primary;
-    font-size: 0.85rem;
-    color: $color-green-dark;
+    font-family: $font-secondary;
+    font-size: 1rem;
+    color: $color-white;
     text-transform: lowercase;
     letter-spacing: 0.04em;
     padding: 0.25rem 0.5rem;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease-in-out;
 
     &:hover {
       opacity: 0.6;
