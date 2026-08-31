@@ -59,6 +59,7 @@ const track3 = [...col3, ...col3];
                 tags={item.tags}
                 link={item.link}
                 imageSrc={getImagePath(item.image)}
+                video={(item as any).video ?? ''}
               />
             ))
           }
@@ -82,6 +83,7 @@ const track3 = [...col3, ...col3];
                 tags={item.tags}
                 link={item.link}
                 imageSrc={getImagePath(item.image)}
+                video={(item as any).video ?? ''}
               />
             ))
           }
@@ -105,6 +107,7 @@ const track3 = [...col3, ...col3];
                 tags={item.tags}
                 link={item.link}
                 imageSrc={getImagePath(item.image)}
+                video={(item as any).video ?? ''}
               />
             ))
           }
@@ -113,6 +116,65 @@ const track3 = [...col3, ...col3];
     </div>
   </div>
 </section>
+
+<!-- Modal Global de Video (reutilizado por todas las cards) -->
+<div
+  class='video-modal'
+  data-video-modal
+  aria-hidden='true'
+  role='dialog'
+  aria-modal='true'
+  aria-labelledby='modal-title'
+>
+  <div class='video-modal__backdrop' data-modal-backdrop></div>
+  <div class='video-modal__container' data-modal-container>
+    <div class='video-modal__header'>
+      <span
+        class='video-modal__title'
+        id='modal-title'
+        data-modal-title
+      ></span>
+      <button
+        class='video-modal__close'
+        data-modal-close
+        aria-label='Cerrar modal'
+        type='button'
+      >cerrar ×</button>
+    </div>
+
+    <div class='video-modal__media'>
+      <video
+        class='video-modal__video'
+        data-modal-video
+        playsinline
+        preload='metadata'
+      ></video>
+
+      <!-- Botón play/pausa personalizado -->
+      <button
+        class='video-modal__play-btn'
+        data-modal-play
+        aria-label='Reproducir / Pausar'
+        type='button'
+      >
+        <svg class='video-modal__play-icon' data-play-icon viewBox='0 0 24 24' fill='currentColor'>
+          <path d='M8 5v14l11-7z'/>
+        </svg>
+        <svg class='video-modal__pause-icon' data-pause-icon viewBox='0 0 24 24' fill='currentColor' style='display:none'>
+          <path d='M6 19h4V5H6v14zm8-14v14h4V5h-4z'/>
+        </svg>
+      </button>
+
+      <!-- Barra de progreso personalizada -->
+      <div class='video-modal__progress' data-modal-progress>
+        <div class='video-modal__progress-track' data-progress-track>
+          <div class='video-modal__progress-fill' data-progress-fill></div>
+          <div class='video-modal__progress-knob' data-progress-knob></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
   import gsap from 'gsap';
@@ -389,6 +451,223 @@ const track3 = [...col3, ...col3];
           gsap.to(overlay, { opacity: 0, duration: 0.4, ease: 'power2.out' });
         }
       });
+    });
+
+    // =========================================================
+    // LÓGICA DEL MODAL DE VIDEO
+    // =========================================================
+    const DEMO_VIDEO =
+      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+
+    const videoModal = document.querySelector('[data-video-modal]') as HTMLElement;
+    const modalBackdrop = document.querySelector('[data-modal-backdrop]') as HTMLElement;
+    const modalContainer = document.querySelector('[data-modal-container]') as HTMLElement;
+    const modalTitleEl = document.querySelector('[data-modal-title]') as HTMLElement;
+    const modalVideo = document.querySelector('[data-modal-video]') as HTMLVideoElement;
+    const modalClose = document.querySelector('[data-modal-close]') as HTMLButtonElement;
+    const modalPlayBtn = document.querySelector('[data-modal-play]') as HTMLButtonElement;
+    const playIcon = document.querySelector('[data-play-icon]') as SVGElement;
+    const pauseIcon = document.querySelector('[data-pause-icon]') as SVGElement;
+    const progressFill = document.querySelector('[data-progress-fill]') as HTMLElement;
+    const progressKnob = document.querySelector('[data-progress-knob]') as HTMLElement;
+    const progressTrack = document.querySelector('[data-progress-track]') as HTMLElement;
+
+    if (!videoModal || !modalVideo) return;
+
+    let isModalOpen = false;
+    let isDragging = false;
+
+    // ----- Helpers -----
+    const updatePlayIcons = (paused: boolean) => {
+      if (paused) {
+        playIcon.style.display = 'block';
+        pauseIcon.style.display = 'none';
+      } else {
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+      }
+    };
+
+    const updateProgress = () => {
+      if (!modalVideo.duration) return;
+      const pct = (modalVideo.currentTime / modalVideo.duration) * 100;
+      gsap.set(progressFill, { width: `${pct}%` });
+      gsap.set(progressKnob, { left: `${pct}%` });
+    };
+
+    const seekFromEvent = (e: MouseEvent | Touch) => {
+      const rect = progressTrack.getBoundingClientRect();
+      const clientX = 'clientX' in e ? e.clientX : (e as Touch).clientX;
+      const ratio = Math.min(Math.max((clientX - rect.left) / rect.width, 0), 1);
+      modalVideo.currentTime = ratio * modalVideo.duration;
+      updateProgress();
+    };
+
+    // ----- Abrir modal -----
+    const openModal = (title: string, videoSrc: string) => {
+      isModalOpen = true;
+      modalTitleEl.textContent = title;
+      modalVideo.src = videoSrc || DEMO_VIDEO;
+      modalVideo.load();
+      modalVideo.pause();
+      updatePlayIcons(true);
+      gsap.set(progressFill, { width: '0%' });
+      gsap.set(progressKnob, { left: '0%' });
+
+      videoModal.setAttribute('aria-hidden', 'false');
+      videoModal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+
+      gsap.fromTo(
+        modalBackdrop,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.35, ease: 'power2.out' },
+      );
+      gsap.fromTo(
+        modalContainer,
+        { opacity: 0, scale: 0.85, y: 30 },
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 0.45,
+          ease: 'back.out(1.4)',
+          delay: 0.05,
+        },
+      );
+    };
+
+    // ----- Cerrar modal -----
+    const closeModal = () => {
+      if (!isModalOpen) return;
+
+      gsap.to(modalContainer, {
+        opacity: 0,
+        scale: 0.9,
+        y: 20,
+        duration: 0.3,
+        ease: 'power2.in',
+      });
+      gsap.to(modalBackdrop, {
+        opacity: 0,
+        duration: 0.3,
+        ease: 'power2.in',
+        onComplete: () => {
+          isModalOpen = false;
+          videoModal.setAttribute('aria-hidden', 'true');
+          videoModal.style.display = 'none';
+          modalVideo.pause();
+          modalVideo.src = '';
+          document.body.style.overflow = '';
+          updatePlayIcons(true);
+        },
+      });
+    };
+
+    // ----- Delegación de eventos: abrir modal -----
+    document.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest('[data-ver-caso]') as HTMLElement | null;
+      if (!btn) return;
+      e.stopPropagation();
+      const title = btn.getAttribute('data-title') ?? '';
+      const videoSrc = btn.getAttribute('data-video') ?? '';
+      openModal(title, videoSrc);
+    });
+
+    // ----- Cerrar: botón X -----
+    modalClose.addEventListener('click', closeModal);
+
+    // ----- Cerrar: click en backdrop -----
+    modalBackdrop.addEventListener('click', closeModal);
+
+    // ----- Cerrar: tecla Escape -----
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isModalOpen) closeModal();
+    });
+
+    // ----- Play / Pausa -----
+    modalPlayBtn.addEventListener('click', () => {
+      if (modalVideo.paused) {
+        modalVideo.play();
+        updatePlayIcons(false);
+        // Ocultar botón play después de iniciar
+        gsap.fromTo(
+          modalPlayBtn,
+          { opacity: 1, scale: 1 },
+          { opacity: 0, scale: 0.8, duration: 0.4, ease: 'power2.in', delay: 0.6 },
+        );
+      } else {
+        modalVideo.pause();
+        updatePlayIcons(true);
+        gsap.fromTo(
+          modalPlayBtn,
+          { opacity: 0, scale: 0.8 },
+          { opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(1.4)' },
+        );
+      }
+    });
+
+    // Click en el video: toggle play/pausa con animación del botón
+    modalVideo.addEventListener('click', () => {
+      if (modalVideo.paused) {
+        modalVideo.play();
+        updatePlayIcons(false);
+        gsap.fromTo(
+          modalPlayBtn,
+          { opacity: 1, scale: 1.2 },
+          { opacity: 0, scale: 0.8, duration: 0.5, ease: 'power2.in', delay: 0.5 },
+        );
+      } else {
+        modalVideo.pause();
+        updatePlayIcons(true);
+        gsap.fromTo(
+          modalPlayBtn,
+          { opacity: 0, scale: 0.8 },
+          { opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(1.4)' },
+        );
+      }
+    });
+
+    // Mostrar botón play cuando el video termina
+    modalVideo.addEventListener('ended', () => {
+      updatePlayIcons(true);
+      gsap.fromTo(
+        modalPlayBtn,
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(1.4)' },
+      );
+    });
+
+    // ----- Progreso en tiempo real -----
+    modalVideo.addEventListener('timeupdate', updateProgress);
+
+    // ----- Seek: click en barra -----
+    progressTrack.addEventListener('click', (e) => {
+      seekFromEvent(e);
+    });
+
+    // ----- Seek: drag en barra -----
+    progressTrack.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      seekFromEvent(e);
+    });
+    document.addEventListener('mousemove', (e) => {
+      if (isDragging) seekFromEvent(e);
+    });
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    // Touch seek
+    progressTrack.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      seekFromEvent(e.touches[0]);
+    });
+    document.addEventListener('touchmove', (e) => {
+      if (isDragging) seekFromEvent(e.touches[0]);
+    });
+    document.addEventListener('touchend', () => {
+      isDragging = false;
     });
   });
 </script>

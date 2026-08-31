@@ -5,9 +5,11 @@ interface Props {
   tags: string;
   link: string;
   imageSrc: string;
+  video?: string;
 }
 
-const { title, description, tags, link, imageSrc } = Astro.props;
+const { title, description, tags, link, imageSrc, video } = Astro.props;
+const titleStr = title.join(' ');
 ---
 
 <article
@@ -22,7 +24,7 @@ const { title, description, tags, link, imageSrc } = Astro.props;
     <div class='case-card__image-wrapper'>
       <img
         src={imageSrc}
-        alt={`Caso: ${title.join(' ')}`}
+        alt={`Caso: ${titleStr}`}
         class='case-card__image'
         data-case-img
         loading='lazy'
@@ -54,11 +56,13 @@ const { title, description, tags, link, imageSrc } = Astro.props;
     <div class='case-card__content'>
       <p class='case-card__description'>{description}</p>
       <span class='case-card__tags'>{tags}</span>
-      <a
-        href={link}
+      <button
         class='case-card__link'
-        >VER CASO</a
-      >
+        data-ver-caso
+        data-title={titleStr}
+        data-video={video ?? ''}
+        type='button'
+      >VER CASO</button>
     </div>
   </div>
 </article>
