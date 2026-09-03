@@ -84,7 +84,6 @@ import './Timeline.scss';
     </div>
 
     <div class='timeline-mobile__scroll-track'>
-
       <div class='timeline-mobile__content'>
         <div class='timeline-mobile__center-line'>
           <div
@@ -192,9 +191,8 @@ import './Timeline.scss';
       />
     </div>
 
+    <!-- ELIMINADOS: Los spacers (que provocaban desplazamiento vertical) -->
     <div class='timeline-desktop__scroll-track'>
-      <div class='timeline-desktop__spacer'></div>
-
       <div class='timeline-desktop__content'>
         <div class='timeline-desktop__items'>
           <div class='timeline-desktop__center-line'>
@@ -218,12 +216,6 @@ import './Timeline.scss';
           }
         </div>
       </div>
-
-      <div
-        class='timeline-desktop__spacer'
-        data-outro-spacer='desktop'
-      >
-      </div>
     </div>
   </div>
 </section>
@@ -237,8 +229,6 @@ import './Timeline.scss';
   let currentMM: gsap.MatchMedia | null = null;
 
   function initTimelineAnimations() {
-    // Limpieza defensiva: evita duplicar ScrollTriggers si este script
-    // se re-ejecuta (ej. navegación con Astro View Transitions)
     ScrollTrigger.getAll().forEach((st) => {
       if (typeof st.vars.id === 'string' && st.vars.id.startsWith('timeline-')) {
         st.kill();
@@ -257,12 +247,12 @@ import './Timeline.scss';
     // CONTEXTO MOBILE / TABLET (< 1024px)
     // =======================================================
     mm.add('(max-width: 1023px)', () => {
+      // (Se mantiene intacto según indicaciones)
       const items = gsap.utils.toArray<HTMLElement>(
         '[data-timeline-item="mobile"]',
       );
       const lineProgress = document.querySelector('[data-line-progress="mobile"]');
 
-      // Respeta accesibilidad: sin movimiento, todo visible de inmediato
       if (prefersReducedMotion) {
         gsap.set(lineProgress, { scaleY: 1 });
         items.forEach((item) => {
@@ -276,14 +266,13 @@ import './Timeline.scss';
         return;
       }
 
-      // --- Intro: MUCHO más corta y sin lag (antes: +=150vh, scrub 2) ---
       const introTl = gsap.timeline({
         scrollTrigger: {
           id: 'timeline-mobile-intro',
           trigger: '.timeline__mobile-only',
           start: 'top top',
           end: '+=70vh',
-          scrub: 0.6, // antes 2 -> respuesta casi inmediata al input de scroll
+          scrub: 0.6,
         },
       });
 
@@ -321,7 +310,6 @@ import './Timeline.scss';
         0,
       );
 
-      // --- Línea: ahora anima "transform" (GPU) en vez de "height" (layout) ---
       gsap.set(lineProgress, { scaleY: 0, transformOrigin: 'top center' });
       gsap.to(lineProgress, {
         scaleY: 1,
@@ -329,13 +317,12 @@ import './Timeline.scss';
         scrollTrigger: {
           id: 'timeline-mobile-line',
           trigger: '.timeline-mobile__content',
-          start: 'top 85%', // antes 'top 50%' -> arranca en cuanto entra
+          start: 'top 85%',
           end: 'bottom 85%',
           scrub: 0.4,
         },
       });
 
-      // --- Items: aparición tipo "burbuja", más cerca del borde del viewport ---
       items.forEach((item, i) => {
         const node = item.querySelector('[data-circuit-node]');
         const wrapper = item.querySelector('.timeline-item__content-wrapper');
@@ -346,7 +333,7 @@ import './Timeline.scss';
           scrollTrigger: {
             id: `timeline-mobile-item-${i}`,
             trigger: item,
-            start: 'top 90%', // antes 85% -> aparece apenas asoma
+            start: 'top 90%',
             toggleActions: 'play none none reverse',
           },
         })
@@ -409,101 +396,96 @@ import './Timeline.scss';
     // CONTEXTO DESKTOP (>= 1024px)
     // =======================================================
     mm.add('(min-width: 1024px)', () => {
-      const content = document.querySelector('.timeline-desktop__content');
+      const sectionDesktop = document.querySelector('.timeline__desktop-only');
+      const scrollTrack = document.querySelector('.timeline-desktop__scroll-track');
       const itemsContainer = document.querySelector('.timeline-desktop__items');
-      const items = gsap.utils.toArray<HTMLElement>(
-        '[data-timeline-item="desktop"]',
-      );
+      const items = gsap.utils.toArray<HTMLElement>('[data-timeline-item="desktop"]');
       const lineProgress = document.querySelector('[data-line-progress="desktop"]');
 
       if (prefersReducedMotion) {
         gsap.set(lineProgress, { scaleX: 1 });
         items.forEach((item) => {
           gsap.set(item.querySelector('.timeline-item__content-wrapper'), {
-            opacity: 1,
-            x: 0,
-            scale: 1,
+            opacity: 1, x: 0, scale: 1,
           });
           gsap.set(item.querySelector('[data-circuit-node]'), { scale: 1 });
         });
         return;
       }
 
-      // --- Intro: igual que mobile, más corta y sin lag ---
-      const introTl = gsap.timeline({
-        scrollTrigger: {
-          id: 'timeline-desktop-intro',
-          trigger: '.timeline__desktop-only',
-          start: 'top top',
-          end: '+=70vh',
-          scrub: 0.6,
-        },
+      // 1. Preparación de Layout (Sin movimientos Y, solo capas)
+      // Aseguramos que el track completo se superponga de manera absoluta al sticky-scene
+      gsap.set(sectionDesktop, { position: 'relative' }); 
+      gsap.set(scrollTrack, {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: 10, 
       });
 
-      introTl.to(
-        '[data-intro-text="desktop"]',
-        { opacity: 0, y: -10, duration: 1 },
-        0,
-      );
-      introTl.to(
-        '[data-mood-block="desktop"]',
-        {
-          scale: 1.4,
-          filter: 'blur(6px)',
-          opacity: 0.4,
-          duration: 2,
-          force3D: true,
-          rotationZ: 0.01,
-          ease: 'power1.inOut',
-        },
-        0,
-      );
-      introTl.to(
-        '[data-figure="desktop"]',
-        {
-          x: (i: number, el: HTMLElement) =>
-            el.classList.contains('timeline-desktop__figure--1') ? -40 : 40,
-          filter: 'blur(2px)',
-          duration: 2,
-          force3D: true,
-          rotationZ: 0.01,
-          ease: 'power1.inOut',
-        },
-        0,
-      );
+      // Iniciamos el contenedor de items completamente fuera de pantalla hacia la DERECHA
+      gsap.set(itemsContainer, {
+        x: () => window.innerWidth,
+      });
 
-      const getScrollAmount = () =>
-        (itemsContainer as HTMLElement).scrollWidth - window.innerWidth;
+      const getScrollAmount = () => (itemsContainer as HTMLElement).scrollWidth;
 
-      const scrollTween = gsap.to(itemsContainer, {
-        x: () => -getScrollAmount(),
-        ease: 'none',
+      // 2. Master Timeline: Un único pin para controlar toda la sección Desktop
+      const masterTl = gsap.timeline({
         scrollTrigger: {
-          id: 'timeline-desktop-pin',
-          trigger: content,
+          id: 'timeline-desktop-master',
+          trigger: sectionDesktop,
           pin: true,
           start: 'top top',
-          end: () => `+=${getScrollAmount()}`,
+          end: () => `+=${getScrollAmount() + window.innerWidth * 1.5}`, // Duración cómoda
           scrub: 1,
           invalidateOnRefresh: true,
         },
       });
 
-      // --- Línea: transform (GPU) en vez de width (layout) ---
-      gsap.set(lineProgress, { scaleX: 0, transformOrigin: 'left center' });
-      gsap.to(lineProgress, {
-        scaleX: 1,
+      // Fase A: Intro
+      masterTl.addLabel('intro');
+      masterTl.to('[data-intro-text="desktop"]', { opacity: 0, y: -10, duration: 1 }, 'intro');
+      masterTl.to('[data-mood-block="desktop"]', {
+        scale: 1.4, filter: 'blur(6px)', opacity: 0.4, duration: 2, ease: 'power1.inOut'
+      }, 'intro');
+      masterTl.to('[data-figure="desktop"]', {
+        x: (i, el) => el.classList.contains('timeline-desktop__figure--1') ? -40 : 40,
+        filter: 'blur(2px)', duration: 2, ease: 'power1.inOut'
+      }, 'intro');
+
+      // Fase B: Recorrido exclusivamente Horizontal (Eje X)
+      masterTl.addLabel('scroll', 'intro+=1'); 
+      
+      const horizontalScrollTween = gsap.to(itemsContainer, {
+        x: () => -getScrollAmount(), // Cruza todo hasta SALIR por la izquierda
         ease: 'none',
-        scrollTrigger: {
-          id: 'timeline-desktop-line',
-          trigger: content,
-          start: 'top top',
-          end: () => `+=${getScrollAmount()}`,
-          scrub: true,
-          invalidateOnRefresh: true,
-        },
+        duration: 10,
       });
 
+      masterTl.add(horizontalScrollTween, 'scroll');
+
+      // Línea de progreso acompañando el scroll
+      gsap.set(lineProgress, { scaleX: 0, transformOrigin: 'left center' });
+      masterTl.to(lineProgress, {
+        scaleX: 1,
+        ease: 'none',
+        duration: 10,
+      }, 'scroll');
+
+      // Fase C: Outro (Salida / Reversión)
+      masterTl.addLabel('outro', 'scroll+=9.5'); // Inicia suavemente mientras sale
+      masterTl.to('[data-intro-text="desktop"]', { opacity: 1, y: 0, duration: 1 }, 'outro');
+      masterTl.to('[data-mood-block="desktop"]', {
+        scale: 1, filter: 'blur(0px)', opacity: 1, duration: 2, ease: 'power1.inOut'
+      }, 'outro');
+      masterTl.to('[data-figure="desktop"]', {
+        x: 0, filter: 'blur(0px)', duration: 2, ease: 'power1.inOut'
+      }, 'outro');
+
+      // 3. Animaciones internas ligadas al desplazamiento horizontal nativo
       items.forEach((item, i) => {
         const node = item.querySelector('[data-circuit-node]');
         const wrapper = item.querySelector('.timeline-item__content-wrapper');
@@ -514,8 +496,8 @@ import './Timeline.scss';
           scrollTrigger: {
             id: `timeline-desktop-item-${i}`,
             trigger: item,
-            containerAnimation: scrollTween,
-            start: 'left 90%', // antes 85%
+            containerAnimation: horizontalScrollTween, 
+            start: 'left 85%',
             toggleActions: 'play none none reverse',
           },
         })
@@ -529,46 +511,6 @@ import './Timeline.scss';
           })
           .to(node, { scale: 1, duration: 0.35, ease: 'back.out(2)' }, '-=0.3');
       });
-
-      const outroTl = gsap.timeline({
-        scrollTrigger: {
-          id: 'timeline-desktop-outro',
-          trigger: '[data-outro-spacer="desktop"]',
-          start: 'top bottom',
-          end: 'bottom bottom',
-          scrub: 1,
-        },
-      });
-      outroTl.to(
-        '[data-intro-text="desktop"]',
-        { opacity: 1, y: 0, duration: 1 },
-        0,
-      );
-      outroTl.to(
-        '[data-mood-block="desktop"]',
-        {
-          scale: 1,
-          filter: 'blur(0px)',
-          opacity: 1,
-          duration: 2,
-          force3D: true,
-          rotationZ: 0.01,
-          ease: 'power1.inOut',
-        },
-        0,
-      );
-      outroTl.to(
-        '[data-figure="desktop"]',
-        {
-          x: 0,
-          filter: 'blur(0px)',
-          duration: 2,
-          force3D: true,
-          rotationZ: 0.01,
-          ease: 'power1.inOut',
-        },
-        0,
-      );
     });
   }
 
@@ -577,6 +519,5 @@ import './Timeline.scss';
   } else {
     initTimelineAnimations();
   }
-  // Compatibilidad con Astro View Transitions, si tu proyecto las usa
   document.addEventListener('astro:page-load', initTimelineAnimations);
 </script>
