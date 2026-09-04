@@ -275,23 +275,30 @@ const track3 = [...col3, ...col3];
     );
 
     // =========================================================
-    // SWIPE EN MOBILE: Navegación manual por salto inmediato
+    // SWIPE EN MOBILE: invierte la dirección del loop vía timeScale
     // =========================================================
     if (col1 && track1) {
-      let touchStartY = 0;
-      let touchMoveY = 0;
-      let isSwiping = false;
+      const BOUNDARY_RATIO = 0.04; // 4% del recorrido total = "zona límite" (escala con el contenido)
+      const FLIP_THRESHOLD = 8; // px mínimos para diferenciar un swipe de un tap
+
+      let gestureRefY = 0;
       let releasedToPage = false;
-      let swipeTween: gsap.core.Tween | null = null;
+      let pageLastY = 0;
+
+      const getLoopHeight = () => track1.scrollHeight / 2;
+
+      const getRealPosition = () => {
+        const yPercent = (gsap.getProperty(track1, 'yPercent') as number) || 0;
+        return (-yPercent / 100) * track1.scrollHeight; // rango 0..loopHeight
+      };
 
       col1.addEventListener(
         'touchstart',
         (e) => {
           if (!isMobileViewport() || !mobileTween) return;
-          touchStartY = e.touches[0].clientY;
-          touchMoveY = touchStartY;
-          isSwiping = true;
+          gestureRefY = e.touches[0].clientY;
           releasedToPage = false;
+          pageLastY = gestureRefY;
         },
         { passive: true },
       );
@@ -299,93 +306,61 @@ const track3 = [...col3, ...col3];
       col1.addEventListener(
         'touchmove',
         (e) => {
-          if (!isMobileViewport() || !mobileTween || !isSwiping) return;
-          touchMoveY = e.touches[0].clientY;
-          const deltaY = touchMoveY - touchStartY;
+          if (!isMobileViewport() || !mobileTween) return;
+          const currentY = e.touches[0].clientY;
 
-          // Si ya se liberó, dejamos que el navegador haga scroll
-          if (releasedToPage) return;
-
-          const isSwipingDown = deltaY > 0; // Gesto hacia abajo (ver anterior)
-          const isSwipingUp = deltaY < 0; // Gesto hacia arriba (ver siguiente)
-
-          const yPercent =
-            (gsap.getProperty(track1, 'yPercent') as number) || 0;
-
-          // Límites: 0 es el inicio, -50 es el fin (antes de repetir el loop)
-          const atStart = yPercent >= -2;
-          const atEnd = yPercent <= -48;
-
-          // Respetar límites y liberar al scroll nativo de la página
-          if ((isSwipingDown && atStart) || (isSwipingUp && atEnd)) {
-            releasedToPage = true;
+          // Ya alcanzamos el límite real: el resto del gesto mueve la página, no el carrusel
+          if (releasedToPage) {
+            e.preventDefault(); // necesario: touch-action:none sigue bloqueando el scroll nativo
+            window.scrollBy(0, pageLastY - currentY);
+            pageLastY = currentY;
             return;
           }
 
-          // Bloquear scroll de la página si estamos moviendo el carrusel
-          if (Math.abs(deltaY) > 5) {
+          const deltaY = currentY - gestureRefY; // >0 = swipe hacia abajo
+          if (Math.abs(deltaY) < FLIP_THRESHOLD) return; // filtra taps / micro-movimientos
+
+          const requestedDirection: 1 | -1 = deltaY > 0 ? -1 : 1; // abajo -> arriba, arriba -> abajo
+
+          if (requestedDirection === mobileDirection) {
+            gestureRefY = currentY; // reubica referencia: permite detectar otra inversión luego
             e.preventDefault();
+            return;
           }
+
+          const loopHeight = getLoopHeight();
+          const realPos = getRealPosition();
+          const boundary = loopHeight * BOUNDARY_RATIO;
+          const atStart = realPos <= boundary;
+          const atEnd = realPos >= loopHeight - boundary;
+
+          // Si el gesto pide seguir más allá del primer/último caso -> liberar a la página
+          if (
+            (requestedDirection === -1 && atStart) ||
+            (requestedDirection === 1 && atEnd)
+          ) {
+            releasedToPage = true;
+            pageLastY = currentY;
+            return;
+          }
+
+          mobileDirection = requestedDirection;
+          mobileTween.timeScale(mobileDirection); // inversión suave, sin reiniciar el tween
+          gestureRefY = currentY;
+          e.preventDefault();
         },
         { passive: false },
       );
 
       col1.addEventListener(
         'touchend',
-        (e) => {
-          if (
-            !isMobileViewport() ||
-            !mobileTween ||
-            !isSwiping ||
-            releasedToPage
-          )
-            return;
-          isSwiping = false;
-
-          const deltaY = touchMoveY - touchStartY;
-
-          // Threshold: solo actuar si fue un swipe claro (>20px)
-          if (Math.abs(deltaY) > 20) {
-            const numCards = track1.children.length / 2; // Cantidad real de items únicos
-            const duration = 40; // Debe coincidir con la duración de mobileTween
-            const isNext = deltaY < 0;
-
-            // Pausar autoplay para evitar que compita con el salto manual
-            mobileTween.pause();
-            if (swipeTween) swipeTween.kill();
-
-            // Calcular en qué "índice flotante" de tarjeta estamos actualmente
-            let currentTime = mobileTween.time();
-            let currentCardFloat = (currentTime / duration) * numCards;
-
-            // Forzar el salto al siguiente/anterior entero más cercano
-            let targetCard = isNext
-              ? Math.floor(currentCardFloat) + 1
-              : Math.ceil(currentCardFloat) - 1;
-
-            let targetTime = (targetCard / numCards) * duration;
-
-            // Restringir dentro de los márgenes del tween original (0 a 40)
-            if (targetTime < 0) targetTime = 0;
-            if (targetTime > duration) targetTime = duration;
-
-            // Animar el tiempo del tween base para crear un "snap" fluido
-            swipeTween = gsap.to(mobileTween, {
-              time: targetTime,
-              duration: 0.35,
-              ease: 'power2.out', // Transición suave pero rápida
-              onComplete: () => {
-                // Reanudar autoplay en background
-                if (!isCardActive) {
-                  mobileTween?.play();
-                }
-              },
-            });
-          }
+        () => {
+          releasedToPage = false;
         },
         { passive: true },
       );
     }
+
     // =========================================================
     // EVENTOS DE INTERACCIÓN DE CARDS
     // =========================================================
