@@ -130,6 +130,10 @@
 
     &--1 {
       display: block;
+
+      @media (max-width: 1023px) {
+        touch-action: none;
+      }
     }
 
     @include tablet {
