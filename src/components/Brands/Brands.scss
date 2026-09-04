@@ -13,6 +13,9 @@
   @include desktop {
     padding: 4rem 0;
   }
+  @include max-desktop {
+    align-items: center;
+  }
 
   &__container {
     max-width: 1200px;

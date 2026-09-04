@@ -15,7 +15,7 @@
   }
 
   @include desktop {
-    padding-bottom: 9rem;
+    padding-bottom: 4rem;
   }
 
   &__header {
@@ -98,6 +98,7 @@
   &__columns {
     display: flex;
     flex-direction: row;
+    justify-content: center;
     gap: 1.5rem;
     height: 100%;
     width: 100%;
@@ -113,10 +114,11 @@
   }
 
   &__col {
-    flex: 1;
+    flex: 0 1 480px;
+    max-width: 480px;
     min-width: 0;
     height: 100%;
-    overflow: visible; // En desktop necesita desbordar visualmente las sombras
+    overflow: visible;
     display: none;
 
     // Ocultar scrollbar nativo para Mobile/Tablet
@@ -131,15 +133,15 @@
     }
 
     @include tablet {
+      flex-basis: 320px;
+      max-width: 320px;
       &--2 {
         display: block;
       }
     }
-
     @include desktop {
-      &--3 {
-        display: block;
-      }
+      flex-basis: 400px;
+      max-width: 400px;
     }
   }
 

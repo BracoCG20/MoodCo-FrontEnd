@@ -30,7 +30,10 @@ const track3 = [...col3, ...col3];
   aria-labelledby='cases-title'
   data-animate-section
 >
-  <header class='cases__header' data-animate-element>
+  <header
+    class='cases__header'
+    data-animate-element
+  >
     <h2
       id='cases-title'
       class='cases__heading'
@@ -90,30 +93,6 @@ const track3 = [...col3, ...col3];
           }
         </div>
       </div>
-
-      <!-- Columna 3 (Desktop) -->
-      <div
-        class='cases__col cases__col--3'
-        data-col-index='2'
-      >
-        <div
-          class='cases__track'
-          data-carousel-track
-        >
-          {
-            track3.map((item) => (
-              <CaseCard
-                title={item.title}
-                description={item.description}
-                tags={item.tags}
-                link={item.link}
-                imageSrc={getImagePath(item.image)}
-                video={(item as any).video ?? ''}
-              />
-            ))
-          }
-        </div>
-      </div>
     </div>
   </div>
 </section>
@@ -127,8 +106,15 @@ const track3 = [...col3, ...col3];
   aria-modal='true'
   aria-labelledby='modal-title'
 >
-  <div class='video-modal__backdrop' data-modal-backdrop></div>
-  <div class='video-modal__container' data-modal-container>
+  <div
+    class='video-modal__backdrop'
+    data-modal-backdrop
+  >
+  </div>
+  <div
+    class='video-modal__container'
+    data-modal-container
+  >
     <div class='video-modal__header'>
       <span
         class='video-modal__title'
@@ -140,7 +126,8 @@ const track3 = [...col3, ...col3];
         data-modal-close
         aria-label='Cerrar modal'
         type='button'
-      >cerrar ×</button>
+        >cerrar ×</button
+      >
     </div>
 
     <div class='video-modal__media'>
@@ -158,19 +145,44 @@ const track3 = [...col3, ...col3];
         aria-label='Reproducir / Pausar'
         type='button'
       >
-        <svg class='video-modal__play-icon' data-play-icon viewBox='0 0 24 24' fill='currentColor'>
-          <path d='M8 5v14l11-7z'/>
+        <svg
+          class='video-modal__play-icon'
+          data-play-icon
+          viewBox='0 0 24 24'
+          fill='currentColor'
+        >
+          <path d='M8 5v14l11-7z'></path>
         </svg>
-        <svg class='video-modal__pause-icon' data-pause-icon viewBox='0 0 24 24' fill='currentColor' style='display:none'>
-          <path d='M6 19h4V5H6v14zm8-14v14h4V5h-4z'/>
+        <svg
+          class='video-modal__pause-icon'
+          data-pause-icon
+          viewBox='0 0 24 24'
+          fill='currentColor'
+          style='display:none'
+        >
+          <path d='M6 19h4V5H6v14zm8-14v14h4V5h-4z'></path>
         </svg>
       </button>
 
       <!-- Barra de progreso personalizada -->
-      <div class='video-modal__progress' data-modal-progress>
-        <div class='video-modal__progress-track' data-progress-track>
-          <div class='video-modal__progress-fill' data-progress-fill></div>
-          <div class='video-modal__progress-knob' data-progress-knob></div>
+      <div
+        class='video-modal__progress'
+        data-modal-progress
+      >
+        <div
+          class='video-modal__progress-track'
+          data-progress-track
+        >
+          <div
+            class='video-modal__progress-fill'
+            data-progress-fill
+          >
+          </div>
+          <div
+            class='video-modal__progress-knob'
+            data-progress-knob
+          >
+          </div>
         </div>
       </div>
     </div>
@@ -460,18 +472,38 @@ const track3 = [...col3, ...col3];
     const DEMO_VIDEO =
       'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
 
-    const videoModal = document.querySelector('[data-video-modal]') as HTMLElement;
-    const modalBackdrop = document.querySelector('[data-modal-backdrop]') as HTMLElement;
-    const modalContainer = document.querySelector('[data-modal-container]') as HTMLElement;
-    const modalTitleEl = document.querySelector('[data-modal-title]') as HTMLElement;
-    const modalVideo = document.querySelector('[data-modal-video]') as HTMLVideoElement;
-    const modalClose = document.querySelector('[data-modal-close]') as HTMLButtonElement;
-    const modalPlayBtn = document.querySelector('[data-modal-play]') as HTMLButtonElement;
+    const videoModal = document.querySelector(
+      '[data-video-modal]',
+    ) as HTMLElement;
+    const modalBackdrop = document.querySelector(
+      '[data-modal-backdrop]',
+    ) as HTMLElement;
+    const modalContainer = document.querySelector(
+      '[data-modal-container]',
+    ) as HTMLElement;
+    const modalTitleEl = document.querySelector(
+      '[data-modal-title]',
+    ) as HTMLElement;
+    const modalVideo = document.querySelector(
+      '[data-modal-video]',
+    ) as HTMLVideoElement;
+    const modalClose = document.querySelector(
+      '[data-modal-close]',
+    ) as HTMLButtonElement;
+    const modalPlayBtn = document.querySelector(
+      '[data-modal-play]',
+    ) as HTMLButtonElement;
     const playIcon = document.querySelector('[data-play-icon]') as SVGElement;
     const pauseIcon = document.querySelector('[data-pause-icon]') as SVGElement;
-    const progressFill = document.querySelector('[data-progress-fill]') as HTMLElement;
-    const progressKnob = document.querySelector('[data-progress-knob]') as HTMLElement;
-    const progressTrack = document.querySelector('[data-progress-track]') as HTMLElement;
+    const progressFill = document.querySelector(
+      '[data-progress-fill]',
+    ) as HTMLElement;
+    const progressKnob = document.querySelector(
+      '[data-progress-knob]',
+    ) as HTMLElement;
+    const progressTrack = document.querySelector(
+      '[data-progress-track]',
+    ) as HTMLElement;
 
     if (!videoModal || !modalVideo) return;
 
@@ -499,7 +531,10 @@ const track3 = [...col3, ...col3];
     const seekFromEvent = (e: MouseEvent | Touch) => {
       const rect = progressTrack.getBoundingClientRect();
       const clientX = 'clientX' in e ? e.clientX : (e as Touch).clientX;
-      const ratio = Math.min(Math.max((clientX - rect.left) / rect.width, 0), 1);
+      const ratio = Math.min(
+        Math.max((clientX - rect.left) / rect.width, 0),
+        1,
+      );
       modalVideo.currentTime = ratio * modalVideo.duration;
       updateProgress();
     };
@@ -567,7 +602,9 @@ const track3 = [...col3, ...col3];
 
     // ----- Delegación de eventos: abrir modal -----
     document.addEventListener('click', (e) => {
-      const btn = (e.target as HTMLElement).closest('[data-ver-caso]') as HTMLElement | null;
+      const btn = (e.target as HTMLElement).closest(
+        '[data-ver-caso]',
+      ) as HTMLElement | null;
       if (!btn) return;
       e.stopPropagation();
       const title = btn.getAttribute('data-title') ?? '';
@@ -595,7 +632,13 @@ const track3 = [...col3, ...col3];
         gsap.fromTo(
           modalPlayBtn,
           { opacity: 1, scale: 1 },
-          { opacity: 0, scale: 0.8, duration: 0.4, ease: 'power2.in', delay: 0.6 },
+          {
+            opacity: 0,
+            scale: 0.8,
+            duration: 0.4,
+            ease: 'power2.in',
+            delay: 0.6,
+          },
         );
       } else {
         modalVideo.pause();
@@ -616,7 +659,13 @@ const track3 = [...col3, ...col3];
         gsap.fromTo(
           modalPlayBtn,
           { opacity: 1, scale: 1.2 },
-          { opacity: 0, scale: 0.8, duration: 0.5, ease: 'power2.in', delay: 0.5 },
+          {
+            opacity: 0,
+            scale: 0.8,
+            duration: 0.5,
+            ease: 'power2.in',
+            delay: 0.5,
+          },
         );
       } else {
         modalVideo.pause();

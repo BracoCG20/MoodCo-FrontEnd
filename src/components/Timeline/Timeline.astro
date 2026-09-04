@@ -513,10 +513,10 @@ import './Timeline.scss';
       );
 
       // Fase C: Outro (Salida / Reversión)
-      masterTl.addLabel('outro', 'scroll+=9.5'); // Inicia suavemente mientras sale
+      masterTl.addLabel('outro', 'scroll+=4.5'); // Inicia suavemente mientras sale
       masterTl.to(
         '[data-intro-text="desktop"]',
-        { opacity: 1, y: 0, duration: 1 },
+        { opacity: 1, y: 0, duration: 0.5 },
         'outro',
       );
       masterTl.to(
