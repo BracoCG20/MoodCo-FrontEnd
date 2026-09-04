@@ -17,12 +17,10 @@ const getImagePath = (filename: string) => {
 // Generamos desfases
 const col1 = [...casesData.items];
 const col2 = [...casesData.items.slice(2), ...casesData.items.slice(0, 2)];
-const col3 = [...casesData.items.slice(4), ...casesData.items.slice(0, 4)];
 
 // Duplicamos para loop infinito
 const track1 = [...col1, ...col1];
 const track2 = [...col2, ...col2];
-const track3 = [...col3, ...col3];
 ---
 
 <section
