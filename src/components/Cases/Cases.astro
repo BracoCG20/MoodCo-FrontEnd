@@ -210,14 +210,14 @@ const track3 = [...col3, ...col3];
     let carousels: gsap.core.Tween[] = [];
     let activeCard: HTMLElement | null = null;
     let isCardActive = false;
-    let isTouching = false;
-    let autoScrollReq: number;
     let touchStartY = 0;
     let touchStartScrollTop = 0;
     let touchMode: 'idle' | 'carousel' | 'page' = 'idle';
     let pageScrollStartY = 0;
     let pageScrollStartTop = 0;
     const SWIPE_THRESHOLD = 6;
+    let mobileTween: gsap.core.Tween | null = null;
+    let mobileDirection: 1 | -1 = 1;
 
     const isMobileViewport = () =>
       window.matchMedia('(max-width: 1023px)').matches;
@@ -234,15 +234,15 @@ const track3 = [...col3, ...col3];
         isDesktop: '(min-width: 1024px)',
       },
       (context) => {
-        let { isMobile, isDesktop } = context.conditions as any;
+        const { isMobile, isDesktop } = context.conditions as any;
 
         // Limpieza preventiva
-        if (autoScrollReq) cancelAnimationFrame(autoScrollReq);
         carousels.forEach((c) => c.kill());
         carousels = [];
-        gsap.set(col1, { clearProps: 'overflowY,overflowX' });
+        mobileTween?.kill();
+        mobileTween = null;
 
-        // LÓGICA DESKTOP (Mantiene el loop intacto de GSAP)
+        // LÓGICA DESKTOP / TABLET (sin cambios respecto a la actual)
         if (isDesktop) {
           carousels = Array.from(tracks).map((track, index) => {
             const isMovingUp = index % 2 !== 0;
@@ -259,52 +259,46 @@ const track3 = [...col3, ...col3];
           });
         }
 
-        // LÓGICA MOBILE/TABLET (Permite scroll nativo + chaining)
-        if (isMobile && col1 && track1) {
-          // Habilita el scroll vertical nativo
-          gsap.set(col1, { overflowY: 'auto', overflowX: 'hidden' });
-
-          const resetPosition = () => {
-            if (col1 && track1) col1.scrollTop = track1.scrollHeight / 2;
-          };
-          setTimeout(resetPosition, 100);
-
-          // Bucle de auto-scroll suave
-          const tick = () => {
-            if (!isTouching && !isCardActive) {
-              col1.scrollTop -= 0.5; // Baja visualmente
-              if (col1.scrollTop <= 0) {
-                col1.scrollTop = track1.scrollHeight / 2;
-              }
-            }
-            autoScrollReq = requestAnimationFrame(tick);
-          };
-          tick();
-
-          // Cuando la sección desaparece de la pantalla, resetea el loop nativo
-          ScrollTrigger.create({
-            trigger: '.cases',
-            start: 'top bottom',
-            end: 'bottom top',
-            onLeave: resetPosition,
-            onLeaveBack: resetPosition,
-          });
+        // LÓGICA MOBILE: mismo mecanismo que desktop (tween infinito de yPercent),
+        // así el swipe puede controlar su dirección con timeScale, sin un segundo
+        // sistema de animación.
+        if (isMobile && track1) {
+          mobileTween = gsap.fromTo(
+            track1,
+            { yPercent: 0 },
+            { yPercent: -50, duration: 40, ease: 'none', repeat: -1 },
+          );
+          mobileDirection = 1;
+          mobileTween.timeScale(mobileDirection);
         }
       },
     );
 
     // =========================================================
-    // SWIPE MANUAL EN MOBILE (respeta límites reales de casos)
+    // SWIPE EN MOBILE: invierte la dirección del loop vía timeScale
     // =========================================================
     if (col1 && track1) {
+      const BOUNDARY_RATIO = 0.04; // 4% del recorrido total = "zona límite" (escala con el contenido)
+      const FLIP_THRESHOLD = 8; // px mínimos para diferenciar un swipe de un tap
+
+      let gestureRefY = 0;
+      let releasedToPage = false;
+      let pageLastY = 0;
+
+      const getLoopHeight = () => track1.scrollHeight / 2;
+
+      const getRealPosition = () => {
+        const yPercent = (gsap.getProperty(track1, 'yPercent') as number) || 0;
+        return (-yPercent / 100) * track1.scrollHeight; // rango 0..loopHeight
+      };
+
       col1.addEventListener(
         'touchstart',
         (e) => {
-          if (!isMobileViewport()) return;
-          isTouching = true; // pausa el auto-scroll (tick)
-          touchMode = 'idle';
-          touchStartY = e.touches[0].clientY;
-          touchStartScrollTop = col1.scrollTop;
+          if (!isMobileViewport() || !mobileTween) return;
+          gestureRefY = e.touches[0].clientY;
+          releasedToPage = false;
+          pageLastY = gestureRefY;
         },
         { passive: true },
       );
@@ -312,44 +306,48 @@ const track3 = [...col3, ...col3];
       col1.addEventListener(
         'touchmove',
         (e) => {
-          if (!isMobileViewport()) return;
-
+          if (!isMobileViewport() || !mobileTween) return;
           const currentY = e.touches[0].clientY;
-          const deltaY = touchStartY - currentY; // swipe arriba = deltaY positivo
 
-          // Micro-movimiento: aún podría ser un tap sobre una card -> no interferir
-          if (touchMode === 'idle' && Math.abs(deltaY) < SWIPE_THRESHOLD)
-            return;
-          if (touchMode === 'idle') touchMode = 'carousel';
-
-          if (touchMode === 'carousel') {
-            const singleLoopHeight = track1.scrollHeight / 2; // altura real (sin duplicar)
-            const realStart = mod(touchStartScrollTop, singleLoopHeight);
-            const tentativeReal = realStart + deltaY;
-
-            // Límite real alcanzado (primer o último caso) -> liberar a scroll de página
-            if (tentativeReal <= 0 || tentativeReal >= singleLoopHeight) {
-              col1.scrollTop =
-                tentativeReal <= 0
-                  ? touchStartScrollTop - realStart
-                  : touchStartScrollTop + (singleLoopHeight - realStart);
-
-              touchMode = 'page';
-              pageScrollStartY = currentY;
-              pageScrollStartTop = window.scrollY;
-              e.preventDefault(); // evita doble manejo del mismo gesto
-              return;
-            }
-
-            e.preventDefault();
-            col1.scrollTop = touchStartScrollTop + deltaY;
+          // Ya alcanzamos el límite real: el resto del gesto mueve la página, no el carrusel
+          if (releasedToPage) {
+            e.preventDefault(); // necesario: touch-action:none sigue bloqueando el scroll nativo
+            window.scrollBy(0, pageLastY - currentY);
+            pageLastY = currentY;
             return;
           }
 
-          // touchMode === 'page': el carrusel ya llegó a su límite, ahora mueve la página
+          const deltaY = currentY - gestureRefY; // >0 = swipe hacia abajo
+          if (Math.abs(deltaY) < FLIP_THRESHOLD) return; // filtra taps / micro-movimientos
+
+          const requestedDirection: 1 | -1 = deltaY > 0 ? -1 : 1; // abajo -> arriba, arriba -> abajo
+
+          if (requestedDirection === mobileDirection) {
+            gestureRefY = currentY; // reubica referencia: permite detectar otra inversión luego
+            e.preventDefault();
+            return;
+          }
+
+          const loopHeight = getLoopHeight();
+          const realPos = getRealPosition();
+          const boundary = loopHeight * BOUNDARY_RATIO;
+          const atStart = realPos <= boundary;
+          const atEnd = realPos >= loopHeight - boundary;
+
+          // Si el gesto pide seguir más allá del primer/último caso -> liberar a la página
+          if (
+            (requestedDirection === -1 && atStart) ||
+            (requestedDirection === 1 && atEnd)
+          ) {
+            releasedToPage = true;
+            pageLastY = currentY;
+            return;
+          }
+
+          mobileDirection = requestedDirection;
+          mobileTween.timeScale(mobileDirection); // inversión suave, sin reiniciar el tween
+          gestureRefY = currentY;
           e.preventDefault();
-          const pageDelta = pageScrollStartY - currentY;
-          window.scrollTo(0, pageScrollStartTop + pageDelta);
         },
         { passive: false },
       );
@@ -357,8 +355,7 @@ const track3 = [...col3, ...col3];
       col1.addEventListener(
         'touchend',
         () => {
-          isTouching = false; // reanuda el loop automático (tick)
-          touchMode = 'idle';
+          releasedToPage = false;
         },
         { passive: true },
       );
@@ -406,6 +403,7 @@ const track3 = [...col3, ...col3];
             card.classList.remove('is-active');
             activeCard = null;
             isCardActive = false;
+            if (!isDesktop && mobileTween) mobileTween.play();
 
             if (isDesktop) {
               gsap.to(track, {
@@ -479,6 +477,7 @@ const track3 = [...col3, ...col3];
           card.classList.remove('is-active');
           activeCard = null;
           isCardActive = false;
+          if (!isDesktop && mobileTween) mobileTween.play();
 
           if (isDesktop) {
             gsap.to(track, {
@@ -513,6 +512,7 @@ const track3 = [...col3, ...col3];
           card.classList.add('is-active');
           activeCard = card as HTMLElement;
           isCardActive = true; // Pausa el auto-scroll de requestAnimationFrame en Mobile
+          if (!isDesktop && mobileTween) mobileTween.pause();
 
           // Centrado dinámico en Desktop
           if (isDesktop && carouselWrapper) {
