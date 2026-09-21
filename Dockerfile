@@ -1,8 +1,8 @@
 FROM node:22.12.0-alpine AS base
 WORKDIR /app
 
-# Instalar pnpm
-RUN corepack enable && corepack prepare pnpm@10.15.1 --activate
+# Instalar pnpm vía npm (corepack tiene issues de firma en algunos entornos)
+RUN npm install -g pnpm@10.15.1
 
 FROM base AS deps
 COPY package.json pnpm-lock.yaml ./
