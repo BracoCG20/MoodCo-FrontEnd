@@ -7,7 +7,7 @@ export default defineConfig({
   output: 'server',
   adapter: node({ mode: 'standalone' }),
   security: {
-    checkOrigin: true,
+    checkOrigin: false, // Desactiva la verificación de origen de Astro si Traefik/Dokploy ya gestiona el dominio
   },
   server: {
     port: 4321,
