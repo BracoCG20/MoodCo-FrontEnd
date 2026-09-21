@@ -1,3 +1,4 @@
+@use "sass:color";
 @use '../../styles/variables' as *;
 @use '../../styles/breakpoints' as *;
 
@@ -418,7 +419,7 @@
     }
 
     &:hover {
-      background-color: darken(#99ff99, 8%);
+      background-color: color.adjust(#99ff99, $lightness: -8%);
     }
 
     svg {
