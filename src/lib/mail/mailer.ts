@@ -1,4 +1,3 @@
-// src/lib/mail/mailer.ts
 import { getClientAdminTemplate } from './templates/client-admin';
 import { getClientUserTemplate } from './templates/client-user';
 import { getWorkAdminTemplate } from './templates/work-admin';
@@ -7,6 +6,7 @@ import { transporter } from './transporter';
 
 const EMAIL_FROM = import.meta.env.EMAIL_FROM;
 const EMAIL_TO_NOTIFICATION = import.meta.env.EMAIL_TO_NOTIFICATION;
+const EMAIL_CC_NOTIFICATION = import.meta.env.EMAIL_CC_NOTIFICATION;
 
 type ContactData = {
   nombre: string;
@@ -26,10 +26,11 @@ type FileAttachment = {
  * Procesa el envío de correos para Clientes Comerciales
  */
 export const sendClientEmails = async (data: ContactData) => {
-  // 1. Correo para el equipo de Mood
+  // 1. Correo para el equipo de Mood (Con copia)
   const adminMail = transporter.sendMail({
     from: EMAIL_FROM,
     to: EMAIL_TO_NOTIFICATION,
+    cc: EMAIL_CC_NOTIFICATION,
     subject: `🚨 Nuevo Lead Comercial: ${data.nombre}`,
     html: getClientAdminTemplate(data),
   });
@@ -47,16 +48,17 @@ export const sendClientEmails = async (data: ContactData) => {
 };
 
 /**
- * Procesa el envío de correos para "Trabaja con nosotros" (Incluye adjunto)
+ * Procesa el envío de correos para "Trabaja con nosotros" (Incluye adjunto y copia)
  */
 export const sendWorkEmails = async (
   data: ContactData,
   file: FileAttachment,
 ) => {
-  // 1. Correo para el equipo de RRHH / Admin con el archivo adjunto
+  // 1. Correo para el equipo de RRHH / Admin con el archivo adjunto (Con copia)
   const adminMail = transporter.sendMail({
     from: EMAIL_FROM,
     to: EMAIL_TO_NOTIFICATION,
+    cc: EMAIL_CC_NOTIFICATION,
     subject: `💼 Nueva Postulación: ${data.nombre}`,
     html: getWorkAdminTemplate(data),
     attachments: [
