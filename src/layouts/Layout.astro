@@ -26,11 +26,37 @@ const {
       name='description'
       content={description}
     />
+
+    <!-- FIX: Tipo de archivo correcto para un .ico -->
     <link
       rel='icon'
-      type='image/svg+xml'
+      type='image/x-icon'
       href='/Logo_Mood.ico'
     />
+
+    <!-- Etiquetas Open Graph (SEO / Redes Sociales) -->
+    <meta
+      property='og:title'
+      content={title}
+    />
+    <meta
+      property='og:description'
+      content={description}
+    />
+    <meta
+      property='og:type'
+      content='website'
+    />
+    <meta
+      property='og:url'
+      content={import.meta.env.PUBLIC_SITE_URL || 'https://www.mood.com.co'}
+    />
+    <meta
+      property='og:image'
+      content='../assets/banner_Mobile.png'
+    />
+    <!-- O la imagen que prefieras en public/ -->
+
     <title>{title}</title>
   </head>
   <body>
@@ -39,7 +65,7 @@ const {
     <CustomCursor />
     <script>
       import { initLenis, initScrollAnimations } from '../utils/animations';
-      
+
       document.addEventListener('DOMContentLoaded', () => {
         initLenis();
         initScrollAnimations();
