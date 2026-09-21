@@ -16,7 +16,10 @@ import './Forms.scss';
     id='wrapper-contacto'
   >
     <div class='forms-section__content'>
-      <header class='forms-section__header' data-animate-element>
+      <header
+        class='forms-section__header'
+        data-animate-element
+      >
         <h2 class='forms-section__title'>
           <span class='forms-section__title-regular'
             >{formsData.formContacto.title.regular}</span
@@ -39,7 +42,7 @@ import './Forms.scss';
           name='formType'
           value='contacto'
         />
-        <!-- Honeypot: Se agrega aria-hidden para que los lectores de pantalla lo ignoren y no afecte accesibilidad -->
+        <!-- Honeypot -->
         <input
           type='text'
           name='bot_check'
@@ -114,7 +117,7 @@ import './Forms.scss';
   </div>
 
   <!-- ============================================== -->
-  <!-- FORMULARIO 2: TRABAJA CON NOSOTROS             -->
+  <!-- FORMULARIO 2: TRABAJA CON NOSOTROS            -->
   <!-- ============================================== -->
   <div
     class='forms-section__wrapper'
@@ -425,7 +428,16 @@ import './Forms.scss';
             body: formData,
           });
 
-          const result = await response.json();
+          // PREVENCIÓN DE ERROR AL PARSEAR JSON
+          // Si el servidor o proxy devuelve HTML/texto (ej. error 403 o 502), evitamos el crash con response.json()
+          const contentType = response.headers.get('content-type');
+          let result;
+
+          if (contentType && contentType.includes('application/json')) {
+            result = await response.json();
+          } else {
+            throw new Error(`Error en el servidor (${response.status})`);
+          }
 
           if (!response.ok || !result.success) {
             throw new Error(result.message || 'Error en el servidor');
