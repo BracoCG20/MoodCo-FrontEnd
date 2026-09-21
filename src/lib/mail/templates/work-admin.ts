@@ -1,5 +1,5 @@
 const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://www.mood.com.co';
-const LOGO_URL = `${SITE_URL}/Logo_mood.svg`;
+const LOGO_URL = `${SITE_URL}/logo_header.png`;
 
 export const getWorkAdminTemplate = (data: {
   nombre: string;
