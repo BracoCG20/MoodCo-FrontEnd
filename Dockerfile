@@ -21,6 +21,6 @@ COPY --from=builder /app/package.json ./
 
 ENV NODE_ENV=production
 
-EXPOSE 4321
+EXPOSE 8080
 
 CMD ["node", "dist/server/entry.mjs"]
