@@ -4,7 +4,7 @@ import './Brands.scss';
 
 // Ajustamos el tipado para indicarle a TypeScript que recibimos un objeto con la propiedad src
 const imageFiles = import.meta.glob<{ default: { src: string } }>(
-  '../../assets/logos/*.{png,jpg,jpeg,svg}',
+  '../../assets/logos/*.{png,jpg,jpeg,svg,webp}',
   { eager: true },
 );
 

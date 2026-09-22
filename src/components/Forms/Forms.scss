@@ -28,18 +28,18 @@
 
     &#wrapper-contacto {
       background-position: right;
-      background-image: url('/fondoM_form1.jpg');
+      background-image: url('/fondoM_form1.webp');
       @include desktop {
-        background-image: url('/fondo_form1.jpg');
+        background-image: url('/fondo_form1.webp');
       }
     }
 
     // AJUSTE VISUAL (Aplica a "Trabaja con nosotros")
     &#wrapper-trabaja {
-      background-image: url('/fondoM_form2.png');
+      background-image: url('/fondoM_form2.webp');
 
       @include desktop {
-        background-image: url('/fondo_form2.jpg');
+        background-image: url('/fondo_form2.webp');
 
         // Convierte el contenido en un layout de 2 columnas (Texto a la izquierda, Form a la derecha)
         .forms-section__content {
