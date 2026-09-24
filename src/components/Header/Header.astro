@@ -8,7 +8,6 @@ import './Header.scss';
   data-header
 >
   <div class='header__container'>
-    <!-- Logo -->
     <a
       href='/'
       class='header__brand'
@@ -21,7 +20,6 @@ import './Header.scss';
       />
     </a>
 
-    <!-- Lema -->
     <p class='header__tagline'>{headerData.tagline}</p>
 
     <!-- Botón Hamburger -->
@@ -55,14 +53,13 @@ import './Header.scss';
     </button>
   </div>
 
-  <!-- Menú Desplegable -->
+  <!-- Menú -->
   <nav
     class='header__menu'
     data-menu
     aria-hidden='true'
   >
     <div class='header__menu-inner'>
-      <!-- Enlaces de navegación -->
       <ul class='header__nav'>
         {
           headerData.links.map((link) => (
@@ -81,13 +78,10 @@ import './Header.scss';
           ))
         }
       </ul>
-
-      <!-- Selector de Idioma -->
       <div
         class='header__lang'
         data-lang-selector
       >
-        <!-- Elemento de fondo: Burbuja líquida -->
         <div
           class='header__lang-bubble'
           data-lang-bubble
@@ -221,7 +215,7 @@ import './Header.scss';
       });
     });
 
-    // 5. Animación líquida (Viscosa) del Selector de Idioma
+    // 5. Animación del Selector de Idioma
     // Inicializar posición de la burbuja
     const initBubble = () => {
       const activeBtn = Array.from(langBtns).find((btn) =>
@@ -235,22 +229,18 @@ import './Header.scss';
       }
     };
 
-    // Reposicionar al cambiar tamaño de pantalla para evitar desajustes
     window.addEventListener('resize', initBubble);
-    // Posición inicial
     setTimeout(initBubble, 50);
 
     langBtns.forEach((btn) => {
       btn.addEventListener('click', () => {
         if (btn.classList.contains('is-active')) return;
 
-        // Quitar la clase a los botones inactivos y animar solo el color del texto
         langBtns.forEach((b) => {
           b.classList.remove('is-active');
           gsap.to(b, { color: '#FFFFFF', duration: 0.3 });
         });
 
-        // Activar el seleccionado
         btn.classList.add('is-active');
         gsap.to(btn, { color: '#000000', duration: 0.3, ease: 'power2.out' });
 
@@ -259,18 +249,13 @@ import './Header.scss';
           const htmlBtn = btn as HTMLElement;
           const targetLeft = htmlBtn.offsetLeft;
           const targetWidth = htmlBtn.offsetWidth;
-
-          // Leemos posición actual desde GSAP
           const currentLeft = gsap.getProperty(bubble, 'left') as number;
           const isMovingRight = targetLeft > currentLeft;
 
-          // Matamos animaciones previas para evitar colisiones si se clica rápido
           gsap.killTweensOf(bubble);
           const tl = gsap.timeline();
 
-          // Efecto de fusión y estiramiento viscoso
           if (isMovingRight) {
-            // Se estira hacia la derecha primero y se "aplasta" (scaleY)
             tl.to(bubble, {
               width: targetLeft + targetWidth - currentLeft,
               scaleY: 0.7,
@@ -281,12 +266,11 @@ import './Header.scss';
               left: targetLeft,
               width: targetWidth,
               scaleY: 1,
-              borderRadius: '8px', // Vuelve a su forma natural
+              borderRadius: '8px',
               duration: 0.45,
-              ease: 'elastic.out(1, 0.7)', // Rebote elástico del líquido
+              ease: 'elastic.out(1, 0.7)',
             });
           } else {
-            // Se estira hacia la izquierda
             tl.to(bubble, {
               left: targetLeft,
               width:

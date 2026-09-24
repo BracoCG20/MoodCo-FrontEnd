@@ -4,7 +4,7 @@
 .brands {
   background-color: $color-green-light;
   padding: 3rem 0;
-  color: $color-black;
+  color: $black;
   display: flex;
   flex-direction: column;
   gap: 3rem;
@@ -13,7 +13,7 @@
   @include desktop {
     padding: 4rem 0;
   }
-  @include max-desktop {
+  @include maxDesktop {
     align-items: center;
   }
 
@@ -25,7 +25,7 @@
   }
 
   &__title {
-    font-family: $font-secondary; // Roc Grotesk Condensed
+    font-family: $font-secondary;
     text-transform: uppercase;
     font-size: 1.5rem;
     line-height: 1.2;
@@ -55,20 +55,20 @@
   // Zona del Slider
   &__slider {
     width: 100%;
-    overflow: hidden; // Oculta lo que desborda
+    overflow: hidden;
     display: flex;
   }
 
   &__track {
     display: flex;
     align-items: center;
-    width: max-content; // Permite que el contenedor crezca según sus hijos
-    will-change: transform; // Optimización de renderizado para navegadores
+    width: max-content;
+    will-change: transform;
   }
 
   &__item {
     flex-shrink: 0;
-    padding: 0 1.5rem; // Espaciado entre logos
+    padding: 0 1.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -81,7 +81,7 @@
   &__logo {
     max-width: 120px;
     height: auto;
-    max-height: 60px; // Limita la altura para mantener proporción entre logos diferentes
+    max-height: 60px;
     object-fit: contain;
 
     @include tablet {

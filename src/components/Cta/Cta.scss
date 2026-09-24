@@ -56,13 +56,13 @@
   }
 
   &__description {
-    color: $color-white;
+    color: $white;
     font-family: $font-primary;
     font-size: 1.125rem;
     font-weight: 400;
     line-height: 1.4;
     margin: 0 auto;
-    max-width: 250px; // Fuerza el salto de línea en móvil como en la captura
+    max-width: 250px;
 
     @include tablet {
       max-width: none;
@@ -78,12 +78,12 @@
     font-weight: 700;
     padding-left: 3px;
     text-decoration: underline;
-    color: $color-white;
+    color: $white;
     transition: opacity 0.2s ease-in-out;
 
     &:hover,
     &:focus {
-      opacity: 0.7; // Efecto interactivo respetando la regla de 4 colores
+      opacity: 0.7;
     }
   }
 }

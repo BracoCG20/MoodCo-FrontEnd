@@ -7,8 +7,6 @@ html.has-custom-cursor {
   * {
     cursor: none !important;
   }
-
-  // Mantenemos el cursor nativo de texto en los inputs para usabilidad pura
   input,
   textarea,
   [contenteditable='true'] {
@@ -16,7 +14,7 @@ html.has-custom-cursor {
   }
 }
 
-// 2. Contenedor invisible (Solo se encarga de seguir al mouse en el eje X/Y)
+// 2. Contenedor invisible
 .custom-cursor-wrapper {
   position: fixed;
   top: 0;
@@ -26,7 +24,7 @@ html.has-custom-cursor {
   pointer-events: none;
   z-index: 9999;
   will-change: transform;
-  opacity: 0; // Oculto inicialmente
+  opacity: 0;
   transition: opacity 0.3s ease;
 
   &.is-visible {
@@ -37,7 +35,7 @@ html.has-custom-cursor {
 // 3. El elemento visual interactivo (La Esfera Dinámica)
 .custom-cursor-visual {
   position: absolute;
-  top: -10px; // Centrado exacto respecto al wrapper (mitad del width/height)
+  top: -10px;
   left: -10px;
   width: 20px;
   height: 20px;
@@ -55,14 +53,13 @@ html.has-custom-cursor {
   transform-origin: center center;
   will-change: transform, background, border;
 
-  // Transición suave nativa para cambios de color y borde en hovers
   transition:
     background 0.3s ease,
     border 0.3s ease,
     box-shadow 0.3s ease;
 }
 
-// 4. Estilos de las ondas (Ripples) - Totalmente desvinculadas del cursor
+// 4. Estilos de las ondas
 .custom-cursor-ripple {
   position: fixed;
   top: 0;

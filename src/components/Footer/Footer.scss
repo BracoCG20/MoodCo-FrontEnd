@@ -2,8 +2,8 @@
 @use '../../styles/breakpoints' as *;
 
 .footer {
-  background-color: $color-white;
-  color: $color-black;
+  background-color: $white;
+  color: $black;
   padding: 3rem;
   font-family: $font-primary;
 
@@ -14,7 +14,6 @@
     max-width: 1200px;
     margin: 0 auto;
 
-    // Adaptación a Tablet
     @include tablet {
       flex-direction: row;
       justify-content: space-between;
@@ -22,7 +21,6 @@
       gap: 2rem;
     }
 
-    // Adaptación a Desktop (ajuste de distribución)
     @include desktop {
       justify-content: center;
       gap: 8rem;
@@ -54,7 +52,7 @@
 
   &__nav,
   &__info {
-    font-style: normal; // Resetea el estilo de la etiqueta <address>
+    font-style: normal;
   }
 
   &__list {
@@ -75,7 +73,7 @@
 
   &__link,
   &__text {
-    color: $color-black;
+    color: $black;
     transition: opacity 0.2s ease-in-out;
 
     &--bold {
@@ -86,7 +84,7 @@
   &__link {
     &:hover,
     &:focus {
-      opacity: 0.6; // Estado hover interactivo respetando la restricción de 4 colores
+      opacity: 0.6;
     }
   }
 }

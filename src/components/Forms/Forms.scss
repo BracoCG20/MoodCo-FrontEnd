@@ -6,16 +6,15 @@
   position: relative;
 
   &__wrapper {
-    display: none; // Oculto por defecto
+    display: none;
     width: 100%;
     min-height: 80vh;
     padding: 3rem 2rem;
-    background-color: $color-black;
+    background-color: $black;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 
-    // Visibilidad controlada por JS
     &.is-active {
       display: flex;
       justify-content: center;
@@ -34,14 +33,12 @@
       }
     }
 
-    // AJUSTE VISUAL (Aplica a "Trabaja con nosotros")
     &#wrapper-trabaja {
       background-image: url('/fondoM_form2.webp');
 
       @include desktop {
         background-image: url('/fondo_form2.webp');
 
-        // Convierte el contenido en un layout de 2 columnas (Texto a la izquierda, Form a la derecha)
         .forms-section__content {
           flex-direction: row;
           justify-content: center;
@@ -92,7 +89,7 @@
     flex-direction: column;
     gap: 1rem;
     text-align: center;
-    color: $color-white;
+    color: $white;
     @include desktop {
       text-align: start;
       max-width: 650px;
@@ -101,11 +98,10 @@
 
   &__title {
     display: flex;
-    // align-items: center;
     justify-content: center;
     gap: 0 0.2rem;
     flex-wrap: wrap;
-    font-family: $font-secondary; // Roc Grotesk Condensed
+    font-family: $font-secondary;
     text-transform: uppercase;
     font-size: 1.75rem;
     line-height: 1;
@@ -160,7 +156,7 @@
   }
 
   &__label {
-    color: $color-white;
+    color: $white;
     font-size: 1rem;
     @include desktop {
       font-size: 1.2rem;
@@ -171,7 +167,7 @@
       align-items: center;
       gap: 0.5rem;
       cursor: pointer;
-      border-bottom: 1px solid $color-white;
+      border-bottom: 1px solid $white;
       padding-bottom: 0.25rem;
 
       svg {
@@ -184,19 +180,19 @@
   &__input {
     width: 100%;
     padding: 0.5rem 1rem;
-    border-radius: 10px; // Bordes redondeados de la referencia
-    background-color: $color-white; // Opacidad para evitar grises
-    color: $color-black;
+    border-radius: 10px;
+    background-color: $white;
+    color: $black;
     font-family: $font-primary;
     font-size: 1rem;
 
     &:focus {
-      background-color: $color-white;
+      background-color: $white;
     }
   }
 
   &__input-file {
-    display: none; // Ocultamos el input feo por defecto del navegador
+    display: none;
   }
 
   &__actions {
@@ -239,14 +235,14 @@
     }
 
     &--submit {
-      background-color: $color-white;
-      color: $color-black;
+      background-color: $white;
+      color: $black;
     }
 
     &--success {
       background-color: $color-green-light;
-      color: $color-black;
-      pointer-events: none; // Un botón de éxito no debería ser clicable
+      color: $black;
+      pointer-events: none;
     }
   }
 
@@ -255,13 +251,12 @@
     background-color: rgba(255, 255, 255, 0.95);
   }
 
-  // Contenedor del mensaje de error
   &__error {
     color: #ff4d4d;
     font-size: 0.85rem;
     font-family: $font-primary;
     margin-top: -0.25rem;
-    min-height: 1rem; // Evita saltos de layout cuando aparece el texto
+    min-height: 1rem;
     display: block;
     text-align: left;
     width: 100%;

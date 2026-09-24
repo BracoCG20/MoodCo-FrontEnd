@@ -1,17 +1,24 @@
+//src/styles/_breakpoints.scss
+//Breakpoints
+$bp-tablet: 768px;
+$bp-desktop: 1024px;
+$bp-maxDesktop: 1440px;
+
+//Mixins para Media Queries
 @mixin tablet {
-  @media (min-width: 724px) {
+  @media (min-width: #{$bp-tablet}) {
     @content;
   }
 }
 
 @mixin desktop {
-  @media (min-width: 1023px) {
+  @media (min-width: #{$bp-desktop}) {
     @content;
   }
 }
 
-@mixin max-desktop {
-  @media (min-width: 1440px) {
+@mixin maxDesktop {
+  @media (min-width: #{$bp-maxDesktop}) {
     @content;
   }
 }

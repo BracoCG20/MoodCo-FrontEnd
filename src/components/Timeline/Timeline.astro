@@ -250,7 +250,6 @@ import './Timeline.scss';
     // CONTEXTO MOBILE / TABLET (< 1024px)
     // =======================================================
     mm.add('(max-width: 1023px)', () => {
-      // (Se mantiene intacto según indicaciones)
       const items = gsap.utils.toArray<HTMLElement>(
         '[data-timeline-item="mobile"]',
       );
@@ -453,7 +452,7 @@ import './Timeline.scss';
           trigger: sectionDesktop,
           pin: true,
           start: 'top top',
-          end: () => `+=${getScrollAmount() + window.innerWidth * 1.5}`, // Duración cómoda
+          end: () => `+=${getScrollAmount() + window.innerWidth * 1.5}`,
           scrub: 1,
           invalidateOnRefresh: true,
         },
@@ -493,7 +492,7 @@ import './Timeline.scss';
       masterTl.addLabel('scroll', 'intro+=1');
 
       const horizontalScrollTween = gsap.to(itemsContainer, {
-        x: () => -getScrollAmount(), // Cruza todo hasta SALIR por la izquierda
+        x: () => -getScrollAmount(),
         ease: 'none',
         duration: 5,
       });
@@ -513,7 +512,7 @@ import './Timeline.scss';
       );
 
       // Fase C: Outro (Salida / Reversión)
-      masterTl.addLabel('outro', 'scroll+=4.5'); // Inicia suavemente mientras sale
+      masterTl.addLabel('outro', 'scroll+=4.5');
       masterTl.to(
         '[data-intro-text="desktop"]',
         { opacity: 1, y: 0, duration: 0.5 },

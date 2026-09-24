@@ -2,22 +2,18 @@
 import brandsData from '../../data/brands.json';
 import './Brands.scss';
 
-// Ajustamos el tipado para indicarle a TypeScript que recibimos un objeto con la propiedad src
 const imageFiles = import.meta.glob<{ default: { src: string } }>(
   '../../assets/logos/*.{png,jpg,jpeg,svg,webp}',
   { eager: true },
 );
 
-// Función corregida: ahora extraemos .default.src
 const getImagePath = (filename: string) => {
   const path = `../../assets/logos/${filename}`;
   const image = imageFiles[path];
 
-  // Si la imagen existe, devolvemos la propiedad src del objeto, de lo contrario un string vacío
   return image ? image.default.src : '';
 };
 
-// Duplicamos el array para el efecto de loop infinito continuo
 const loopLogos = [...brandsData.logos, ...brandsData.logos];
 ---
 

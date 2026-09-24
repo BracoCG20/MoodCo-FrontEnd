@@ -9,7 +9,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: $color-black; // Fallback mientras carga el video
+  background-color: $black;
 
   // Capa 1: Video
   &__video {
@@ -44,7 +44,7 @@
     height: 100%;
     max-width: 1400px;
     z-index: 3;
-    pointer-events: none; // Evita bloquear interacciones con el fondo si las hubiera
+    pointer-events: none;
   }
 
   // Capa 4: Línea SVG
@@ -60,18 +60,17 @@
   // Capa 5: Textos
   &__title {
     position: absolute;
-    color: $color-white;
-    font-family: $font-secondary; // Roc Grotesk Condensed
+    color: $white;
+    font-family: $font-secondary;
     text-transform: uppercase;
     line-height: 0.95;
     margin: 0;
     z-index: 5;
-    // Sombra sutil para despegar el texto del video ruidoso
-    text-shadow: 0 4px 16px rgba($color-black, 0.4);
+    text-shadow: 0 4px 16px rgba($black, 0.4);
 
     // Bloque Superior
     &--top {
-      font-weight: 700; // Bold según referencia
+      font-weight: 700;
       font-size: 2.55rem;
       top: 26%;
       right: 5%;
@@ -87,14 +86,14 @@
         top: 15%;
         right: 15%;
       }
-      @include max-desktop {
+      @include maxDesktop {
         top: 18%;
       }
     }
 
     // Bloque Inferior
     &--bottom {
-      font-weight: 300; // Light según referencia
+      font-weight: 300;
       font-size: 2.5rem;
       bottom: 13%;
       left: 5%;
@@ -112,7 +111,7 @@
         left: 10%;
       }
 
-      @include max-desktop {
+      @include maxDesktop {
         left: 20%;
       }
     }

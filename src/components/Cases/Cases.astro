@@ -14,11 +14,9 @@ const getImagePath = (filename: string) => {
   return image ? image.default.src : '';
 };
 
-// Generamos desfases
 const col1 = [...casesData.items];
 const col2 = [...casesData.items.slice(2), ...casesData.items.slice(0, 2)];
 
-// Duplicamos para loop infinito
 const track1 = [...col1, ...col1];
 const track2 = [...col2, ...col2];
 ---
@@ -44,7 +42,6 @@ const track2 = [...col2, ...col2];
 
   <div class='cases__carousel-wrapper'>
     <div class='cases__columns'>
-      <!-- Columna 1 (Mobile / Tablet / Desktop) -->
       <div
         class='cases__col cases__col--1'
         data-col-index='0'
@@ -68,7 +65,6 @@ const track2 = [...col2, ...col2];
         </div>
       </div>
 
-      <!-- Columna 2 (Tablet / Desktop) -->
       <div
         class='cases__col cases__col--2'
         data-col-index='1'
@@ -95,7 +91,6 @@ const track2 = [...col2, ...col2];
   </div>
 </section>
 
-<!-- Modal Global de Video (reutilizado por todas las cards) -->
 <div
   class='video-modal'
   data-video-modal
@@ -136,7 +131,7 @@ const track2 = [...col2, ...col2];
         preload='metadata'
       ></video>
 
-      <!-- Botón play/pausa personalizado -->
+      <!-- Botón play/pausa -->
       <button
         class='video-modal__play-btn'
         data-modal-play
@@ -223,9 +218,6 @@ const track2 = [...col2, ...col2];
 
     let mm = gsap.matchMedia();
 
-    // =========================================================
-    // LÓGICA RESPONSIVE (Aísla Mobile de Desktop dinámicamente)
-    // =========================================================
     mm.add(
       {
         isMobile: '(max-width: 1023px)',
@@ -234,13 +226,11 @@ const track2 = [...col2, ...col2];
       (context) => {
         const { isMobile, isDesktop } = context.conditions as any;
 
-        // Limpieza preventiva
         carousels.forEach((c) => c.kill());
         carousels = [];
         mobileTween?.kill();
         mobileTween = null;
 
-        // LÓGICA DESKTOP / TABLET (sin cambios respecto a la actual)
         if (isDesktop) {
           carousels = Array.from(tracks).map((track, index) => {
             const isMovingUp = index % 2 !== 0;
@@ -257,9 +247,6 @@ const track2 = [...col2, ...col2];
           });
         }
 
-        // LÓGICA MOBILE: mismo mecanismo que desktop (tween infinito de yPercent),
-        // así el swipe puede controlar su dirección con timeScale, sin un segundo
-        // sistema de animación.
         if (isMobile && track1) {
           mobileTween = gsap.fromTo(
             track1,
@@ -272,12 +259,9 @@ const track2 = [...col2, ...col2];
       },
     );
 
-    // =========================================================
-    // SWIPE EN MOBILE: invierte la dirección del loop vía timeScale
-    // =========================================================
     if (col1 && track1) {
-      const BOUNDARY_RATIO = 0.04; // 4% del recorrido total = "zona límite" (escala con el contenido)
-      const FLIP_THRESHOLD = 8; // px mínimos para diferenciar un swipe de un tap
+      const BOUNDARY_RATIO = 0.04;
+      const FLIP_THRESHOLD = 8;
 
       let gestureRefY = 0;
       let releasedToPage = false;
@@ -287,7 +271,7 @@ const track2 = [...col2, ...col2];
 
       const getRealPosition = () => {
         const yPercent = (gsap.getProperty(track1, 'yPercent') as number) || 0;
-        return (-yPercent / 100) * track1.scrollHeight; // rango 0..loopHeight
+        return (-yPercent / 100) * track1.scrollHeight;
       };
 
       col1.addEventListener(
@@ -307,21 +291,20 @@ const track2 = [...col2, ...col2];
           if (!isMobileViewport() || !mobileTween) return;
           const currentY = e.touches[0].clientY;
 
-          // Ya alcanzamos el límite real: el resto del gesto mueve la página, no el carrusel
           if (releasedToPage) {
-            e.preventDefault(); // necesario: touch-action:none sigue bloqueando el scroll nativo
+            e.preventDefault();
             window.scrollBy(0, pageLastY - currentY);
             pageLastY = currentY;
             return;
           }
 
-          const deltaY = currentY - gestureRefY; // >0 = swipe hacia abajo
-          if (Math.abs(deltaY) < FLIP_THRESHOLD) return; // filtra taps / micro-movimientos
+          const deltaY = currentY - gestureRefY;
+          if (Math.abs(deltaY) < FLIP_THRESHOLD) return;
 
-          const requestedDirection: 1 | -1 = deltaY > 0 ? -1 : 1; // abajo -> arriba, arriba -> abajo
+          const requestedDirection: 1 | -1 = deltaY > 0 ? -1 : 1;
 
           if (requestedDirection === mobileDirection) {
-            gestureRefY = currentY; // reubica referencia: permite detectar otra inversión luego
+            gestureRefY = currentY;
             e.preventDefault();
             return;
           }
@@ -332,7 +315,6 @@ const track2 = [...col2, ...col2];
           const atStart = realPos <= boundary;
           const atEnd = realPos >= loopHeight - boundary;
 
-          // Si el gesto pide seguir más allá del primer/último caso -> liberar a la página
           if (
             (requestedDirection === -1 && atStart) ||
             (requestedDirection === 1 && atEnd)
@@ -343,7 +325,7 @@ const track2 = [...col2, ...col2];
           }
 
           mobileDirection = requestedDirection;
-          mobileTween.timeScale(mobileDirection); // inversión suave, sin reiniciar el tween
+          mobileTween.timeScale(mobileDirection);
           gestureRefY = currentY;
           e.preventDefault();
         },
@@ -509,7 +491,7 @@ const track2 = [...col2, ...col2];
           trigger.setAttribute('aria-expanded', 'true');
           card.classList.add('is-active');
           activeCard = card as HTMLElement;
-          isCardActive = true; // Pausa el auto-scroll de requestAnimationFrame en Mobile
+          isCardActive = true;
           if (!isDesktop && mobileTween) mobileTween.pause();
 
           // Centrado dinámico en Desktop
@@ -536,7 +518,7 @@ const track2 = [...col2, ...col2];
     });
 
     // =========================================================
-    // LÓGICA DEL MODAL DE VIDEO
+    // LÓGICA DEL VIDEO
     // =========================================================
     const DEMO_VIDEO =
       'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
