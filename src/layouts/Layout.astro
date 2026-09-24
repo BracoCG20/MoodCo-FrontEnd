@@ -6,12 +6,25 @@ import '../styles/main.scss';
 interface Props {
   title: string;
   description?: string;
+  image?: string;
+  keywords?: string;
 }
 
 const {
   title,
-  description = 'Agencia creativa que potencia cada idea y cada proyecto en el entorno digital para que su marca logre mayores alcances.',
+  description = 'Agencia creativa en Colombia que potencia cada idea y cada proyecto en el entorno digital para que su marca logre mayores alcances.',
+  image = '../assets/banner_Mobile.webp',
+  keywords = 'agencia colombia, diseño Web, desarrollo web, seo, data analyst, branding',
 } = Astro.props;
+
+// const lang = Astro.currentLocale || 'es';
+
+const canonicalURL = new URL(
+  Astro.url.pathname,
+  Astro.site || 'https://mood.com.co',
+);
+
+const imageUrl = new URL(image, canonicalURL);
 ---
 
 <!doctype html>
@@ -19,22 +32,68 @@ const {
   <head>
     <meta charset='UTF-8' />
     <meta
+      name='theme-color'
+      content='#ffffff'
+    />
+    <meta
       name='viewport'
       content='width=device-width, initial-scale=1.0'
     />
-    <meta
-      name='description'
-      content={description}
-    />
-
-    <!-- FIX: Tipo de archivo correcto para un .ico -->
     <link
       rel='icon'
       type='image/x-icon'
       href='/Logo_Mood.ico'
     />
+    <meta
+      name='generator'
+      content={Astro.generator}
+    />
+    <link
+      rel='icon'
+      href='/Logo_Mood192.png'
+      type='image/png'
+      sizes='192x192'
+    />
+    <link
+      rel='apple-touch-icon'
+      href='/apple-icon.png'
+    />
 
-    <!-- Etiquetas Open Graph (SEO / Redes Sociales) -->
+    <!-- SEO Básico-->
+    <title>{title}</title>
+
+    <meta
+      name='description'
+      content={description}
+    />
+    <meta
+      name='author'
+      content='Cristian Braco'
+    />
+    <meta
+      name='keywords'
+      content={keywords}
+    />
+    <meta
+      name='robots'
+      content='index, follow'
+    />
+    <link
+      rel='canonical'
+      href={canonicalURL}
+    />
+
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta
+      property='og:type'
+      content='website'
+    />
+    <meta
+      property='og:url'
+      content={import.meta.env.PUBLIC_SITE_URL ||
+        'https://www.mood.com.co' ||
+        canonicalURL}
+    />
     <meta
       property='og:title'
       content={title}
@@ -44,20 +103,57 @@ const {
       content={description}
     />
     <meta
-      property='og:type'
-      content='website'
-    />
-    <meta
-      property='og:url'
-      content={import.meta.env.PUBLIC_SITE_URL || 'https://www.mood.com.co'}
-    />
-    <meta
       property='og:image'
-      content='../assets/banner_Mobile.webp'
+      content={imageUrl}
     />
-    <!-- O la imagen que prefieras en public/ -->
+    <meta
+      property='og:site_name'
+      content='Mood Colombia'
+    />
+    <!--  Se adapto el locale para SEO -->
+    <!-- <meta
+      property='og:locale'
+      content={lang === 'es' ? 'es_ES' : 'en_US'}
+    /> -->
+    <!-- Twitter-->
+    <meta
+      property='twitter:card'
+      content='summary_large_image'
+    />
+    <meta
+      property='twitter:url'
+      content={canonicalURL}
+    />
+    <meta
+      property='twitter:title'
+      content={title}
+    />
+    <meta
+      property='twitter:description'
+      content={description}
+    />
+    <meta
+      property='twitter:image'
+      content={imageUrl}
+    />
 
-    <title>{title}</title>
+    <!-- JSON-LD SEO -->
+    <script type='application/ld+json'>
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Mood Colombia",
+        "url": "https://www.mood.com.co",
+        "logo": "https://www.mood.com.co/Logo_Mood.ico",
+        "description": "Agencia creativa en Colombia que potencia cada idea y cada proyecto en el entorno digital para que su marca logre mayores alcances.",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "desguerra@mood.com.co",
+          "contactType": "customer support"
+        },
+        "sameAs": ["https://www.linkedin.com/company/moodagenciacreativa"]
+      }
+    </script>
   </head>
   <body>
     <slot />
